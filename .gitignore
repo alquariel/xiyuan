@@ -1,28 +1,84 @@
-# ---- 构建产物 / IDE ----
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Linker files
+*.ilk
+
+# Debugger Files
+*.pdb
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+*.so.*
+
+# Fortran module files
+*.mod
+*.smod
+# RAPID modules are .mod too - keep them tracked
+!rapid/**/*.mod
+!mod_files/**/*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Build directories
 build/
-out/
-.cache/
-.vs/
-.vscode/
-CMakeUserPresets.json
+Build/
+build-*/
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+install_manifest.txt
 compile_commands.json
 
-# ---- 日志 ----
+# Temporary files
+*.tmp
 *.log
-logs/
+*.bak
+*.swp
 
-# ---- 本地配置（含密码与现场 IP，仅保留 example）----
+# vcpkg
+vcpkg_installed/
+
+# debug information files
+*.dwo
+
+# test output & cache
+Testing/
+.cache/
+
+# ---- 本地配置（含密码与现场 IP，仅保留脱敏的 example）----
 config/env_config.json
 config/logging_config.json
 
-# ---- 第三方传感器 SDK 二进制（海康 HCNetSDK 等，版权受限，需自行下载）----
-lib/sensors/**/*.dll
-lib/sensors/**/*.lib
+# ---- 第三方传感器 SDK（海康 HCNetSDK 等，版权受限，需自行下载）----
 lib/sensors/**/*.zip
 lib/sensors/**/*.ini
 
 # ---- RobotStudio 运行产物 ----
-rapid/**/*.log
 rapid/**/*.rlf
 rapid/**/*.rsf
 

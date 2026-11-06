@@ -1,0 +1,26 @@
+# MODE=JOINT
+# Joint-space path for EGM joint mode (EGMActJoint / EGMRunJoint).
+#
+# Columns: j1 j2 j3 j4 j5 j6 v
+#   j1..j6 : absolute joint angles, DEGREES
+#            (the EGM joint channel carries DEGREES, not radians - no deg/rad conversion)
+#   v      : joint-space speed, DEG/S
+#
+# Start joints (must equal the robot's current joints when "Start" is pressed):
+#   [-26.98, 39.72, 12.21, 0.43, 38.54, -117.32]
+# Motion: j6 from -117.32 deg to -112.32 deg (5 deg), 0.5 deg per point, 1.0 deg/s.
+# j6 rotates the tool about its own axis, TCP stays almost fixed -> safe first test.
+# j1..j5 are kept constant.
+#
+#  j1       j2       j3      j4      j5       j6        v
+-26.98   39.72    12.21    0.43    38.54   -117.32    1.0
+-26.98   39.72    12.21    0.43    38.54   -116.82    1.0
+-26.98   39.72    12.21    0.43    38.54   -116.32    1.0
+-26.98   39.72    12.21    0.43    38.54   -115.82    1.0
+-26.98   39.72    12.21    0.43    38.54   -115.32    1.0
+-26.98   39.72    12.21    0.43    38.54   -114.82    1.0
+-26.98   39.72    12.21    0.43    38.54   -114.32    1.0
+-26.98   39.72    12.21    0.43    38.54   -113.82    1.0
+-26.98   39.72    12.21    0.43    38.54   -113.32    1.0
+-26.98   39.72    12.21    0.43    38.54   -112.82    1.0
+-26.98   39.72    12.21    0.43    38.54   -112.32    1.0
