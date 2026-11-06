@@ -1,0 +1,141 @@
+﻿{
+	"robot": {
+		"enable_logger": false,
+		"_connection_note": "Motion uses the direct socket transport (transport.type=socket) to 127.0.0.1:5000; ROBOT_MONITOR frames go to monitor.port=5001. For the real robot set ip back to 192.168.0.10 and transport.type=plc.",
+		"ip": "127.0.0.1",
+		"port_motion": 5000,
+		"transport":{
+			"type":"socket"
+		},
+		"default_speed": {
+			"tcp_linear": 200.0,
+			"tcp_orientation": 200.0,
+			"external_linear": 200.0,
+			"external_orientation": 100.0
+		},
+		"monitor": {
+			"_source_note": "Slice K robot monitoring config. Autostart is independent of ConnectionRobotButton.",
+			"enabled": true,
+			"autostart": true,
+			"port": 5001,
+			"sample_interval_ms": 100,
+			"dds_publish_enabled": true,
+			"dds_domain_id": 0,
+			"dds_topic": "afp.robot.monitor.sample",
+			"record_csv": false,
+			"record_raw_messages": false,
+			"recording_dir": "logs/robot_monitor",
+			"flush_every_sample": true
+		},
+		"serial_port":{ 
+			"ip": "192.168.0.10" 
+		}
+	},
+	"ftp": {
+		"_note": "The Winding_4600 RobotStudio station has no FTP server. Set enabled=false to simulate a successful upload (the MOD file stays local on the PC; the controller is expected to already have the .mod loaded separately, or LOAD_MOD is handled by SERVER.mod).",
+		"enabled": false,
+		"ip": "192.168.0.10",
+		"port": 21,
+		"user": "Default User",
+		"password": "CHANGE_ME"
+	},
+	"plc": {
+		"_connection_note": "The Winding_4600 RobotStudio station has no S7-1200. With enabled=false the DB18 print handshake is simulated (always ACKed) and the DB5 laser/motor/cylinder controls are disabled. Set enabled=true and restore the real IP when running on the machine.",
+		"enabled": false,
+		"ip": "192.168.0.20",
+		"rack": 0,
+		"slot": 1
+	},
+	"egm": {
+		"_note": "控制器 UCdevice(RemotePortNumber=6510) 会先向本机 6510 发 EgmRobot，本机解析后回发 protobuf EgmSensor。port 必须与 SIO.cfg 里的 RemotePortNumber 一致。",
+		"enabled": true,
+		"ip": "127.0.0.1",
+		"port": 6510,
+		"offset": 0,
+		"period_ms": 4,
+		"max_deviation_tcp_mm": 0.1,
+		"max_speed_deviation_tcp_mm_per_sec": 2000.0
+	},
+	"pressure": {
+		"_source_note": "Defaults match Python: pressure_reader.py sleep(0.1), pressure_monitor.py 40-sample processing window.",
+		"sample_interval_ms": 100,
+		"processing_window_samples": 40,
+		"dds_domain_id": 0,
+		"dds_topic": "afp.pressure.sample"
+	},
+	"thermal_camera": {
+		"ip": "192.168.0.64",
+		"port": 8000,
+		"user": "admin",
+		"password": "CHANGE_ME",
+		"sdk_dir": "",
+		"portable_sdk_dir": "lib/sensors/thermal_camera/lib/win",
+		"cache_max_files": 60,
+		"display_interval_ms": 1000
+	},
+	"high_speed_camera": {
+		"_source_note": "Defaults match Python highspeed_camera_service.py and prefer a portable MVS SDK DLL beside the executable.",
+		"sdk_dll_path": "",
+		"portable_sdk_dll_path": "lib/sensors/high_speed_camera/MvCameraControl.dll",
+		"installed_sdk_dll_path": "C:/Program Files (x86)/Common Files/MVS/Runtime/Win64_x64/MvCameraControl.dll",
+		"frame_timeout_ms": 1000
+	},
+	"timeseries_archive": {
+		"_source_note": "Optional new feature: start InfluxDB and archive pressure DDS samples to a time-series database.",
+		"enabled": true,
+		"start_influxdb": true,
+		"influxdb_show_console": true,
+		"stop_influxdb_on_exit": true,
+		"influxdb_exe_path": "D:/InfluxDB 3 Core/influxdb3-core-3.9.2-windows_amd64/influxdb3.exe",
+		"host_url": "http://localhost:8181",
+		"node_id": "afp-node",
+		"object_store": "file",
+		"data_dir": "D:/InfluxDB 3 Core/data",
+		"admin_token_file": "D:/InfluxDB 3 Core/afp-admin-token.json",
+		"database": "afp_process",
+		"retention_period": "30d",
+		"ensure_database_on_start": true,
+		"subscriber_autostart": true,
+		"subscriber_executable": "dds_influx_subscriber.exe",
+		"subscriber_show_console": true,
+		"subscriber_print_live_data": true,
+		"write_batch_size": 10,
+		"write_flush_interval_ms": 1000,
+		"http_request_timeout_ms": 5000,
+		"max_pending_points": 10000,
+		"reachability_probe_timeout_ms": 500,
+		"influxdb_startup_timeout_ms": 30000,
+		"cli_timeout_ms": 10000
+	},
+	"grafana": {
+		"_source_note": "Optional Grafana OSS server launcher for local pressure-data dashboards.",
+		"enabled": true,
+		"autostart": true,
+		"exe_path": "D:/Grafana OSS/grafana-13.0.1+security-01/bin/grafana.exe",
+		"working_dir": "D:/Grafana OSS/grafana-13.0.1+security-01",
+		"host_url": "http://localhost:3000",
+		"show_console": true,
+		"startup_timeout_ms": 10000
+	},
+	"pressure_archive": {
+		"enabled": true,
+		"dds_domain_id": 0,
+		"dds_topic": "afp.pressure.sample",
+		"table": "pressure_sensor",
+		"source_tag": "pressure_sensor_1"
+	},
+	"robot_monitor_archive": {
+		"enabled": true,
+		"dds_domain_id": 0,
+		"dds_topic": "afp.robot.monitor.sample",
+		"table": "robot_monitor",
+		"source_tag": "abb_irb4600"
+	},
+	"serial": {
+		"general_baudrate": 9600,
+		"fiber_laser": {
+			"port": "COM3",
+			"baudrate": 9600
+		}
+	}
+}

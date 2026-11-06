@@ -1,0 +1,31 @@
+# ---- 构建产物 / IDE ----
+build/
+out/
+.cache/
+.vs/
+.vscode/
+CMakeUserPresets.json
+compile_commands.json
+
+# ---- 日志 ----
+*.log
+logs/
+
+# ---- 本地配置（含密码与现场 IP，仅保留 example）----
+config/env_config.json
+config/logging_config.json
+
+# ---- 第三方传感器 SDK 二进制（海康 HCNetSDK 等，版权受限，需自行下载）----
+lib/sensors/**/*.dll
+lib/sensors/**/*.lib
+lib/sensors/**/*.zip
+lib/sensors/**/*.ini
+
+# ---- RobotStudio 运行产物 ----
+rapid/**/*.log
+rapid/**/*.rlf
+rapid/**/*.rsf
+
+# ---- 系统文件 ----
+Thumbs.db
+.DS_Store
