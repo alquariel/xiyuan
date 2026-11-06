@@ -1,0 +1,11 @@
+struct AfpPressureSample {
+    unsigned long long timestamp_ms;        // Unix 毫秒时间戳
+    unsigned long long sample_sequence;     // 递增序列号 (0,1,2…)
+    double raw_value;                       // catchdata() 原始读数
+    double mean_value;                      // 滚动窗口均值  ← 窗口填满前为 0
+    double variance_value;                  // 滚动方差
+    double standard_deviation_value;        // 滚动标准差
+    double peak_value;                      // 窗口内峰值
+    boolean window_ready;                   // true = 统计值有效
+    boolean sensor_running;                 // 传感器运行状态
+};
