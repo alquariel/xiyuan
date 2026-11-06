@@ -1,0 +1,33 @@
+struct AfpRobotMonitorSample
+{
+    unsigned long long timestamp_ms;
+    unsigned long long sample_sequence;
+
+    double x;
+    double y;
+    double z;
+    double q1;
+    double q2;
+    double q3;
+    double q4;
+
+    double j1;
+    double j2;
+    double j3;
+    double j4;
+    double j5;
+    double j6;
+
+    double eax1;
+    double eax2;
+    double eax3;
+    double eax4;
+    double eax5;
+    double eax6;
+
+    double commanded_tcp_speed;
+    double commanded_orientation_speed;
+    double commanded_external_linear_speed;
+    double commanded_external_orientation_speed;
+    double estimated_tcp_speed;
+};
