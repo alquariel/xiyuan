@@ -1,0 +1,5730 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ContinuosfiberInterface</class>
+ <widget class="QWidget" name="ContinuosfiberInterface">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1197</width>
+    <height>741</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>ContinousfiberInterface</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>C:/Administrator/Pycharm/LuLu/.designer/backup/图片1.png</normaloff>C:/Administrator/Pycharm/LuLu/.designer/backup/图片1.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(242, 242,242);
+</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="1">
+    <widget class="QTabWidget" name="Other_tabWidget_Robotplatform">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>60</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="palette">
+      <palette>
+       <active>
+        <colorrole role="Button">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>242</red>
+           <green>242</green>
+           <blue>242</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Base">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>242</red>
+           <green>242</green>
+           <blue>242</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>242</red>
+           <green>242</green>
+           <blue>242</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </active>
+       <inactive>
+        <colorrole role="Button">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>242</red>
+           <green>242</green>
+           <blue>242</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Base">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>242</red>
+           <green>242</green>
+           <blue>242</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>242</red>
+           <green>242</green>
+           <blue>242</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </inactive>
+       <disabled>
+        <colorrole role="Button">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>242</red>
+           <green>242</green>
+           <blue>242</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Base">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>242</red>
+           <green>242</green>
+           <blue>242</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>242</red>
+           <green>242</green>
+           <blue>242</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </disabled>
+      </palette>
+     </property>
+     <property name="font">
+      <font>
+       <family>微软雅黑</family>
+       <pointsize>14</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="cursor">
+      <cursorShape>ArrowCursor</cursorShape>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::TabFocus</enum>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(242,242, 242);
+border-color: rgb(0,0, 0);
+font: 14pt &quot;微软雅黑&quot;;
+</string>
+     </property>
+     <property name="tabShape">
+      <enum>QTabWidget::Rounded</enum>
+     </property>
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <property name="tabBarAutoHide">
+      <bool>false</bool>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>  初始化   </string>
+      </attribute>
+      <widget class="QFrame" name="frame_6">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>5</y>
+         <width>1170</width>
+         <height>660</height>
+        </rect>
+       </property>
+       <property name="palette">
+        <palette>
+         <active>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+          <colorrole role="Window">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </active>
+         <inactive>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+          <colorrole role="Window">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </inactive>
+         <disabled>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+          <colorrole role="Window">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
+        </palette>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>310</width>
+          <height>210</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>喷头控制</string>
+        </property>
+        <widget class="QPushButton" name="ConmunicationConnectionButton">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>60</y>
+           <width>120</width>
+           <height>45</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>200</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>    开机    </string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="CloseSerialpushButton">
+         <property name="geometry">
+          <rect>
+           <x>170</x>
+           <y>60</y>
+           <width>120</width>
+           <height>45</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>200</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>关机</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="nozzletemperature">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>140</y>
+           <width>111</width>
+           <height>27</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font:12pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <property name="text">
+          <string>打印温度(℃)</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="nozzletemperaturelineEdit">
+         <property name="geometry">
+          <rect>
+           <x>170</x>
+           <y>140</y>
+           <width>121</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_3">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>235</y>
+          <width>310</width>
+          <height>130</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>紫外控制</string>
+        </property>
+        <widget class="QPushButton" name="open">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>50</y>
+           <width>120</width>
+           <height>45</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>200</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>    开机    </string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="stop">
+         <property name="geometry">
+          <rect>
+           <x>170</x>
+           <y>50</y>
+           <width>120</width>
+           <height>45</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>200</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>    关机    </string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_4">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>370</y>
+          <width>310</width>
+          <height>220</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>串口设置</string>
+        </property>
+        <widget class="QLabel" name="BaudRatelabel">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>48</y>
+           <width>91</width>
+           <height>27</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font:12pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <property name="text">
+          <string>波特率</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="BaudRateBox">
+         <property name="geometry">
+          <rect>
+           <x>150</x>
+           <y>41</y>
+           <width>140</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);
+font: 75 12pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>9600</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>11200</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QLabel" name="label_4">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>99</y>
+           <width>101</width>
+           <height>27</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font:12pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <property name="text">
+          <string>串口选择</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="ComPortBox">
+         <property name="geometry">
+          <rect>
+           <x>150</x>
+           <y>92</y>
+           <width>140</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);
+font: 75 12pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>COM1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>COM2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>COM10</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QLabel" name="SerialStatelabel">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>166</y>
+           <width>71</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <property name="text">
+          <string>COM1</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="ChoosepushButton">
+         <property name="geometry">
+          <rect>
+           <x>150</x>
+           <y>160</y>
+           <width>140</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>200</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string> 检测串口 </string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="geometry">
+         <rect>
+          <x>340</x>
+          <y>20</y>
+          <width>490</width>
+          <height>570</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>运动控制</string>
+        </property>
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>190</y>
+           <width>220</width>
+           <height>370</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>笛卡尔坐标系</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="styleSheet">
+             <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+            </property>
+            <property name="text">
+             <string>X：</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="styleSheet">
+             <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+            </property>
+            <property name="text">
+             <string>Y：</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="RobotXlineEdit">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="RobotYlineEdit">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="styleSheet">
+             <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+            </property>
+            <property name="text">
+             <string>Z：</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="RobotRXlineEdit">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="RobotZlineEdit">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_19">
+            <property name="styleSheet">
+             <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+            </property>
+            <property name="text">
+             <string> I：</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_21">
+            <property name="styleSheet">
+             <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+            </property>
+            <property name="text">
+             <string>K：</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_20">
+            <property name="styleSheet">
+             <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+            </property>
+            <property name="text">
+             <string>J：</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="RobotRZlineEdit">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="RobotRYlineEdit">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QGroupBox" name="groupBox_8">
+         <property name="geometry">
+          <rect>
+           <x>240</x>
+           <y>190</y>
+           <width>240</width>
+           <height>370</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>极坐标系</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4" columnstretch="1,5">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_33">
+            <property name="styleSheet">
+             <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+            </property>
+            <property name="text">
+             <string>A1:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="axis1lineEdit">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_40">
+            <property name="styleSheet">
+             <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+            </property>
+            <property name="text">
+             <string>A2:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="axis2lineEdit">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_41">
+            <property name="styleSheet">
+             <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+            </property>
+            <property name="text">
+             <string>A3:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="axis3lineEdit">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_42">
+            <property name="styleSheet">
+             <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+            </property>
+            <property name="text">
+             <string>A4:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="axis4lineEdit">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_43">
+            <property name="styleSheet">
+             <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+            </property>
+            <property name="text">
+             <string>A5:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="axis5lineEdit">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_44">
+            <property name="styleSheet">
+             <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+            </property>
+            <property name="text">
+             <string>A6:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="axis6lineEdit">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QLabel" name="label_6">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>50</y>
+           <width>110</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>机械臂状态：</string>
+         </property>
+        </widget>
+        <widget class="QGroupBox" name="groupBox_20">
+         <property name="geometry">
+          <rect>
+           <x>230</x>
+           <y>20</y>
+           <width>250</width>
+           <height>75</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>零位设置</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_32">
+            <property name="text">
+             <string>X</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="zero_position_x">
+            <property name="font">
+             <font>
+              <family>微软雅黑</family>
+              <pointsize>14</pointsize>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="text">
+             <string>-800</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_37">
+            <property name="text">
+             <string>Y</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="zero_position_y">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="text">
+             <string>100</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_38">
+            <property name="text">
+             <string>Z</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="zero_position_z">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="text">
+             <string>500</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QFrame" name="frame_21">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>110</y>
+           <width>470</width>
+           <height>71</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border:1px solid rgb(212, 212, 212);</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
+          <property name="spacing">
+           <number>10</number>
+          </property>
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="ConnectionRobotButton">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>45</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>45</height>
+             </size>
+            </property>
+            <property name="palette">
+             <palette>
+              <active>
+               <colorrole role="WindowText">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>0</red>
+                  <green>0</green>
+                  <blue>0</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Button">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>217</red>
+                  <green>217</green>
+                  <blue>217</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Text">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>0</red>
+                  <green>0</green>
+                  <blue>0</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="ButtonText">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>0</red>
+                  <green>0</green>
+                  <blue>0</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Base">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>217</red>
+                  <green>217</green>
+                  <blue>217</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Window">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>217</red>
+                  <green>217</green>
+                  <blue>217</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="PlaceholderText">
+                <brush brushstyle="NoBrush">
+                 <color alpha="128">
+                  <red>0</red>
+                  <green>0</green>
+                  <blue>0</blue>
+                 </color>
+                </brush>
+               </colorrole>
+              </active>
+              <inactive>
+               <colorrole role="WindowText">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>0</red>
+                  <green>0</green>
+                  <blue>0</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Button">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>217</red>
+                  <green>217</green>
+                  <blue>217</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Text">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>0</red>
+                  <green>0</green>
+                  <blue>0</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="ButtonText">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>0</red>
+                  <green>0</green>
+                  <blue>0</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Base">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>217</red>
+                  <green>217</green>
+                  <blue>217</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Window">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>217</red>
+                  <green>217</green>
+                  <blue>217</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="PlaceholderText">
+                <brush brushstyle="NoBrush">
+                 <color alpha="128">
+                  <red>0</red>
+                  <green>0</green>
+                  <blue>0</blue>
+                 </color>
+                </brush>
+               </colorrole>
+              </inactive>
+              <disabled>
+               <colorrole role="WindowText">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>0</red>
+                  <green>0</green>
+                  <blue>0</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Button">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>217</red>
+                  <green>217</green>
+                  <blue>217</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Text">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>0</red>
+                  <green>0</green>
+                  <blue>0</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="ButtonText">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>0</red>
+                  <green>0</green>
+                  <blue>0</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Base">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>217</red>
+                  <green>217</green>
+                  <blue>217</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Window">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>217</red>
+                  <green>217</green>
+                  <blue>217</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="PlaceholderText">
+                <brush brushstyle="NoBrush">
+                 <color alpha="128">
+                  <red>0</red>
+                  <green>0</green>
+                  <blue>0</blue>
+                 </color>
+                </brush>
+               </colorrole>
+              </disabled>
+             </palette>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>链接IP</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="Robot_movebutton">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>45</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>45</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>定位</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="RobotGohomeButton">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>45</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>45</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>复位</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="RobotaxismoveButton">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>45</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>45</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>转轴</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QLabel" name="robot_state_show">
+         <property name="geometry">
+          <rect>
+           <x>140</x>
+           <y>50</y>
+           <width>60</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>未连接</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_6">
+        <property name="geometry">
+         <rect>
+          <x>840</x>
+          <y>20</y>
+          <width>310</width>
+          <height>260</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>外部轴控制</string>
+        </property>
+        <widget class="QLabel" name="label_34">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>50</y>
+           <width>120</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <property name="text">
+          <string>倾斜轴(变位机):</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="Positioner1lineEdit">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>45</y>
+           <width>120</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_45">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>100</y>
+           <width>120</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <property name="text">
+          <string>旋转轴(变位机):</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="Positioner2lineEdit">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>95</y>
+           <width>120</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="PositionermoveButton">
+         <property name="geometry">
+          <rect>
+           <x>25</x>
+           <y>200</y>
+           <width>110</width>
+           <height>40</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+border-radius:6px;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+border-radius:6px;
+}</string>
+         </property>
+         <property name="text">
+          <string>移动</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="PositionercomebackButton">
+         <property name="geometry">
+          <rect>
+           <x>170</x>
+           <y>200</y>
+           <width>110</width>
+           <height>40</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+border-radius:6px;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+border-radius:6px;
+}</string>
+         </property>
+         <property name="text">
+          <string>复位</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_46">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>150</y>
+           <width>120</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <property name="text">
+          <string>平移轴(地轨):</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="Positioner3lineEdit">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>145</y>
+           <width>120</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_7">
+        <property name="geometry">
+         <rect>
+          <x>840</x>
+          <y>290</y>
+          <width>310</width>
+          <height>300</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>机器人速度控制</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_5" columnstretch="5,3">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_47">
+           <property name="font">
+            <font>
+             <family>微软雅黑</family>
+             <pointsize>12</pointsize>
+             <weight>9</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+           </property>
+           <property name="text">
+            <string>机器运行速度(mm/s)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="RobotlinespeedlineEdit">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_64">
+           <property name="font">
+            <font>
+             <family>微软雅黑</family>
+             <pointsize>12</pointsize>
+             <weight>9</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+           </property>
+           <property name="text">
+            <string>重定位角速度(deg/s)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="RobotangularspeedlineEdit">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_65">
+           <property name="font">
+            <font>
+             <family>微软雅黑</family>
+             <pointsize>12</pointsize>
+             <weight>9</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+           </property>
+           <property name="text">
+            <string>外部轴线速度(mm/s)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="AxislinespeedlineEdit">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_66">
+           <property name="font">
+            <font>
+             <family>微软雅黑</family>
+             <pointsize>12</pointsize>
+             <weight>9</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">font: 75 12pt &quot;微软雅黑&quot;;</string>
+           </property>
+           <property name="text">
+            <string>外部轴角速度(deg/s)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="AxisangularspeedlineEdit">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>  控制系统  </string>
+      </attribute>
+      <widget class="QWidget" name="widget_2" native="true">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>1170</width>
+         <height>660</height>
+        </rect>
+       </property>
+       <property name="palette">
+        <palette>
+         <active>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+          <colorrole role="Window">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </active>
+         <inactive>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+          <colorrole role="Window">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </inactive>
+         <disabled>
+          <colorrole role="Button">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+          <colorrole role="Base">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+          <colorrole role="Window">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>242</red>
+             <green>242</green>
+             <blue>242</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
+        </palette>
+       </property>
+       <widget class="QGroupBox" name="groupBox_9">
+        <property name="geometry">
+         <rect>
+          <x>620</x>
+          <y>110</y>
+          <width>260</width>
+          <height>80</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>PLC控制</string>
+        </property>
+        <widget class="QPushButton" name="ConnectionPLCButton">
+         <property name="geometry">
+          <rect>
+           <x>12</x>
+           <y>30</y>
+           <width>110</width>
+           <height>35</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>110</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>110</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>微软雅黑</family>
+           <pointsize>14</pointsize>
+           <weight>50</weight>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:4px;
+border:4px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+border:4px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>连接PLC</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="DisconnectPLCButton">
+         <property name="geometry">
+          <rect>
+           <x>140</x>
+           <y>30</y>
+           <width>110</width>
+           <height>35</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:4px;
+border:4px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+border:4px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>断开PLC</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_12">
+        <property name="geometry">
+         <rect>
+          <x>620</x>
+          <y>195</y>
+          <width>260</width>
+          <height>135</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>气缸控制</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_6" columnstretch="0,0,0">
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>4</number>
+         </property>
+         <property name="rightMargin">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>10</number>
+         </property>
+         <property name="horizontalSpacing">
+          <number>10</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>6</number>
+         </property>
+         <item row="3" column="2">
+          <widget class="QPushButton" name="cylinder3_button">
+           <property name="minimumSize">
+            <size>
+             <width>90</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+           </property>
+           <property name="text">
+            <string>开关Ⅲ</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QPushButton" name="cylinder2_button">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+           </property>
+           <property name="text">
+            <string>开关Ⅱ</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QPushButton" name="cylinder1_button">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+           </property>
+           <property name="text">
+            <string>开关Ⅰ</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_28">
+           <property name="text">
+            <string>剪刀控制：</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_29">
+           <property name="text">
+            <string>抬升控制：</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_31">
+           <property name="text">
+            <string>压丝控制：</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QCheckBox" name="cylinder1_state">
+           <property name="maximumSize">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>ArrowCursor</cursorShape>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QCheckBox" name="cylinder2_state">
+           <property name="cursor">
+            <cursorShape>ArrowCursor</cursorShape>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QCheckBox" name="cylinder3_state">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_13">
+        <property name="geometry">
+         <rect>
+          <x>620</x>
+          <y>20</y>
+          <width>530</width>
+          <height>85</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>过程参数</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,2,1,2,1,2">
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_81">
+           <property name="styleSheet">
+            <string notr="true">font:12pt &quot;微软雅黑&quot;;</string>
+           </property>
+           <property name="text">
+            <string>路径行数 :</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="spinBox">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="maximum">
+            <number>999999999</number>
+           </property>
+           <property name="singleStep">
+            <number>1</number>
+           </property>
+           <property name="value">
+            <number>1</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_82">
+           <property name="styleSheet">
+            <string notr="true">font:12pt &quot;微软雅黑&quot;;</string>
+           </property>
+           <property name="text">
+            <string>完成率 :</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QProgressBar{
+	border:1px solid black;
+}</string>
+           </property>
+           <property name="minimum">
+            <number>0</number>
+           </property>
+           <property name="value">
+            <number>50</number>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="textDirection">
+            <enum>QProgressBar::TopToBottom</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_83">
+           <property name="styleSheet">
+            <string notr="true">font:12pt &quot;微软雅黑&quot;;</string>
+           </property>
+           <property name="text">
+            <string>剩余时间 :</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLCDNumber" name="lcdNumber">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>ArrowCursor</cursorShape>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Plain</enum>
+           </property>
+           <property name="smallDecimalPoint">
+            <bool>true</bool>
+           </property>
+           <property name="digitCount">
+            <number>6</number>
+           </property>
+           <property name="mode">
+            <enum>QLCDNumber::Dec</enum>
+           </property>
+           <property name="segmentStyle">
+            <enum>QLCDNumber::Flat</enum>
+           </property>
+           <property name="value" stdset="0">
+            <double>386.120000000000005</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_14">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>110</y>
+          <width>140</width>
+          <height>220</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>路径设置</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_13">
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="locusselectsetButton">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+           </property>
+           <property name="text">
+            <string>获取路径</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="locusseselectButton">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+           </property>
+           <property name="text">
+            <string>路径匹配</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="ParametersuitedtButton">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+           </property>
+           <property name="text">
+            <string>参数选择</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_15">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>110</y>
+          <width>440</width>
+          <height>480</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>路径可视化</string>
+        </property>
+        <widget class="QLabel" name="labelpic">
+         <property name="geometry">
+          <rect>
+           <x>1</x>
+           <y>26</y>
+           <width>16</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="HC_RD_2">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>30</y>
+           <width>211</width>
+           <height>201</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="TIC_RD_2">
+         <property name="geometry">
+          <rect>
+           <x>220</x>
+           <y>30</y>
+           <width>211</width>
+           <height>201</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="FC_VV_2">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>240</y>
+           <width>421</width>
+           <height>231</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_16">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>590</width>
+          <height>85</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>运动控制</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>10</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="Robot_movebutton_Gcode">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::ActionsContextMenu</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+           </property>
+           <property name="text">
+            <string>开始打印</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="PauseRobotButton">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+           </property>
+           <property name="text">
+            <string>暂停打印</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="ContinueRobotButton">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+           </property>
+           <property name="text">
+            <string>继续打印</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="StopRobotButton">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+           </property>
+           <property name="text">
+            <string>停止打印</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_17">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>335</y>
+          <width>140</width>
+          <height>255</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>路径测试</string>
+        </property>
+        <widget class="QCheckBox" name="force_test">
+         <property name="geometry">
+          <rect>
+           <x>16</x>
+           <y>37</y>
+           <width>111</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QCheckButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+}</string>
+         </property>
+         <property name="text">
+          <string>压力测试</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_11">
+        <property name="geometry">
+         <rect>
+          <x>620</x>
+          <y>335</y>
+          <width>260</width>
+          <height>170</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>电机控制</string>
+        </property>
+        <widget class="QLineEdit" name="Paving_distance">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>30</y>
+           <width>140</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);
+font:12pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <property name="placeholderText">
+          <string>铺带距离(mm)</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="Wire_feed_rate">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>66</y>
+           <width>140</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>微软雅黑</family>
+           <pointsize>12</pointsize>
+           <weight>50</weight>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);
+font:12pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <property name="placeholderText">
+          <string>送丝速度(mm/s)</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="parameter_input">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>66</y>
+           <width>90</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:10pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:10pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>参数写入</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="motor_enable">
+         <property name="geometry">
+          <rect>
+           <x>80</x>
+           <y>105</y>
+           <width>80</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);
+border-radius:4px;
+font:10pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);
+border-radius:4px;
+font:10pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>电机使能</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="motor_actuation">
+         <property name="geometry">
+          <rect>
+           <x>170</x>
+           <y>105</y>
+           <width>80</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);
+border-radius:4px;
+font:10pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);
+border-radius:4px;
+font:10pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>电机启动</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="interruption">
+         <property name="geometry">
+          <rect>
+           <x>93</x>
+           <y>142</y>
+           <width>70</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font:10pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <property name="text">
+          <string>点动</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="continuous">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>142</y>
+           <width>70</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font:10pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <property name="text">
+          <string>连续</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="motor_state">
+         <property name="geometry">
+          <rect>
+           <x>12</x>
+           <y>141</y>
+           <width>81</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font:10pt &quot;微软雅黑&quot;;</string>
+         </property>
+         <property name="text">
+          <string>电机状态：</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="state_show">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>30</y>
+           <width>90</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+font:10pt &quot;微软雅黑&quot;;
+border:3px outset rgb(200, 200, 200);</string>
+         </property>
+         <property name="text">
+          <string>操作按钮</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="motor_reset">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>105</y>
+           <width>60</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);
+border-radius:4px;
+font:10pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);
+border-radius:4px;
+font:10pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>复位</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_10">
+        <property name="geometry">
+         <rect>
+          <x>890</x>
+          <y>110</y>
+          <width>260</width>
+          <height>481</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>红外激光</string>
+        </property>
+        <widget class="QLineEdit" name="target_temperature_input">
+         <property name="geometry">
+          <rect>
+           <x>125</x>
+           <y>170</y>
+           <width>120</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit{
+background-color: rgb(255, 255, 255);
+font:12pt &quot;微软雅黑&quot;;
+}</string>
+         </property>
+         <property name="placeholderText">
+          <string>目标温度(°C)</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="laser_connect">
+         <property name="geometry">
+          <rect>
+           <x>145</x>
+           <y>130</y>
+           <width>100</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>激光连接</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="laser_open_button">
+         <property name="geometry">
+          <rect>
+           <x>135</x>
+           <y>330</y>
+           <width>110</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>激光开</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="laser_close_button">
+         <property name="geometry">
+          <rect>
+           <x>135</x>
+           <y>370</y>
+           <width>110</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>激光关</string>
+         </property>
+        </widget>
+        <widget class="QTextBrowser" name="laser_state_display">
+         <property name="geometry">
+          <rect>
+           <x>15</x>
+           <y>35</y>
+           <width>230</width>
+           <height>85</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QTextBrowser{
+font:8pt &quot;微软雅黑&quot;;
+}</string>
+         </property>
+         <property name="html">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'微软雅黑'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="redlight_show">
+         <property name="geometry">
+          <rect>
+           <x>15</x>
+           <y>130</y>
+           <width>105</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+font:10pt &quot;微软雅黑&quot;;
+border:3px outset rgb(200, 200, 200);
+}</string>
+         </property>
+         <property name="text">
+          <string>红光状态</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLabel" name="target_temperature_label">
+         <property name="geometry">
+          <rect>
+           <x>15</x>
+           <y>170</y>
+           <width>105</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+font:12pt &quot;微软雅黑&quot;;
+}</string>
+         </property>
+         <property name="text">
+          <string>目标温度(°C):</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_39">
+         <property name="geometry">
+          <rect>
+           <x>194</x>
+           <y>35</y>
+           <width>51</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+font:8pt&quot;微软雅黑&quot;;
+border:1px solid black;
+}</string>
+         </property>
+         <property name="text">
+          <string>状态日志</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="redlight_open">
+         <property name="geometry">
+          <rect>
+           <x>15</x>
+           <y>330</y>
+           <width>110</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>红光开</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="redlight_close">
+         <property name="geometry">
+          <rect>
+           <x>15</x>
+           <y>370</y>
+           <width>110</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>红光关</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="set_target_temperature">
+         <property name="geometry">
+          <rect>
+           <x>15</x>
+           <y>210</y>
+           <width>110</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>设置温度</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="temperature_control">
+         <property name="geometry">
+          <rect>
+           <x>135</x>
+           <y>210</y>
+           <width>110</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>温度调控</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="laser_power_label">
+         <property name="geometry">
+          <rect>
+           <x>15</x>
+           <y>250</y>
+           <width>105</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+font:12pt &quot;微软雅黑&quot;;
+}</string>
+         </property>
+         <property name="text">
+          <string>激光功率(W):</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="laser_power_input">
+         <property name="geometry">
+          <rect>
+           <x>125</x>
+           <y>250</y>
+           <width>120</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit{
+background-color: rgb(255, 255, 255);
+font:12pt &quot;微软雅黑&quot;;
+}</string>
+         </property>
+         <property name="placeholderText">
+          <string>功率设定值(W)</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="set_laser_power">
+         <property name="geometry">
+          <rect>
+           <x>15</x>
+           <y>290</y>
+           <width>110</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>激光功率写入</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="set_laser_power_control">
+         <property name="geometry">
+          <rect>
+           <x>135</x>
+           <y>290</y>
+           <width>110</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+font:12pt &quot;微软雅黑&quot;;
+border:3px groove gray;
+}</string>
+         </property>
+         <property name="text">
+          <string>激光功率控制</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_18">
+        <property name="geometry">
+         <rect>
+          <x>620</x>
+          <y>510</y>
+          <width>260</width>
+          <height>80</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>磁滞控制</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <property name="topMargin">
+          <number>4</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="Hysteresis_ratio">
+           <property name="maximumSize">
+            <size>
+             <width>50</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>比例：</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="Hysteresis_ratio_text">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);  
+font:12pt&quot;微软雅黑&quot;;</string>
+           </property>
+           <property name="placeholderText">
+            <string>范围(100-300)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="Hysteresis_ratio_input">
+           <property name="minimumSize">
+            <size>
+             <width>65</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>65</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+font:12pt&quot;微软雅黑&quot;;
+border-radius:4px;
+border:3px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+font:12pt&quot;微软雅黑&quot;;  
+border-radius:4px;
+border:3px groove gray;
+}</string>
+           </property>
+           <property name="text">
+            <string>写入</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>  监测系统 </string>
+      </attribute>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>10</y>
+         <width>1165</width>
+         <height>655</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTabWidget{
+	border:1px outset gray;
+}
+QTabWidget::tab-bar { 
+	alignment: center; 
+} 
+</string>
+       </property>
+       <property name="currentIndex">
+        <number>2</number>
+       </property>
+       <widget class="QWidget" name="HC">
+        <attribute name="title">
+         <string>高速相机</string>
+        </attribute>
+        <widget class="QWidget" name="widget_3" native="true">
+         <property name="geometry">
+          <rect>
+           <x>5</x>
+           <y>5</y>
+           <width>120</width>
+           <height>602</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QWidget{
+	border:1px outset gray;
+}</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="spacing">
+           <number>20</number>
+          </property>
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="topMargin">
+           <number>20</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_27">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel{
+    font:12pt&quot;微软雅黑&quot;;
+	border:none;
+}</string>
+            </property>
+            <property name="text">
+             <string>&lt;相机控制&gt;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="enum_cam">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+	border:4px outset gray;
+	background-color:rgb(217, 217, 217);
+	border-radius:6px;
+	font:12pt &quot;微软雅黑&quot;;
+}
+QPushButton::hover{
+	border:4px groove gray;
+	background-color:rgb(200, 200, 200);
+	border-radius:6px;
+	font:12pt &quot;微软雅黑&quot;;
+}</string>
+            </property>
+            <property name="text">
+             <string>检测设备</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="camera_list">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>35</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QComboBox{ 
+	font:12pt &quot;微软雅黑&quot;;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="HC_machine">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>连接设备</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="HC_data">
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>缺陷采集</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="HC_start">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>开始采集</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="HC_stop">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>关闭相机</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QLabel" name="HC_RD">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>5</y>
+           <width>613</width>
+           <height>410</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="HC_PData">
+         <property name="geometry">
+          <rect>
+           <x>748</x>
+           <y>5</y>
+           <width>406</width>
+           <height>272</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="HC_Abrasion">
+         <property name="geometry">
+          <rect>
+           <x>748</x>
+           <y>282</y>
+           <width>406</width>
+           <height>160</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="HC_Misalignment">
+         <property name="geometry">
+          <rect>
+           <x>748</x>
+           <y>447</y>
+           <width>406</width>
+           <height>160</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_10">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>5</y>
+           <width>80</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt &quot;微软雅黑&quot;;
+	background-color:none;
+}</string>
+         </property>
+         <property name="text">
+          <string>原始图像</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_11">
+         <property name="geometry">
+          <rect>
+           <x>748</x>
+           <y>5</y>
+           <width>80</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt &quot;微软雅黑&quot;;
+	background-color:none;
+}</string>
+         </property>
+         <property name="text">
+          <string>缺陷显示</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_12">
+         <property name="geometry">
+          <rect>
+           <x>748</x>
+           <y>282</y>
+           <width>70</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt &quot;微软雅黑&quot;;
+	background-color:none;
+}</string>
+         </property>
+         <property name="text">
+          <string>Abrasion</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_13">
+         <property name="geometry">
+          <rect>
+           <x>748</x>
+           <y>447</y>
+           <width>100</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt &quot;微软雅黑&quot;;
+	background-color:none;
+}</string>
+         </property>
+         <property name="text">
+          <string>Misalignment</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QFrame" name="frame_3">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>420</y>
+           <width>613</width>
+           <height>187</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QFrame{
+	border:1px solid gray;
+}</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QFrame" name="frame_5">
+            <property name="styleSheet">
+             <string notr="true">QFrame{
+	border:none;
+}</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="topMargin">
+              <number>15</number>
+             </property>
+             <property name="bottomMargin">
+              <number>15</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="label_3">
+               <property name="styleSheet">
+                <string notr="true">QLabel{
+	font:10pt&quot;微软雅黑&quot;;
+}</string>
+               </property>
+               <property name="text">
+                <string>Frame rate:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="styleSheet">
+                <string notr="true">QLabel{
+	font:10pt&quot;微软雅黑&quot;;
+}</string>
+               </property>
+               <property name="text">
+                <string>Exposure time:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_2">
+               <property name="styleSheet">
+                <string notr="true">QLabel{
+	font:10pt&quot;微软雅黑&quot;;
+}</string>
+               </property>
+               <property name="text">
+                <string>Gain:</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="frame_7">
+            <property name="styleSheet">
+             <string notr="true">QFrame{
+	border:none;
+}</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <widget class="QLineEdit" name="FrameRate">
+               <property name="styleSheet">
+                <string notr="true">QLineEdit{
+	font:10pt&quot;微软雅黑&quot;;
+}</string>
+               </property>
+               <property name="placeholderText">
+                <string>请输入帧率</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="ExposureTime">
+               <property name="styleSheet">
+                <string notr="true">QLineEdit{
+	font:10pt&quot;微软雅黑&quot;;
+}</string>
+               </property>
+               <property name="placeholderText">
+                <string>请输入曝光时间</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="Gain">
+               <property name="styleSheet">
+                <string notr="true">QLineEdit{
+	font:10pt&quot;微软雅黑&quot;;
+}</string>
+               </property>
+               <property name="placeholderText">
+                <string>请输入增益</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="frame_8">
+            <property name="styleSheet">
+             <string notr="true">QFrame{
+	border:none;
+}</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <item>
+              <widget class="QPushButton" name="get_parameter">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+font:10pt &quot;微软雅黑&quot;;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+font:10pt &quot;微软雅黑&quot;;
+}</string>
+               </property>
+               <property name="text">
+                <string>显示参数</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="set_parameter">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+font:10pt &quot;微软雅黑&quot;;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+font:10pt &quot;微软雅黑&quot;;
+}</string>
+               </property>
+               <property name="text">
+                <string>设置参数</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <zorder>HC_Misalignment</zorder>
+        <zorder>HC_Abrasion</zorder>
+        <zorder>HC_PData</zorder>
+        <zorder>HC_RD</zorder>
+        <zorder>widget_3</zorder>
+        <zorder>label_10</zorder>
+        <zorder>label_12</zorder>
+        <zorder>label_11</zorder>
+        <zorder>label_13</zorder>
+        <zorder>frame_3</zorder>
+       </widget>
+       <widget class="QWidget" name="TIC">
+        <attribute name="title">
+         <string>红外热像仪</string>
+        </attribute>
+        <widget class="QLabel" name="TIC_RD">
+         <property name="geometry">
+          <rect>
+           <x>5</x>
+           <y>90</y>
+           <width>691</width>
+           <height>518</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px outset gray;
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="TIC_PD">
+         <property name="geometry">
+          <rect>
+           <x>701</x>
+           <y>158</y>
+           <width>453</width>
+           <height>450</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px outset gray;
+}
+</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QFrame" name="frame">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>635</y>
+           <width>560</width>
+           <height>40</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QFrame{
+	border:1px outset gray;
+}</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <widget class="QSlider" name="horizontalSlider">
+          <property name="geometry">
+           <rect>
+            <x>315</x>
+            <y>6</y>
+            <width>235</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QSlider{
+}</string>
+          </property>
+          <property name="minimum">
+           <number>-50</number>
+          </property>
+          <property name="maximum">
+           <number>50</number>
+          </property>
+          <property name="sliderPosition">
+           <number>0</number>
+          </property>
+          <property name="tracking">
+           <bool>true</bool>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="radioButton">
+          <property name="geometry">
+           <rect>
+            <x>105</x>
+            <y>5</y>
+            <width>65</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QRadioButton{
+	font:14pt &quot;微软雅黑&quot;;
+}</string>
+          </property>
+          <property name="text">
+           <string>High</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_7">
+          <property name="geometry">
+           <rect>
+            <x>5</x>
+            <y>5</y>
+            <width>100</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QLabel{
+	border:none;
+}</string>
+          </property>
+          <property name="text">
+           <string>打印速度:</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="radioButton_2">
+          <property name="geometry">
+           <rect>
+            <x>175</x>
+            <y>5</y>
+            <width>70</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QRadioButton{
+	font:14pt &quot;微软雅黑&quot;;
+}</string>
+          </property>
+          <property name="text">
+           <string>Good</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="radioButton_3">
+          <property name="geometry">
+           <rect>
+            <x>250</x>
+            <y>5</y>
+            <width>60</width>
+            <height>30</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QRadioButton{
+	font:14pt &quot;微软雅黑&quot;;
+}</string>
+          </property>
+          <property name="text">
+           <string>Low</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QLabel" name="label_14">
+         <property name="geometry">
+          <rect>
+           <x>5</x>
+           <y>90</y>
+           <width>80</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt &quot;微软雅黑&quot;;
+	background-color:none;
+}</string>
+         </property>
+         <property name="text">
+          <string>原始图像</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_15">
+         <property name="geometry">
+          <rect>
+           <x>701</x>
+           <y>158</y>
+           <width>80</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt &quot;微软雅黑&quot;;
+	background-color:none;
+}</string>
+         </property>
+         <property name="text">
+          <string>截取图像</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QTextBrowser" name="textBrowser">
+         <property name="geometry">
+          <rect>
+           <x>5</x>
+           <y>5</y>
+           <width>390</width>
+           <height>80</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QTextBrowser{
+    font:8pt&quot;微软雅黑&quot;;
+}</string>
+         </property>
+        </widget>
+        <widget class="QFrame" name="TIC_control">
+         <property name="geometry">
+          <rect>
+           <x>701</x>
+           <y>5</y>
+           <width>454</width>
+           <height>147</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QFrame{
+	border:1px solid gray;
+}</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_10" stretch="2,4">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_17">
+            <property name="styleSheet">
+             <string notr="true">QLabel{
+	font:12pt&quot;微软雅黑&quot;;
+	border:none;
+	border-bottom:1px solid gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>&lt;红外热像仪控制&gt;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <property name="spacing">
+             <number>5</number>
+            </property>
+            <property name="leftMargin">
+             <number>10</number>
+            </property>
+            <property name="rightMargin">
+             <number>10</number>
+            </property>
+            <item>
+             <widget class="QFrame" name="frame_9">
+              <property name="styleSheet">
+               <string notr="true">QFrame{
+	border:none;
+}</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_2">
+               <property name="spacing">
+                <number>4</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>4</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="TIC_machine">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+font:10pt &quot;微软雅黑&quot;;
+border:2px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+font:10pt &quot;微软雅黑&quot;;
+border:2px groove gray;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>连接设备</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="TIC_data">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+font:10pt &quot;微软雅黑&quot;;
+border:2px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+font:10pt &quot;微软雅黑&quot;;
+border:2px groove gray;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>温度分析</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QFrame" name="frame_10">
+              <property name="styleSheet">
+               <string notr="true">QFrame{
+	border:none;
+}</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_8">
+               <property name="spacing">
+                <number>4</number>
+               </property>
+               <property name="leftMargin">
+                <number>4</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="TIC_start">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+font:10pt &quot;微软雅黑&quot;;
+border:2px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+font:10pt &quot;微软雅黑&quot;;
+border:2px groove gray;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>清空缓存</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="TIC_stop">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+font:10pt &quot;微软雅黑&quot;;
+border:2px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+font:10pt &quot;微软雅黑&quot;;
+border:2px groove gray;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>停止采集</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QLabel" name="label_logbrowser">
+         <property name="geometry">
+          <rect>
+           <x>305</x>
+           <y>5</y>
+           <width>90</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt &quot;微软雅黑&quot;;
+	background-color:none;
+}</string>
+         </property>
+         <property name="text">
+          <string>操作日志</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QFrame" name="closeloop_speed">
+         <property name="geometry">
+          <rect>
+           <x>400</x>
+           <y>5</y>
+           <width>296</width>
+           <height>80</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QFrame{
+	font:10pt&quot;微软雅黑&quot;;
+	border:1px solid gray;
+}</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_11">
+          <property name="spacing">
+           <number>5</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>5</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="2,5">
+            <property name="spacing">
+             <number>5</number>
+            </property>
+            <property name="leftMargin">
+             <number>10</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_16">
+              <property name="styleSheet">
+               <string notr="true">QLabel{
+	border:none;
+}</string>
+              </property>
+              <property name="text">
+               <string>打印速度:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QFrame" name="frame_11">
+              <property name="styleSheet">
+               <string notr="true">QFrame{
+	border:none;
+
+}</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_4">
+               <item>
+                <widget class="QRadioButton" name="radioButton_7">
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">font:10pt&quot;微软雅黑&quot;;</string>
+                 </property>
+                 <property name="text">
+                  <string>high</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButton_8">
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">font:10pt&quot;微软雅黑&quot;;</string>
+                 </property>
+                 <property name="text">
+                  <string>good</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButton_9">
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">font:10pt&quot;微软雅黑&quot;;</string>
+                 </property>
+                 <property name="text">
+                  <string>low</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QSlider" name="horizontalSlider_3">
+            <property name="cursor">
+             <cursorShape>ClosedHandCursor</cursorShape>
+            </property>
+            <property name="sliderPosition">
+             <number>50</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <zorder>TIC_RD</zorder>
+        <zorder>frame</zorder>
+        <zorder>label_14</zorder>
+        <zorder>TIC_PD</zorder>
+        <zorder>label_15</zorder>
+        <zorder>textBrowser</zorder>
+        <zorder>TIC_control</zorder>
+        <zorder>label_logbrowser</zorder>
+        <zorder>closeloop_speed</zorder>
+       </widget>
+       <widget class="QWidget" name="FC">
+        <attribute name="title">
+         <string>压力传感器</string>
+        </attribute>
+        <widget class="QWidget" name="widget_5" native="true">
+         <property name="geometry">
+          <rect>
+           <x>5</x>
+           <y>5</y>
+           <width>120</width>
+           <height>602</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QWidget{
+	border:1px outset gray;
+}
+</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3" stretch="2,0,4,4,4,4">
+          <property name="spacing">
+           <number>10</number>
+          </property>
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_30">
+            <property name="styleSheet">
+             <string notr="true">QLabel{
+	font:12pt&quot;微软雅黑&quot;;
+	border:none;
+}</string>
+            </property>
+            <property name="text">
+             <string>&lt;压力控制&gt;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Line" name="line_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="FC_machine">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>连接设备</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="FC_data">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>压力数据</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="FC_start">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>开始采集</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="FC_stop">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>停止采集</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QLabel" name="FC_RD">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>5</y>
+           <width>590</width>
+           <height>286</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px outset gray;
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="FC_VV">
+         <property name="geometry">
+          <rect>
+           <x>725</x>
+           <y>5</y>
+           <width>430</width>
+           <height>320</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px outset gray;
+}
+</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="FC_VAR">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>330</y>
+           <width>338</width>
+           <height>277</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px outset gray;
+}
+</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="FC_SD">
+         <property name="geometry">
+          <rect>
+           <x>473</x>
+           <y>330</y>
+           <width>338</width>
+           <height>277</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px outset gray;
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="FC_PEAK">
+         <property name="geometry">
+          <rect>
+           <x>816</x>
+           <y>330</y>
+           <width>339</width>
+           <height>277</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px outset gray;
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_18">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>5</y>
+           <width>80</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt &quot;微软雅黑&quot;;
+	background-color:none;
+}</string>
+         </property>
+         <property name="text">
+          <string>原始数据</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_22">
+         <property name="geometry">
+          <rect>
+           <x>725</x>
+           <y>5</y>
+           <width>60</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt &quot;微软雅黑&quot;;
+	background-color:none;
+}</string>
+         </property>
+         <property name="text">
+          <string>有效值</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_23">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>330</y>
+           <width>60</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt &quot;微软雅黑&quot;;
+	background-color:none;
+	alignment:center;
+}</string>
+         </property>
+         <property name="text">
+          <string>方差</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_24">
+         <property name="geometry">
+          <rect>
+           <x>473</x>
+           <y>330</y>
+           <width>70</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt &quot;微软雅黑&quot;;
+	background-color:none;
+}</string>
+         </property>
+         <property name="text">
+          <string>标准差</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_25">
+         <property name="geometry">
+          <rect>
+           <x>816</x>
+           <y>330</y>
+           <width>60</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt &quot;微软雅黑&quot;;
+	background-color:none;
+}</string>
+         </property>
+         <property name="text">
+          <string>峰值</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QFrame" name="frame_2">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>290</y>
+           <width>590</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="cursor">
+          <cursorShape>ArrowCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QFrame{
+	border:1px outset gray;
+}</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1,1,1,9">
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_26">
+            <property name="font">
+             <font>
+              <family>微软雅黑</family>
+              <pointsize>10</pointsize>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel{
+	border:none;
+    font:10pt &quot;微软雅黑&quot;;
+}</string>
+            </property>
+            <property name="text">
+             <string>层厚：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioButton_4">
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QRadioButton{
+	border:none;
+    font:10pt &quot;微软雅黑&quot;;
+}</string>
+            </property>
+            <property name="text">
+             <string>high</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioButton_5">
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QRadioButton{
+	border:none;
+    font:10pt &quot;微软雅黑&quot;;
+}</string>
+            </property>
+            <property name="text">
+             <string>good</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioButton_6">
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QRadioButton{
+	border:none;
+    font:10pt &quot;微软雅黑&quot;;
+}</string>
+            </property>
+            <property name="text">
+             <string>low</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="horizontalSlider_2">
+            <property name="cursor">
+             <cursorShape>ClosedHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QSlider{
+}</string>
+            </property>
+            <property name="minimum">
+             <number>-50</number>
+            </property>
+            <property name="maximum">
+             <number>50</number>
+            </property>
+            <property name="sliderPosition">
+             <number>0</number>
+            </property>
+            <property name="tracking">
+             <bool>true</bool>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="LL">
+        <attribute name="title">
+         <string>线激光</string>
+        </attribute>
+        <widget class="QWidget" name="widget_6" native="true">
+         <property name="geometry">
+          <rect>
+           <x>5</x>
+           <y>5</y>
+           <width>120</width>
+           <height>600</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QWidget{
+	border:1px outset gray;
+}</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4" stretch="2,0,4,4,4,4">
+          <property name="spacing">
+           <number>10</number>
+          </property>
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_35">
+            <property name="styleSheet">
+             <string notr="true">QLabel{
+	font:12pt&quot;微软雅黑&quot;;
+	border:none;
+}</string>
+            </property>
+            <property name="text">
+             <string>&lt;线激光控制&gt;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Line" name="line_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="LL_machine">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>终始坐标</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="LL_data">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>启动扫描</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="LL_start">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>显示扫描</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="LL_stop">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:8px;
+font:12pt &quot;微软雅黑&quot;;
+border:5px groove gray;
+}</string>
+            </property>
+            <property name="text">
+             <string>执行修复</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QLabel" name="LL_RD_1_background">
+         <property name="geometry">
+          <rect>
+           <x>550</x>
+           <y>5</y>
+           <width>600</width>
+           <height>600</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QWidget" name="LL_RD_1" native="true">
+         <property name="geometry">
+          <rect>
+           <x>560</x>
+           <y>15</y>
+           <width>581</width>
+           <height>581</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="grid_display"/>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QTextBrowser" name="textBrowser_ll">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>5</y>
+           <width>415</width>
+           <height>95</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QTextBrowser{
+    font:8pt&quot;微软雅黑&quot;;
+}</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="LL_path">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>105</y>
+           <width>415</width>
+           <height>500</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt&quot;微软雅黑&quot;;
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_36">
+         <property name="geometry">
+          <rect>
+           <x>475</x>
+           <y>5</y>
+           <width>70</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt &quot;微软雅黑&quot;;
+	background-color:none;
+}</string>
+         </property>
+         <property name="text">
+          <string>操作日志</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_48">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>105</y>
+           <width>70</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt &quot;微软雅黑&quot;;
+	background-color:none;
+}</string>
+         </property>
+         <property name="text">
+          <string>路径生成</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_49">
+         <property name="geometry">
+          <rect>
+           <x>550</x>
+           <y>5</y>
+           <width>80</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel{
+	border:1px solid gray;
+	font:10pt &quot;微软雅黑&quot;;
+	background-color:none;
+}</string>
+         </property>
+         <property name="text">
+          <string>缺陷区点云</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tab_6">
+      <attribute name="title">
+       <string>激光系统</string>
+      </attribute>
+      <widget class="QFrame" name="frame_4">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>941</width>
+         <height>471</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
