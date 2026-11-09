@@ -32,6 +32,8 @@ struct EgmTcpPose {
     double q4 = 0;
 };
 
+Q_DECLARE_METATYPE(EgmTcpPose)
+
 class EgmClient : public QObject {
     Q_OBJECT
 
@@ -81,6 +83,11 @@ signals:
 
     // 每约 1 秒上报一次已发送帧数，供 UI 判断链路是否健康。
     void packetCounterTick(quint64 packetsSent);
+
+    // 控制器每个反馈周期（EgmRobot.feedBack.cartesian）上报的实时 TCP 位姿。
+    // 单位 mm，四元数顺序与各坐标轴定义见 RAPID 端 EGMActPose 的 Tool/WObj。
+    // 由收包线程排队发到主线程，供 CSV 记录等使用。
+    void feedbackPoseReceived(const EgmTcpPose& pose);
 
 private:
     void runStreamingLoop();

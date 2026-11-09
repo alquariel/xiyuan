@@ -82,6 +82,9 @@ lib/sensors/**/*.ini
 rapid/**/*.rlf
 rapid/**/*.rsf
 
+# ---- EGM 反馈位姿记录（运行时生成，不入库）----
+data_save/
+
 # ---- 系统文件 ----
 Thumbs.db
 .DS_Store

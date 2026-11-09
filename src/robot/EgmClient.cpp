@@ -256,6 +256,9 @@ bool EgmClient::start() {
     boundPort_.store(0);
     running_.store(true);
 
+    // feedbackPoseReceived 是跨线程发到主线程的信号，自定义类型要先注册。
+    qRegisterMetaType<EgmTcpPose>("EgmTcpPose");
+
     worker_ = std::thread([this] { runStreamingLoop(); });
     emit streamingStateChanged(true);
     return true;
@@ -334,7 +337,11 @@ void EgmClient::runStreamingLoop() {
             if (!peerConnected_.exchange(true)) {
                 emit peerStateChanged(true);
             }
-            ParseRobotFeedbackCartesian(incoming, nullptr);  // 仅作连通性判断
+            // 反馈帧里带控制器的实时 TCP 位姿，解析成功后转发给主线程记录。
+            EgmTcpPose feedback;
+            if (ParseRobotFeedbackCartesian(incoming, &feedback)) {
+                emit feedbackPoseReceived(feedback);
+            }
         }
 
         // 2) 已建立对端后，把当前目标位姿回发（绝对位姿，mm + 四元数）

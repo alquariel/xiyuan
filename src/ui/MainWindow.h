@@ -1,7 +1,9 @@
 #pragma once
 
-#include <QWidget>
+#include <QFile>
+#include <QTextStream>
 #include <QTimer>
+#include <QWidget>
 
 #include "app/AppConfig.h"
 #include "app/AppPaths.h"
@@ -46,6 +48,9 @@ private slots:
     void tickEgmFlow();
     void stopEgmFlow();
 
+    // 控制器 EGM 反馈位姿 → data_save/data_yyyyMMdd_HHmmss.csv
+    void onEgmFeedbackPose(const EgmTcpPose& pose);
+
 private:
     void mousePressEvent(QMouseEvent* event) override;
     void initializeWindowChrome();
@@ -53,6 +58,9 @@ private:
     void initializeUiDefaults();
     void connectSignals();
     void centerOnScreen();
+
+    void startEgmCsvRecording();
+    void stopEgmCsvRecording();
 
     Ui::ContinuosfiberInterface* ui_;
     AppPaths paths_;
@@ -118,4 +126,11 @@ private:
     // never rotates just to "enter" the path.
     PathQuaternion egmAlignQuat_{1, 0, 0, 0};
     bool egmAlignValid_ = false;
+
+    // EGM 反馈位姿记录：每次 EGM 会话新建一个 data_save/data_*.csv。
+    // 只在主线程读写，暂停/结束时关闭。
+    QFile egmCsvFile_;
+    QTextStream egmCsvStream_;
+    bool egmCsvRecording_ = false;
+    int egmCsvRowsSinceFlush_ = 0;
 };

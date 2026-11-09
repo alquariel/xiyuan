@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QCheckBox>
 #include <QCoreApplication>
+#include <QDateTime>
 #include <QDir>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -20,6 +21,52 @@
 #include "ui_Interface4600_window.h"
 
 namespace {
+
+// Path txt default folder: prefer src/path inside the source tree.
+// The executable normally runs from build/ (or build/Debug, build/Release),
+// so walk up from the executable directory until src/path is found. A deployed
+// layout may also place src/path beside the executable. Falls back to the
+// executable directory when nothing matches.
+QString defaultPathTxtDir() {
+    const QString appDir = QCoreApplication::applicationDirPath();
+    const QStringList candidates = {
+        appDir + QStringLiteral("/src/path"),
+        appDir + QStringLiteral("/../src/path"),
+        appDir + QStringLiteral("/../../src/path"),
+        appDir + QStringLiteral("/../../../src/path"),
+    };
+    for (const QString& candidate : candidates) {
+        if (QDir(candidate).exists()) {
+            return QDir(candidate).absolutePath();
+        }
+    }
+    return appDir;
+}
+
+// data_save 目录：项目根下、与 src 文件夹同级。exe 通常在 build/ 下运行，
+// 因此从可执行文件目录逐级向上找到含 src 的目录作为项目根，再在其下建 data_save。
+// 部署环境（没有 src）时退回可执行文件同级的 data_save。
+QString dataSaveDir() {
+    const QString appDir = QCoreApplication::applicationDirPath();
+    const QStringList candidateRoots = {
+        appDir,
+        appDir + QStringLiteral("/.."),
+        appDir + QStringLiteral("/../.."),
+        appDir + QStringLiteral("/../../.."),
+    };
+    for (const QString& candidate : candidateRoots) {
+        const QString rootPath = QDir(candidate).absolutePath();
+        if (!QDir(rootPath + QStringLiteral("/src")).exists()) {
+            continue;
+        }
+        const QString target = rootPath + QStringLiteral("/data_save");
+        QDir().mkpath(target);
+        return target;
+    }
+    const QString fallback = QDir(appDir).absoluteFilePath(QStringLiteral("data_save"));
+    QDir().mkpath(fallback);
+    return fallback;
+}
 
 // Quaternion helpers (ABB order: q1 = scalar / w). Used only to align the
 // path's attitude onto the robot's real attitude at session start.
@@ -80,6 +127,7 @@ MainWindow::MainWindow(QWidget* parent)
 }
 
 MainWindow::~MainWindow() {
+    stopEgmCsvRecording();
     delete ui_;
 }
 
@@ -302,6 +350,8 @@ void MainWindow::connectSignals() {
                 ui_->robot_state_show->setToolTip(
                     QString("EGM: %1 packets sent").arg(packetsSent));
             });
+    connect(&egmClient_, &EgmClient::feedbackPoseReceived,
+            this, &MainWindow::onEgmFeedbackPose);
 }
 
 void MainWindow::centerOnScreen() {
@@ -351,9 +401,7 @@ void MainWindow::loadPathFromTxtDialog() {
             QString::fromUtf8(u8"EGM 未启用，当前只是预加载路径。安装 689-1 并启用 egm.enabled 后点 \"开始打印\" 生效。"));
     }
 
-    const QString defaultDir = QDir(QCoreApplication::applicationDirPath() + "/path").exists()
-        ? QCoreApplication::applicationDirPath() + "/path"
-        : QCoreApplication::applicationDirPath();
+    const QString defaultDir = defaultPathTxtDir();
 
     const QString filePath = QFileDialog::getOpenFileName(
         this,
@@ -522,9 +570,13 @@ void MainWindow::onStartPrintClicked() {
         return;
     }
 
+    // EGM 会话开始前开一个新 CSV，记录控制器实时反馈的 x/y/z/q1..q3。
+    startEgmCsvRecording();
+
     if (!egmClient_.start()) {
         QMessageBox::critical(this, QString::fromUtf8(u8"EGM 客户端启动失败"),
             QString::fromUtf8(u8"EgmClient::start() 返回 false。检查 egm.enabled / period_ms。"));
+        stopEgmCsvRecording();
         robotPrintService_.socket()->sendRawMessage(QStringLiteral("111 #"));
         return;
     }
@@ -615,10 +667,57 @@ void MainWindow::tickEgmFlow() {
 void MainWindow::stopEgmFlow() {
     egmTimer_.stop();
     egmClient_.stop();
+    stopEgmCsvRecording();
 
     if (robotPrintService_.socket() != nullptr && robotPrintService_.socket()->isConnected()) {
         robotPrintService_.socket()->sendRawMessage(QStringLiteral("111 #"));
     }
 
     egmFlowActive_ = false;
+}
+
+// ---- EGM 反馈位姿记录：data_save/data_年月日_时分秒.csv ----
+void MainWindow::startEgmCsvRecording() {
+    stopEgmCsvRecording();
+
+    const QString name = QStringLiteral("data_%1.csv").arg(
+        QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd_HHmmss")));
+    egmCsvFile_.setFileName(QDir(dataSaveDir()).absoluteFilePath(name));
+    if (!egmCsvFile_.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
+        ui_->robot_state_show->setText(
+            QString::fromUtf8(u8"EGM 反馈记录无法写入：%1").arg(egmCsvFile_.fileName()));
+        return;
+    }
+
+    egmCsvStream_.setDevice(&egmCsvFile_);
+    egmCsvStream_ << "x,y,z,q1,q2,q3\n";
+    egmCsvStream_.flush();
+    egmCsvRecording_ = true;
+    egmCsvRowsSinceFlush_ = 0;
+}
+
+void MainWindow::stopEgmCsvRecording() {
+    if (!egmCsvRecording_) return;
+
+    egmCsvRecording_ = false;
+    egmCsvStream_.flush();
+    egmCsvStream_.setDevice(nullptr);
+    egmCsvFile_.close();
+}
+
+void MainWindow::onEgmFeedbackPose(const EgmTcpPose& pose) {
+    if (!egmCsvRecording_) return;
+
+    egmCsvStream_ << QString::number(pose.x, 'f', 3) << ','
+                  << QString::number(pose.y, 'f', 3) << ','
+                  << QString::number(pose.z, 'f', 3) << ','
+                  << QString::number(pose.q1, 'f', 6) << ','
+                  << QString::number(pose.q2, 'f', 6) << ','
+                  << QString::number(pose.q3, 'f', 6) << '\n';
+
+    // 每 250 帧（约 1 秒）落一次盘，兼顾实时性与磁盘写入开销。
+    if (++egmCsvRowsSinceFlush_ >= 250) {
+        egmCsvStream_.flush();
+        egmCsvRowsSinceFlush_ = 0;
+    }
 }
