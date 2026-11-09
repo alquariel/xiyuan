@@ -29,6 +29,7 @@
 # RAPID modules are .mod too - keep them tracked
 !rapid/**/*.mod
 !mod_files/**/*.mod
+!winding4600/**/*.mod
 
 # Compiled Static libraries
 *.lai

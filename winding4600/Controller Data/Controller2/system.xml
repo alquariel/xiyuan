@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SystemProperties>
+  <SystemName>Controller2</SystemName>
+  <SerialNo>VIRTUAL_USE</SerialNo>
+  <UsedMedia>
+    <Media path="C:\Users\15840\AppData\Local\ABB\RobotWare\RobotWare_6.14.0136" name="RobotWare" version="6.14.0136">
+    </Media>
+  </UsedMedia>
+  <ControlModule>
+    <Option descr="RobotWare Base">
+    </Option>
+    <Option descr="Chinese">
+    </Option>
+    <Option descr="709-1 DeviceNet Master/Slave">
+    </Option>
+    <Option descr="841-1 EtherNet/IP Scanner/Adapter">
+    </Option>
+    <Option descr="888-2 PROFINET Controller/Device">
+    </Option>
+    <Option descr="840-2 PROFIBUS Anybus Device">
+    </Option>
+    <Option descr="616-1 PC Interface">
+    </Option>
+    <Option descr="688-1 RobotStudio App Connect">
+    </Option>
+    <Option descr="623-1 Multitasking">
+    </Option>
+    <Option descr="1341-1/1520-1 Integrated Vision Interface">
+    </Option>
+    <Option descr="689-1 Externally Guided Motion (EGM)">
+    </Option>
+    <Option descr="UDPUC Driver">
+    </Option>
+  </ControlModule>
+  <DriveModule>
+    <Name>Robot1</Name>
+    <Option descr="Drive System IRB 460/640/660/760/4600/66xx/6700">
+    </Option>
+    <Option descr="ADU-790A in position X3">
+    </Option>
+    <Option descr="ADU-790A in position Y3">
+    </Option>
+    <Option descr="ADU-790A in position Z3">
+    </Option>
+    <Option descr="Axis Calibration">
+    </Option>
+    <Option descr="IRB 4600-40/2.55 Type C">
+    </Option>
+  </DriveModule>
+</SystemProperties>
