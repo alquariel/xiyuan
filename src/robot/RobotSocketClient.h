@@ -24,6 +24,8 @@ public:
     RobotSocketResult sendStop() override;
     RobotSocketResult sendRawMessage(const QString& frame) override;
     RobotSocketResult sendRawMessageWithReply(const QString& frame, QString& reply) override;
+    RobotSocketResult sendRawMessageWithReply(const QString& frame, QString& reply,
+                                              int timeoutMs) override;
 
     // CASE 0 Ping — sends "0 #" and waits for "0 1" to verify the peer is
     // really the SERVER.mod RAPID process, not just any program bound to the

@@ -61,6 +61,14 @@ public:
         Q_UNUSED(reply);
         return RobotSocketResult::failure("Reply capture is not supported by this socket.");
     }
+
+    // 带超时的版本：EGM 启动前的握手查询必须快（不能像默认 3 s 那样把界面
+    // 卡住十几秒）。默认实现忽略超时，退回上面的固定超时版本。
+    virtual RobotSocketResult sendRawMessageWithReply(const QString& frame, QString& reply,
+                                                      int timeoutMs) {
+        Q_UNUSED(timeoutMs);
+        return sendRawMessageWithReply(frame, reply);
+    }
 };
 
 // Interface for the DB18 print commands needed by the robot print workflow.

@@ -125,19 +125,24 @@ RobotSocketResult RobotSocketClient::sendRawMessage(const QString& message) {
 }
 
 RobotSocketResult RobotSocketClient::sendRawMessageWithReply(const QString& frame, QString& reply) {
+    return sendRawMessageWithReply(frame, reply, timeoutMs_);
+}
+
+RobotSocketResult RobotSocketClient::sendRawMessageWithReply(const QString& frame, QString& reply,
+                                                             int timeoutMs) {
     reply.clear();
     if (!isConnected()) {
         return RobotSocketResult::failure("Robot socket is not connected.");
     }
 
     const QByteArray payload = frame.toUtf8();
-    if (socket_.write(payload) != payload.size() || !socket_.waitForBytesWritten(timeoutMs_)) {
+    if (socket_.write(payload) != payload.size() || !socket_.waitForBytesWritten(timeoutMs)) {
         return RobotSocketResult::failure(
             QString("Failed to write robot socket message '%1': %2").arg(frame, socket_.errorString()));
     }
 
     // RAPID answers every command with one line of text (no terminator).
-    if (!socket_.waitForReadyRead(timeoutMs_)) {
+    if (!socket_.waitForReadyRead(timeoutMs)) {
         return RobotSocketResult::failure(
             QString("Timed out waiting for the reply to '%1': %2").arg(frame, socket_.errorString()));
     }

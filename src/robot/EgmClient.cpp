@@ -249,6 +249,11 @@ bool EgmClient::start() {
     if (running_.load()) {
         return true;  // 已经在跑
     }
+    // 上一轮若因端口绑定失败而退出，worker_ 可能还是 joinable；直接赋新线程
+    // 会 std::terminate，必须先回收。
+    if (worker_.joinable()) {
+        worker_.join();
+    }
 
     stopRequested_.store(false);
     peerConnected_.store(false);
@@ -260,12 +265,36 @@ bool EgmClient::start() {
     qRegisterMetaType<EgmTcpPose>("EgmTcpPose");
 
     worker_ = std::thread([this] { runStreamingLoop(); });
+
+    // 绑定 6510 失败时线程会立刻退出。这里等一小会儿再判定，否则启动失败
+    // 会完全静默：机器人不动、没有报错、CSV 只有表头。
+    for (int i = 0; i < 30; ++i) {
+        if (boundPort_.load() != 0 || !running_.load()) {
+            break;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+    if (!running_.load() || boundPort_.load() == 0) {
+        if (worker_.joinable()) {
+            worker_.join();
+        }
+        running_.store(false);
+        peerConnected_.store(false);
+        emit streamingStateChanged(false);
+        return false;
+    }
+
     emit streamingStateChanged(true);
     return true;
 }
 
 void EgmClient::stop() {
-    if (!running_.load()) return;
+    if (!running_.load()) {
+        if (worker_.joinable()) {
+            worker_.join();
+        }
+        return;
+    }
 
     stopRequested_.store(true);
     if (worker_.joinable()) {

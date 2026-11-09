@@ -127,6 +127,23 @@ private:
     PathQuaternion egmAlignQuat_{1, 0, 0, 0};
     bool egmAlignValid_ = false;
 
+    // Pose-mode translation compensation: the whole path is shifted by
+    // (live TCP - path start) so it begins exactly where the robot stands.
+    // Confirmed by the user in a dialog before the EGM session starts.
+    PathVector3 egmPathOffsetMm_{};
+
+    // 控制器最近一帧 EGM 反馈的真实 TCP 位姿。上一轮 EGM 会话结束后 RAPID 的
+    // CASE 113 会返回「位置相近、姿态偏 30°~40°」的错误读数，因此下一轮启动
+    // 优先用这个缓存做起点补偿与姿态对齐，113 只做交叉校验/兜底。
+    EgmTcpPose lastFeedbackPose_{};
+    bool hasLastFeedbackPose_ = false;
+
+    // 启动看门狗：EGM 启动后若一直收不到控制器反馈帧，说明会话根本没跑起来
+    // （T_ROB1 停机 / EGM 状态未复位 / 6510 被占）。超时后自动停流并给出诊断，
+    // 否则表现为「点了开始、机器人不动、也没有任何报错」。
+    QTimer egmStartWatchdog_;
+    QString egmStartContext_;
+
     // EGM 反馈位姿记录：每次 EGM 会话新建一个 data_save/data_*.csv。
     // 只在主线程读写，暂停/结束时关闭。
     QFile egmCsvFile_;
