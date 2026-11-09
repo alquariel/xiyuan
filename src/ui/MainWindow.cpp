@@ -1026,13 +1026,19 @@ void MainWindow::stopEgmFlow() {
     egmFlowActive_ = false;
 }
 
-// ---- EGM 反馈位姿记录：data_save/data_年月日_时分秒.csv ----
+// ---- EGM 反馈位姿记录：data_save/data_年月日/data_年月日_时分秒.csv ----
 void MainWindow::startEgmCsvRecording() {
     stopEgmCsvRecording();
 
+    const QDateTime now = QDateTime::currentDateTime();
+    // 每天一个子目录，避免单目录堆积过多文件。
+    const QString dayDir = QStringLiteral("data_%1").arg(now.toString(QStringLiteral("yyyyMMdd")));
+    const QString dirPath = QDir(dataSaveDir()).absoluteFilePath(dayDir);
+    QDir().mkpath(dirPath);
+
     const QString name = QStringLiteral("data_%1.csv").arg(
-        QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd_HHmmss")));
-    egmCsvFile_.setFileName(QDir(dataSaveDir()).absoluteFilePath(name));
+        now.toString(QStringLiteral("yyyyMMdd_HHmmss")));
+    egmCsvFile_.setFileName(QDir(dirPath).absoluteFilePath(name));
     if (!egmCsvFile_.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
         ui_->robot_state_show->setText(
             QString::fromUtf8(u8"EGM 反馈记录无法写入：%1").arg(egmCsvFile_.fileName()));
@@ -1040,7 +1046,7 @@ void MainWindow::startEgmCsvRecording() {
     }
 
     egmCsvStream_.setDevice(&egmCsvFile_);
-    egmCsvStream_ << "x,y,z,q1,q2,q3\n";
+    egmCsvStream_ << "x,y,z\n";
     egmCsvStream_.flush();
     egmCsvRecording_ = true;
     egmCsvRowsSinceFlush_ = 0;
@@ -1065,10 +1071,7 @@ void MainWindow::onEgmFeedbackPose(const EgmTcpPose& pose) {
 
     egmCsvStream_ << QString::number(pose.x, 'f', 3) << ','
                   << QString::number(pose.y, 'f', 3) << ','
-                  << QString::number(pose.z, 'f', 3) << ','
-                  << QString::number(pose.q1, 'f', 6) << ','
-                  << QString::number(pose.q2, 'f', 6) << ','
-                  << QString::number(pose.q3, 'f', 6) << '\n';
+                  << QString::number(pose.z, 'f', 3) << '\n';
 
     // 每 250 帧（约 1 秒）落一次盘，兼顾实时性与磁盘写入开销。
     if (++egmCsvRowsSinceFlush_ >= 250) {
