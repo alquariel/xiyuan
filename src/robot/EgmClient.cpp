@@ -329,6 +329,35 @@ void EgmClient::setTargetJoints(const double jointsDeg[6]) {
     }
 }
 
+// ---- 导纳压力闭环接口 ----
+
+void EgmClient::enablePressureControl(bool on) {
+    pressureEnabled_.store(on);
+    if (on) {
+        std::lock_guard<std::mutex> guard(pressureMutex_);
+        pressureController_.reset();
+    }
+}
+
+bool EgmClient::pressureControlEnabled() const {
+    return pressureEnabled_.load();
+}
+
+void EgmClient::setPressureMeasured(double newton) {
+    std::lock_guard<std::mutex> guard(pressureMutex_);
+    pressureMeasured_ = newton;
+}
+
+void EgmClient::setPressureTarget(double newton) {
+    std::lock_guard<std::mutex> guard(pressureMutex_);
+    pressureTarget_ = newton;
+}
+
+void EgmClient::setPressureControllerConfig(const PressureController::Config& cfg) {
+    std::lock_guard<std::mutex> guard(pressureMutex_);
+    pressureController_.setConfig(cfg);
+}
+
 void EgmClient::runStreamingLoop() {
     QUdpSocket socket;
     // UdpUc 的 RemotePortNumber 就是本机监听端口（SIO.cfg 里配的 6510）。
@@ -386,6 +415,27 @@ void EgmClient::runStreamingLoop() {
                     joints[axis] = currentJoints_[axis];
                 }
             }
+
+            // ---- 导纳式压力闭环叠加 ----
+            // 仅 Pose 模式生效：沿工具系 Z 轴（法向）叠加 PID 算出的高度修正。
+            if (mode == Mode::Pose && pressureEnabled_.load()) {
+                double pMeas = 0.0, pTgt = pressureTarget_;
+                {
+                    std::lock_guard<std::mutex> guard(pressureMutex_);
+                    pMeas = pressureMeasured_;
+                    pTgt = pressureTarget_;
+                }
+                double dx = 0, dy = 0, dz = 0;
+                const double errN = pressureController_.step(
+                    pMeas, pTgt,
+                    pose.q1, pose.q2, pose.q3, pose.q4,
+                    &dx, &dy, &dz);
+                pose.x += dx;
+                pose.y += dy;
+                pose.z += dz;
+                emit pressureControllerState(pressureController_.hOffset(), errN);
+            }
+
             const QByteArray payload = (mode == Mode::Joint)
                                            ? BuildJointSensorMessage(joints, sequence)
                                            : BuildSensorMessage(pose, sequence);

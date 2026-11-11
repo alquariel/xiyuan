@@ -406,6 +406,13 @@ void MainWindow::connectSignals() {
     connect(&egmClient_, &EgmClient::feedbackPoseReceived,
             this, &MainWindow::onEgmFeedbackPose);
 
+    // 模拟压力源（10ms tick）→ EGM 压力闭环控制器的测量值注入。
+    // PressureSimulator 由 startEgmCsvRecording 启动、stopEgmCsvRecording 停止，
+    // 正好与 EGM 会话生命周期对齐。将来换成真实压力传感器时，把这条 connect
+    // 换成传感器的 dataReady 信号即可。
+    connect(&pressureSim_, &PressureSimulator::ticked,
+            &egmClient_, &EgmClient::setPressureMeasured);
+
     // 启动看门狗：EGM 启动后 2.5 s 内收不到任何 EgmRobot 反馈帧，说明会话
     // 根本没跑起来。这时必须主动停下并说明原因，否则就是「机器人不动、
     // 也没有报错」的静默失败。
@@ -907,6 +914,12 @@ void MainWindow::onStartPrintClicked() {
     // EGM 会话开始前开一个新 CSV，记录控制器实时反馈的 x/y/z/q1..q3。
     startEgmCsvRecording();
 
+    // ---- 导纳式压力闭环 ----
+    // 仅 Pose 模式生效；enable 时内部自动 reset() PID 状态，避免上轮会话的 h_offset 串入。
+    // 想临时关掉压力闭环，把这两行注释掉即可。
+    egmClient_.setPressureTarget(80.0);        // 目标法向压力 N
+    egmClient_.enablePressureControl(true);
+
     if (!egmClient_.start()) {
         QMessageBox::critical(this, QString::fromUtf8(u8"EGM 客户端启动失败"),
             QString::fromUtf8(u8"本地 UDP 端口没有绑定成功（boundPort=%1）。\n\n"
@@ -1013,6 +1026,7 @@ void MainWindow::tickEgmFlow() {
 void MainWindow::stopEgmFlow() {
     egmStartWatchdog_.stop();
     egmTimer_.stop();
+    egmClient_.enablePressureControl(false);  // 先关压力闭环，再停 UDP 流
     egmClient_.stop();
     stopEgmCsvRecording();
 
