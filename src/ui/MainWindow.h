@@ -17,6 +17,7 @@
 #include "services/grafana/GrafanaStartupService.h"
 #include "services/camera/HighSpeedCameraService.h"
 #include "services/thermal_camera/ThermalCameraService.h"
+#include "pressure/PressureSimulator.h"
 #include "services/robot/RobotMovementService.h"
 #include "services/robot_monitor/RobotMonitoringService.h"
 #include "services/robot/RobotPrintService.h"
@@ -150,4 +151,8 @@ private:
     QTextStream egmCsvStream_;
     bool egmCsvRecording_ = false;
     int egmCsvRowsSinceFlush_ = 0;
+
+    // 模拟法向压力 Fz 数据源：10 ms 采样，均值 80 N、波动 ±20 N。
+    // CSV 写入时直接追加 currentValue()，不需要与 EGM 位姿流时间对齐。
+    PressureSimulator pressureSim_{this};
 };

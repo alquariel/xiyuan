@@ -1046,15 +1046,19 @@ void MainWindow::startEgmCsvRecording() {
     }
 
     egmCsvStream_.setDevice(&egmCsvFile_);
-    egmCsvStream_ << "x,y,z\n";
+    egmCsvStream_ << "x,y,z,Fz\n";
     egmCsvStream_.flush();
     egmCsvRecording_ = true;
     egmCsvRowsSinceFlush_ = 0;
+
+    // CSV 录制启动时同步启动模拟压力源，写行时直接取 currentValue()。
+    pressureSim_.start();
 }
 
 void MainWindow::stopEgmCsvRecording() {
     if (!egmCsvRecording_) return;
 
+    pressureSim_.stop();
     egmCsvRecording_ = false;
     egmCsvStream_.flush();
     egmCsvStream_.setDevice(nullptr);
@@ -1071,7 +1075,8 @@ void MainWindow::onEgmFeedbackPose(const EgmTcpPose& pose) {
 
     egmCsvStream_ << QString::number(pose.x, 'f', 3) << ','
                   << QString::number(pose.y, 'f', 3) << ','
-                  << QString::number(pose.z, 'f', 3) << '\n';
+                  << QString::number(pose.z, 'f', 3) << ','
+                  << QString::number(pressureSim_.currentValue(), 'f', 2) << '\n';
 
     // 每 250 帧（约 1 秒）落一次盘，兼顾实时性与磁盘写入开销。
     if (++egmCsvRowsSinceFlush_ >= 250) {

@@ -143,6 +143,8 @@ set(APP_SOURCES
     src/services/plc/PlcService.cpp
     src/services/pressure/PressureService.h
     src/services/pressure/PressureService.cpp
+    src/pressure/PressureSimulator.h
+    src/pressure/PressureSimulator.cpp
     src/services/camera/HighSpeedCameraService.h
     src/services/camera/HighSpeedCameraService.cpp
     src/services/thermal_camera/ThermalCameraService.h
