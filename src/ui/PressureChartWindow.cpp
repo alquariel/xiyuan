@@ -1,5 +1,9 @@
 #include "ui/PressureChartWindow.h"
 
+#include <QKeyEvent>
+#include <QMouseEvent>
+#include <QNativeGestureEvent>
+#include <QWheelEvent>
 #include <QPainter>
 #include <QTimer>
 #include <QVBoxLayout>
@@ -10,6 +14,7 @@
 #include <QtCharts/QValueAxis>
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
 
 PressureChartWindow::PressureChartWindow(QWidget* parent)
@@ -69,7 +74,11 @@ PressureChartWindow::PressureChartWindow(QWidget* parent)
     pressureView_ = new QChartView(pressureChart_, this);
     pressureView_->setRenderHint(QPainter::Antialiasing);
     pressureView_->setMinimumHeight(260);
-    pressureView_->setRubberBand(QChartView::HorizontalRubberBand);
+    pressureView_->setRubberBand(QChartView::NoRubberBand);   // 左键拖动改为平移，不再用橡皮筋缩放
+    pressureView_->setFocusPolicy(Qt::StrongFocus);
+    pressureView_->viewport()->setCursor(Qt::OpenHandCursor);
+    pressureView_->viewport()->installEventFilter(this);
+    pressureView_->installEventFilter(this);
 
     mainLayout->addWidget(pressureView_, 1);
 
@@ -115,7 +124,11 @@ PressureChartWindow::PressureChartWindow(QWidget* parent)
     zView_ = new QChartView(zChart_, this);
     zView_->setRenderHint(QPainter::Antialiasing);
     zView_->setMinimumHeight(260);
-    zView_->setRubberBand(QChartView::HorizontalRubberBand);
+    zView_->setRubberBand(QChartView::NoRubberBand);
+    zView_->setFocusPolicy(Qt::StrongFocus);
+    zView_->viewport()->setCursor(Qt::OpenHandCursor);
+    zView_->viewport()->installEventFilter(this);
+    zView_->installEventFilter(this);
 
     mainLayout->addWidget(zView_, 1);
 }
@@ -127,15 +140,20 @@ void PressureChartWindow::appendPressureSample(double targetN,
     pressureMeasuredSeries_->append(pressureIndex_, measuredN);
     pressureErrorSeries_->append(pressureIndex_, errorN);
 
-    if (pressureTargetSeries_->count() > kMaxPoints) {
+    if (pressureTargetSeries_->count() > kMaxHistory) {
         pressureTargetSeries_->remove(0);
         pressureMeasuredSeries_->remove(0);
         pressureErrorSeries_->remove(0);
     }
-    updateXRange(pressureAxisX_, pressureIndex_);
-    // Y 轴量程每 10 个采样重算一次，避免 250Hz 下频繁扫描全部点
-    if (pressureIndex_ % 10 == 0) {
-        updateYRange(pressureChart_, pressureAxisY_);
+    if (pressureFollow_) {
+        updateXRange(pressureAxisX_, pressureIndex_);
+        // Y 轴量程每 10 个采样重算一次，避免 250Hz 下频繁扫描全部点
+        if (pressureIndex_ % 10 == 0) {
+            updateYRange(pressureChart_, pressureAxisY_);
+        }
+    } else if (focusedView_ == pressureView_ && !pressureLocked_) {
+        // 放大查看完整曲线时，X 轴保持从 0 到最新点，曲线随数据继续延伸
+        pressureAxisX_->setRange(0, std::max(100, pressureIndex_));
     }
     ++pressureIndex_;
 }
@@ -144,13 +162,17 @@ void PressureChartWindow::appendZSample(double targetZmm, double actualZmm) {
     zTargetSeries_->append(zIndex_, targetZmm);
     zActualSeries_->append(zIndex_, actualZmm);
 
-    if (zTargetSeries_->count() > kMaxPoints) {
+    if (zTargetSeries_->count() > kMaxHistory) {
         zTargetSeries_->remove(0);
         zActualSeries_->remove(0);
     }
-    updateXRange(zAxisX_, zIndex_);
-    if (zIndex_ % 10 == 0) {
-        updateYRange(zChart_, zAxisY_);
+    if (zFollow_) {
+        updateXRange(zAxisX_, zIndex_);
+        if (zIndex_ % 10 == 0) {
+            updateYRange(zChart_, zAxisY_);
+        }
+    } else if (focusedView_ == zView_ && !zLocked_) {
+        zAxisX_->setRange(0, std::max(100, zIndex_));
     }
     ++zIndex_;
 }
@@ -186,6 +208,181 @@ void PressureChartWindow::updateYRange(QChart* chart, QValueAxis* axis) {
     axis->setRange(lo - pad, hi + pad);
 }
 
+// ======================= 鼠标交互 =======================
+
+QChartView* PressureChartWindow::viewAt(QObject* watched) const {
+    if (pressureView_ != nullptr
+        && (watched == pressureView_ || watched == pressureView_->viewport())) {
+        return pressureView_;
+    }
+    if (zView_ != nullptr
+        && (watched == zView_ || watched == zView_->viewport())) {
+        return zView_;
+    }
+    return nullptr;
+}
+
+QValueAxis* PressureChartWindow::axisXOf(const QChartView* view) const {
+    return view == pressureView_ ? pressureAxisX_ : zAxisX_;
+}
+
+QValueAxis* PressureChartWindow::axisYOf(const QChartView* view) const {
+    return view == pressureView_ ? pressureAxisY_ : zAxisY_;
+}
+
+QChart* PressureChartWindow::chartOf(const QChartView* view) const {
+    return view == pressureView_ ? pressureChart_ : zChart_;
+}
+
+int PressureChartWindow::lastIndexOf(const QChartView* view) const {
+    const int index = (view == pressureView_) ? pressureIndex_ : zIndex_;
+    return std::max(0, index - 1);
+}
+
+bool* PressureChartWindow::followOf(const QChartView* view) {
+    return view == pressureView_ ? &pressureFollow_ : &zFollow_;
+}
+
+bool* PressureChartWindow::lockedOf(const QChartView* view) {
+    return view == pressureView_ ? &pressureLocked_ : &zLocked_;
+}
+
+void PressureChartWindow::restoreLiveView() {
+    focusedView_ = nullptr;
+    pressureView_->setVisible(true);
+    zView_->setVisible(true);
+    pressureFollow_ = true;
+    zFollow_ = true;
+    pressureLocked_ = false;
+    zLocked_ = false;
+    if (pressureIndex_ > 0) updateXRange(pressureAxisX_, pressureIndex_ - 1);
+    if (zIndex_ > 0) updateXRange(zAxisX_, zIndex_ - 1);
+    updateYRange(pressureChart_, pressureAxisY_);
+    updateYRange(zChart_, zAxisY_);
+}
+
+void PressureChartWindow::toggleFocus(QChartView* view) {
+    if (view == nullptr) return;
+    if (focusedView_ == view) {   // 再次单击：恢复双图 + 实时滑动
+        restoreLiveView();
+        return;
+    }
+
+    focusedView_ = view;
+    const bool isPressure = (view == pressureView_);
+    (isPressure ? pressureView_ : zView_)->setVisible(true);
+    (isPressure ? zView_ : pressureView_)->setVisible(false);
+
+    *followOf(view) = false;
+    *lockedOf(view) = false;
+
+    // 显示完整曲线：X 轴覆盖 0 到最新采样序号，后续新点继续向右延伸
+    axisXOf(view)->setRange(0, std::max(100, lastIndexOf(view)));
+    updateYRange(chartOf(view), axisYOf(view));
+}
+
+void PressureChartWindow::zoomXAxis(QChartView* view, double factor,
+                                    double anchorPixelX) {
+    if (view == nullptr || factor <= 0.0) return;
+
+    QValueAxis* axisX = axisXOf(view);
+    const QRectF plot = chartOf(view)->plotArea();
+    if (plot.width() <= 0.0) return;
+
+    // 锚点：鼠标（或捏合中心）所在的采样序号，缩放前后保持不动
+    const double span = axisX->max() - axisX->min();
+    const double frac = std::clamp(
+        (anchorPixelX - plot.left()) / plot.width(), 0.0, 1.0);
+    const double anchor = axisX->min() + frac * span;
+
+    const double last = static_cast<double>(lastIndexOf(view));
+    const double maxSpan = std::max(100.0, last + 1.0);
+    const double newSpan = std::clamp(span / factor, 20.0, maxSpan);
+
+    double newMin = anchor - frac * newSpan;
+    newMin = std::clamp(newMin, 0.0, std::max(0.0, last + 1.0 - newSpan));
+    axisX->setRange(newMin, newMin + newSpan);
+
+    // 手动缩放后暂停自动跟随，避免新数据把窗口拉回实时位置
+    *followOf(view) = false;
+    *lockedOf(view) = true;
+}
+
+bool PressureChartWindow::eventFilter(QObject* watched, QEvent* event) {
+    QChartView* view = viewAt(watched);
+    if (view == nullptr) return QWidget::eventFilter(watched, event);
+
+    switch (event->type()) {
+    case QEvent::MouseButtonPress: {
+        auto* me = static_cast<QMouseEvent*>(event);
+        if (me->button() != Qt::LeftButton) break;
+        view->setFocus(Qt::MouseFocusReason);
+        QValueAxis* axisX = axisXOf(view);
+        dragView_ = view;
+        dragMoved_ = false;
+        dragStartX_ = me->pos().x();
+        dragStartMin_ = axisX->min();
+        dragSpan_ = axisX->max() - axisX->min();
+        const double plotWidth = std::max(1.0, chartOf(view)->plotArea().width());
+        dragUnitsPerPx_ = dragSpan_ / plotWidth;
+        view->viewport()->setCursor(Qt::ClosedHandCursor);
+        return true;
+    }
+    case QEvent::MouseMove: {
+        auto* me = static_cast<QMouseEvent*>(event);
+        if (dragView_ != view || !(me->buttons() & Qt::LeftButton)) break;
+        const int dx = me->pos().x() - dragStartX_;
+        if (!dragMoved_ && std::abs(dx) > 3) dragMoved_ = true;
+        if (!dragMoved_) return true;
+        // 手动拖动后暂停自动跟随并锁定视图，避免新数据把窗口拉回实时位置
+        *followOf(view) = false;
+        *lockedOf(view) = true;
+        const double maxMin =
+            std::max(0.0, static_cast<double>(lastIndexOf(view)) - dragSpan_);
+        const double newMin =
+            std::clamp(dragStartMin_ - dx * dragUnitsPerPx_, 0.0, maxMin);
+        axisXOf(view)->setRange(newMin, newMin + dragSpan_);
+        return true;
+    }
+    case QEvent::MouseButtonRelease: {
+        auto* me = static_cast<QMouseEvent*>(event);
+        if (dragView_ != view || me->button() != Qt::LeftButton) break;
+        dragView_ = nullptr;
+        view->viewport()->setCursor(Qt::OpenHandCursor);
+        if (!dragMoved_) toggleFocus(view);   // 未拖动 = 单击：放大 / 还原
+        return true;
+    }
+    case QEvent::Wheel: {
+        auto* we = static_cast<QWheelEvent*>(event);
+        const int delta = we->angleDelta().y();
+        if (delta == 0) break;
+        // 滚轮向上放大、向下缩小，以鼠标位置为锚点
+        const double factor = (delta > 0) ? 1.25 : (1.0 / 1.25);
+        zoomXAxis(view, factor, we->position().x());
+        return true;
+    }
+    case QEvent::NativeGesture: {
+        auto* ge = static_cast<QNativeGestureEvent*>(event);
+        if (ge->gestureType() != Qt::ZoomNativeGesture) break;
+        // 触摸板双指捏合：value() 为正表示放大、为负表示缩小
+        const double factor = std::clamp(1.0 + ge->value(), 0.2, 5.0);
+        zoomXAxis(view, factor, ge->position().x());
+        return true;
+    }
+    case QEvent::KeyPress: {
+        auto* ke = static_cast<QKeyEvent*>(event);
+        if (ke->key() == Qt::Key_Escape && focusedView_ != nullptr) {
+            restoreLiveView();
+            return true;
+        }
+        break;
+    }
+    default:
+        break;
+    }
+    return QWidget::eventFilter(watched, event);
+}
+
 void PressureChartWindow::clearAll() {
     pressureTargetSeries_->clear();
     pressureMeasuredSeries_->clear();
@@ -194,6 +391,7 @@ void PressureChartWindow::clearAll() {
     zActualSeries_->clear();
     pressureIndex_ = 0;
     zIndex_ = 0;
+    restoreLiveView();
     pressureAxisX_->setRange(0, 100);
     zAxisX_->setRange(0, 100);
     pressureAxisY_->setRange(0, 120);
