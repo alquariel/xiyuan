@@ -207,6 +207,19 @@ if(APP_TARGET_READY)
         COMMAND ${CMAKE_COMMAND} -E make_directory
                 $<TARGET_FILE_DIR:AFP_ABB_CPP>/path
     )
+
+    # windeployqt 自动把所有 Qt 运行时 DLL + plugins + 间接依赖（含 Charts 链
+    # 上的 Qt6OpenGL/Qt6OpenGLWidgets 等）全部扫到，不再需要手动逐模块 copy。
+    find_program(WINDEPLOYQT_EXE windeployqt HINTS
+                 $ENV{QTDIR}/bin
+                 "D:/Qt/6.8.3/mingw_64/bin"
+                 REQUIRED)
+    add_custom_command(TARGET AFP_ABB_CPP POST_BUILD
+        COMMAND ${WINDEPLOYQT_EXE}
+                --no-translations --no-opengl-sw
+                $<TARGET_FILE:AFP_ABB_CPP>
+        COMMENT "Deploying Qt runtime DLLs via windeployqt..."
+    )
 else()
     string(REPLACE ";" "\n  " MISSING_APP_SOURCES_TEXT "${MISSING_APP_SOURCES}")
     set(MISSING_APP_SOURCES_TEXT "  ${MISSING_APP_SOURCES_TEXT}")

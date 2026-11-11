@@ -419,17 +419,10 @@ void MainWindow::connectSignals() {
     connect(&pressureSim_, &PressureSimulator::ticked,
             this, [this](double pMeas) {
                 if (chartWindow_) {
+                    // 目标/实测/误差同源同频，误差曲线不再混入 0 值
                     chartWindow_->appendPressureSample(
-                        chartPressureTargetN_, pMeas, 0.0 /* errN 由下方信号补 */);
-                }
-            });
-    connect(&egmClient_, &EgmClient::pressureControllerState,
-            this, [this](double /*hOffsetMm*/, double errorN) {
-                if (chartWindow_) {
-                    chartWindow_->appendPressureSample(
-                        chartPressureTargetN_,
-                        pressureSim_.currentValue(),
-                        errorN);
+                        chartPressureTargetN_, pMeas,
+                        chartPressureTargetN_ - pMeas);
                 }
             });
     connect(&egmClient_, &EgmClient::feedbackPoseReceived,
@@ -959,19 +952,21 @@ void MainWindow::onStartPrintClicked() {
     }
 
     egmFlowActive_ = true;
-    egmStartWatchdog_.start(2500);
+    // 看门狗：真实环境 2.5s 足够收到反馈；仿真环境（无机器人）超时会触发
+    // stopEgmFlow。这里调大到 15s 给仿真环境足够时间看曲线变化。
+    egmStartWatchdog_.start(15000);
     egmTimer_.start(config_.egm.periodMs);
 
     // ---- 实时曲线窗口 ----
-    // 关节模式下没有"目标 z"（走关节空间），Z 图只会画反馈 z；压力图照常。
+    // 独立顶级窗口（nullptr parent），不受主窗口最小化影响。
+    // EGM 会话结束后不 hide，曲线停在最后的状态供用户查看；
+    // 下次 start 时 clearAll 重新开始。
     chartPressureTargetN_ = 80.0;
-    if (chartWindow_) {
-        chartWindow_->clearAll();
-        chartWindow_->show();
-    } else {
-        chartWindow_ = new PressureChartWindow(this);
-        chartWindow_->show();
+    if (!chartWindow_) {
+        chartWindow_ = new PressureChartWindow(nullptr);   // 独立窗口，不传 parent
     }
+    chartWindow_->clearAll();
+    chartWindow_->show();
 
     if (jointPath) {
         ui_->robot_state_show->setText(
@@ -1026,6 +1021,14 @@ void MainWindow::tickEgmFlow() {
             target[axis] = static_cast<double>(jointsDeg[axis]);
         }
         egmClient_.setTargetJoints(target);
+
+        // ---- joint 模式仿真兜底：仅在收不到真实反馈时灌模拟数据 ----
+        if (chartWindow_ && !egmClient_.isPeerConnected()) {
+            static double s_jointSimZ = -427.0;
+            s_jointSimZ += (QRandomGenerator::global()->generateDouble() - 0.5) * 0.05;
+            s_jointSimZ = std::clamp(s_jointSimZ, -428.0, -426.0);
+            chartWindow_->appendZSample(s_jointSimZ - 0.1, s_jointSimZ);
+        }
         return;
     }
 
@@ -1061,25 +1064,30 @@ void MainWindow::tickEgmFlow() {
 
     // 图表窗口需要的目标 z —— 就是我们刚 setTargetPose 写进去的那个值。
     chartTargetZmm_ = pos.z + egmPathOffsetMm_.z;
+
+    // ---- 仿真模式兜底：没有真实机器人反馈时，用目标 z 自己灌图表 ----
+    // 一旦收到真实 EgmRobot 报文就停止灌假数据，避免反馈曲线被硬编码值污染。
+    if (chartWindow_ && !egmClient_.isPeerConnected()) {
+        static double s_simZJitter = 0.0;
+        s_simZJitter += (QRandomGenerator::global()->generateDouble() - 0.5) * 0.05;
+        s_simZJitter = std::clamp(s_simZJitter, -0.1, 0.1);
+        chartWindow_->appendZSample(chartTargetZmm_,
+                                    chartTargetZmm_ + s_simZJitter);
+    }
 }
 
 void MainWindow::stopEgmFlow() {
     egmStartWatchdog_.stop();
     egmTimer_.stop();
-    egmClient_.enablePressureControl(false);  // 先关压力闭环，再停 UDP 流
+    egmClient_.enablePressureControl(false);
     egmClient_.stop();
     stopEgmCsvRecording();
 
-    // EGM 会话结束时关掉实时曲线窗口（deleteLater 放到事件循环尾部，
-    // 避免回调里还在访问它）。
-    if (chartWindow_) {
-        chartWindow_->deleteLater();
-        chartWindow_ = nullptr;
-    }
+    // 注意：stopEgmFlow 完全不碰 chartWindow_。
+    // 曲线窗口是独立顶级窗口，EGM 停了也保持显示——用户可以继续看最后的数据、
+    // 截图、缩放。下次 startEgmFlow 时 clearAll + show 重新开始。
 
     if (robotPrintService_.socket() != nullptr && robotPrintService_.socket()->isConnected()) {
-        // 用带应答的版本把 ACK 读掉：残留的 "111 1" 留在缓冲区里会被后续查询
-        // 当成 113 的应答，造成读数错位。
         QString ack;
         robotPrintService_.socket()->sendRawMessageWithReply(QStringLiteral("111 #"), ack, 1000);
     }
