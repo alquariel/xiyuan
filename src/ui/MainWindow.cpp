@@ -413,6 +413,32 @@ void MainWindow::connectSignals() {
     connect(&pressureSim_, &PressureSimulator::ticked,
             &egmClient_, &EgmClient::setPressureMeasured);
 
+    // ---- 实时曲线窗口数据链路 ----
+    // 图表窗口在 EGM 会话启动时动态创建/显示，停止时 delete，
+    // 避免没有 EGM 运行时白白占内存。所有 connect 都带空指针保护。
+    connect(&pressureSim_, &PressureSimulator::ticked,
+            this, [this](double pMeas) {
+                if (chartWindow_) {
+                    chartWindow_->appendPressureSample(
+                        chartPressureTargetN_, pMeas, 0.0 /* errN 由下方信号补 */);
+                }
+            });
+    connect(&egmClient_, &EgmClient::pressureControllerState,
+            this, [this](double /*hOffsetMm*/, double errorN) {
+                if (chartWindow_) {
+                    chartWindow_->appendPressureSample(
+                        chartPressureTargetN_,
+                        pressureSim_.currentValue(),
+                        errorN);
+                }
+            });
+    connect(&egmClient_, &EgmClient::feedbackPoseReceived,
+            this, [this](const EgmTcpPose& pose) {
+                if (chartWindow_) {
+                    chartWindow_->appendZSample(chartTargetZmm_, pose.z);
+                }
+            });
+
     // 启动看门狗：EGM 启动后 2.5 s 内收不到任何 EgmRobot 反馈帧，说明会话
     // 根本没跑起来。这时必须主动停下并说明原因，否则就是「机器人不动、
     // 也没有报错」的静默失败。
@@ -936,6 +962,17 @@ void MainWindow::onStartPrintClicked() {
     egmStartWatchdog_.start(2500);
     egmTimer_.start(config_.egm.periodMs);
 
+    // ---- 实时曲线窗口 ----
+    // 关节模式下没有"目标 z"（走关节空间），Z 图只会画反馈 z；压力图照常。
+    chartPressureTargetN_ = 80.0;
+    if (chartWindow_) {
+        chartWindow_->clearAll();
+        chartWindow_->show();
+    } else {
+        chartWindow_ = new PressureChartWindow(this);
+        chartWindow_->show();
+    }
+
     if (jointPath) {
         ui_->robot_state_show->setText(
             QString::fromUtf8(u8"EGM 关节流启动：%1  [%2 段, %3 °/s, %4 ms 周期]")
@@ -1021,6 +1058,9 @@ void MainWindow::tickEgmFlow() {
                    pos.y + egmPathOffsetMm_.y,
                    pos.z + egmPathOffsetMm_.z,
                    quat.q1, quat.q2, quat.q3, quat.q4});
+
+    // 图表窗口需要的目标 z —— 就是我们刚 setTargetPose 写进去的那个值。
+    chartTargetZmm_ = pos.z + egmPathOffsetMm_.z;
 }
 
 void MainWindow::stopEgmFlow() {
@@ -1029,6 +1069,13 @@ void MainWindow::stopEgmFlow() {
     egmClient_.enablePressureControl(false);  // 先关压力闭环，再停 UDP 流
     egmClient_.stop();
     stopEgmCsvRecording();
+
+    // EGM 会话结束时关掉实时曲线窗口（deleteLater 放到事件循环尾部，
+    // 避免回调里还在访问它）。
+    if (chartWindow_) {
+        chartWindow_->deleteLater();
+        chartWindow_ = nullptr;
+    }
 
     if (robotPrintService_.socket() != nullptr && robotPrintService_.socket()->isConnected()) {
         // 用带应答的版本把 ACK 读掉：残留的 "111 1" 留在缓冲区里会被后续查询

@@ -18,6 +18,7 @@
 #include "services/camera/HighSpeedCameraService.h"
 #include "services/thermal_camera/ThermalCameraService.h"
 #include "pressure/PressureSimulator.h"
+#include "ui/PressureChartWindow.h"
 #include "services/robot/RobotMovementService.h"
 #include "services/robot_monitor/RobotMonitoringService.h"
 #include "services/robot/RobotPrintService.h"
@@ -155,4 +156,11 @@ private:
     // 模拟法向压力 Fz 数据源：10 ms 采样，均值 80 N、波动 ±20 N。
     // CSV 写入时直接追加 currentValue()，不需要与 EGM 位姿流时间对齐。
     PressureSimulator pressureSim_{this};
+
+    // EGM 运行时的实时曲线窗口（独立窗口，EGM 启停时显隐）。
+    PressureChartWindow* chartWindow_ = nullptr;
+
+    // 图表窗口需要的缓存：目标 z（tickEgmFlow 里每次算完 setTargetPose 后更新）。
+    double chartTargetZmm_ = 0.0;
+    double chartPressureTargetN_ = 80.0;
 };

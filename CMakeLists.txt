@@ -11,7 +11,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR}/src/ui)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Network Widgets Test)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Network Widgets Charts Test)
 find_package(snap7 CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(fastdds CONFIG REQUIRED)
@@ -135,6 +135,8 @@ set(APP_SOURCES
     src/robot_monitor/generated/RobotMonitorSampleTypeObjectSupport.cxx
     src/ui/MainWindow.h
     src/ui/MainWindow.cpp
+    src/ui/PressureChartWindow.h
+    src/ui/PressureChartWindow.cpp
     src/services/PlaceholderServices.h
     src/services/PlaceholderServices.cpp
     src/services/ftp/FtpService.h
@@ -181,6 +183,7 @@ if(APP_TARGET_READY)
         Qt6::Gui
         Qt6::Network
         Qt6::Widgets
+        Qt6::Charts
         snap7::snap7
         fastdds
     )
