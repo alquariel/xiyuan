@@ -3,17 +3,21 @@
 // PressureChartWindow — EGM 运行时的实时曲线窗口
 //
 // 上半：压力对比图
-//   两条折线：目标压力（常量）vs 实测压力，附误差曲线
+//   三条折线：目标压力 vs 实测压力，附误差曲线
 //
 // 下半：Z 坐标对比图
-//   两条折线：目标 z（PathLoader 轨迹 + offset）vs 实际反馈 z（EgmRobot）
+//   两条曲线：
+//     - 目标 z：折线渲染
+//     - 实际反馈 z：**不插点**，直接用贝塞尔曲线连接已有点（通过透明覆盖层画 QPainterPath）
 //
-// 用 QtCharts 的 QChartView + QLineSeries 实现；保留最近 N 个采样点做滑动窗口。
+// 用 QtCharts 的 QChartView + QLineSeries 实现；Z 坐标图额外用一个
+// 透明覆盖 Widget 画 QPainterPath 贝塞尔曲线，实现"已有点直接生成样条"。
 
+#include <QElapsedTimer>
 #include <QPoint>
 #include <QWidget>
 
-#include <QtCharts>   // 总头：自动带 QtCharts 命名空间
+#include <QtCharts>
 
 QT_BEGIN_NAMESPACE
 class QLineSeries;
@@ -28,7 +32,7 @@ class PressureChartWindow : public QWidget {
 public:
     explicit PressureChartWindow(QWidget* parent = nullptr);
 
-    // 一个采样周期（约 4 ms）调用一次，窗口内部保留最近 kMaxPoints 个点。
+    // 一个采样周期（约 4 ms）调用一次
     void appendPressureSample(double targetN, double measuredN, double errorN);
     void appendZSample(double targetZmm, double actualZmm);
 
@@ -38,55 +42,60 @@ protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
-    static constexpr int kMaxPoints  = 1000;   // 实时滑动窗口深度：约 4 s 数据（250Hz）
-    static constexpr int kMaxHistory = 20000;  // 历史保留上限（约 80 s），供完整曲线查看
+    static constexpr int    kMaxPoints    = 1000;
+    static constexpr int    kMaxHistory   = 20000;
+    static constexpr double kWindowSeconds = 4.0;
+    static constexpr double kHistorySeconds = 80.0;
+    static constexpr int    kZDecimFactor = 5;  // Z 绘制降采样因子：每 N 次采样 append 一次（250Hz / 5 = 50Hz 画图）
 
-    // 让 X 轴跟随滑动窗口，避免采样序号超过固定范围后曲线滑出可视区
-    void updateXRange(QValueAxis* axis, int lastIndex);
-    // 按当前可见数据自适应 Y 轴范围（留出边距），避免硬编码量程裁掉曲线
+    void updateXRange(QValueAxis* axis, double lastTime);
     void updateYRange(QChart* chart, QValueAxis* axis);
+    double startTimeSec() const;
 
     // ---- 鼠标交互 ----
-    QChartView* viewAt(QObject* watched) const;  // 事件源对应的图表视图
+    QChartView* viewAt(QObject* watched) const;
     QValueAxis* axisXOf(const QChartView* view) const;
     QValueAxis* axisYOf(const QChartView* view) const;
     QChart*     chartOf(const QChartView* view) const;
-    int         lastIndexOf(const QChartView* view) const;
+    double      lastTimeOf(const QChartView* view) const;
     bool*       followOf(const QChartView* view);
     bool*       lockedOf(const QChartView* view);
-    void        toggleFocus(QChartView* view);   // 单击：放大该图并显示完整曲线 / 恢复
-    void        restoreLiveView();               // 恢复双图 + 实时滑动窗口
+    void        toggleFocus(QChartView* view);
+    void        restoreLiveView();
     void        zoomXAxis(QChartView* view, double factor, double anchorPixelX);
 
-    // ---- 压力图 ----
-    QLineSeries* pressureTargetSeries_   = nullptr;  // 目标
-    QLineSeries* pressureMeasuredSeries_ = nullptr;  // 实测
-    QLineSeries* pressureErrorSeries_    = nullptr;  // 误差（目标-实测）
+    // ---- 压力图（全部折线） ----
+    QLineSeries* pressureTargetSeries_   = nullptr;
+    QLineSeries* pressureMeasuredSeries_ = nullptr;
+    QLineSeries* pressureErrorSeries_    = nullptr;
     QChart*      pressureChart_          = nullptr;
     QChartView*  pressureView_           = nullptr;
     QValueAxis*  pressureAxisX_          = nullptr;
     QValueAxis*  pressureAxisY_          = nullptr;
 
     // ---- Z 坐标图 ----
-    QLineSeries* zTargetSeries_ = nullptr;  // 目标 z
-    QLineSeries* zActualSeries_ = nullptr;  // 实际反馈 z
+    QLineSeries* zTargetSeries_ = nullptr;  // 目标 z（折线渲染）
+    QLineSeries* zActualSeries_ = nullptr;  // 实际反馈 z（存已有点，不直接渲染；贝塞尔覆盖层画）
     QChart*      zChart_        = nullptr;
     QChartView*  zView_         = nullptr;
     QValueAxis*  zAxisX_        = nullptr;
     QValueAxis*  zAxisY_        = nullptr;
 
-    int pressureIndex_ = 0;  // 压力图独立的 x 轴采样计数
-    int zIndex_        = 0;  // Z 图独立的 x 轴采样计数
+    // 实际反馈 z 的贝塞尔覆盖层（透明 widget，画已有点的贝塞尔曲线）
+    QWidget*     zSplineOverlay_ = nullptr;
 
-    // 每个图独立维护视图状态：是否自动跟随、是否被手动平移锁定
+    int pressureIndex_ = 0;
+    int zIndex_        = 0;
+
+    QElapsedTimer startTime_;
+
     bool pressureFollow_ = true;
     bool zFollow_        = true;
     bool pressureLocked_ = false;
     bool zLocked_        = false;
 
-    QChartView* focusedView_ = nullptr;  // 被单击放大的图（nullptr = 双图平铺）
+    QChartView* focusedView_ = nullptr;
 
-    // 拖动平移的临时状态
     QChartView* dragView_    = nullptr;
     bool        dragMoved_   = false;
     int         dragStartX_  = 0;

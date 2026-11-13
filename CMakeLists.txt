@@ -99,6 +99,8 @@ set(APP_SOURCES
     src/robot/SocketRobotMotionClient.cpp
     src/robot/EgmClient.h
     src/robot/EgmClient.cpp
+    src/robot/EgmFlowController.h
+    src/robot/EgmFlowController.cpp
     src/robot/PathLoader.h
     src/robot/PathLoader.cpp
     src/plc/S7Data.h
