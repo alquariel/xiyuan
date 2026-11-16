@@ -19,14 +19,9 @@
 #include <limits>
 
 // ==================== SplineOverlay ====================
-// 透明覆盖 widget，挂在 QChartView::viewport() 上，
-// 用 QPainterPath::cubicTo（贝塞尔曲线）**直接连接已有点**，
-// 不插任何点、不改变 series 数据，只改变连接方式。
-//
-// 控制点公式（Uniform Catmull-Rom → Bezier 转换，张力 1/6）：
-//   C1 = P1 + (P2 - P0) / 6
-//   C2 = P2 - (P3 - P1) / 6
-// 段 [P1, P2] 的贝塞尔四元组：P1, C1, C2, P2
+// 透明覆盖 widget，挂在 QChartView::viewport() 上。
+// 使用 Uniform Catmull-Rom 插值在每对相邻采样点之间生成中间点，
+// 再通过 QPainterPath::lineTo 连接插补点，不改变 series 中的原始数据。
 
 class SplineOverlay : public QWidget {
 public:
@@ -77,23 +72,26 @@ protected:
         QPainterPath path;
         path.moveTo(toWidget(dataPts[0]));
 
+        constexpr int kInterpolationSteps = 16;
         const int n = dataPts.size();
         for (int i = 0; i < n - 1; ++i) {
-            QPointF P0 = (i >= 1) ? dataPts[i - 1] : dataPts[0];
-            QPointF P1 = dataPts[i];
-            QPointF P2 = dataPts[i + 1];
-            QPointF P3 = (i + 2 < n) ? dataPts[i + 2] : dataPts[n - 1];
+            const QPointF p0 = toWidget((i >= 1) ? dataPts[i - 1] : dataPts[0]);
+            const QPointF p1 = toWidget(dataPts[i]);
+            const QPointF p2 = toWidget(dataPts[i + 1]);
+            const QPointF p3 = toWidget((i + 2 < n) ? dataPts[i + 2] : dataPts[n - 1]);
 
-            QPointF p1 = toWidget(P1);
-            QPointF p2 = toWidget(P2);
-            QPointF cp0 = toWidget(P0);
-            QPointF cp3 = toWidget(P3);
-
-            // Uniform Catmull-Rom → Bezier 控制点（张力 1/6）
-            QPointF c1 = p1 + (p2 - cp0) / 6.0;
-            QPointF c2 = p2 - (cp3 - p1) / 6.0;
-
-            path.cubicTo(c1, c2, p2);
+            // Uniform Catmull-Rom 插值，末步恰好到达 p2。
+            for (int step = 1; step <= kInterpolationSteps; ++step) {
+                const qreal t = static_cast<qreal>(step) / kInterpolationSteps;
+                const qreal t2 = t * t;
+                const qreal t3 = t2 * t;
+                const QPointF interpolated = 0.5 * (
+                    2.0 * p1
+                    + (-p0 + p2) * t
+                    + (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3) * t2
+                    + (-p0 + 3.0 * p1 - 3.0 * p2 + p3) * t3);
+                path.lineTo(interpolated);
+            }
         }
         p.drawPath(path);
     }
@@ -173,7 +171,7 @@ PressureChartWindow::PressureChartWindow(QWidget* parent)
 
     mainLayout->addWidget(pressureView_, 1);
 
-    // ============== Z 坐标图：已有点 → 贝塞尔曲线覆盖层 ==============
+    // ============== Z 坐标图：已有点 → Catmull-Rom 插值曲线覆盖层 ==============
     zTargetSeries_ = new QLineSeries();
     zActualSeries_ = new QLineSeries();
 
@@ -212,13 +210,13 @@ PressureChartWindow::PressureChartWindow(QWidget* parent)
     zActualSeries_->attachAxis(zAxisX);
     zActualSeries_->attachAxis(zAxisY);
 
-    // 关键：让 chart 不画 zActualSeries_ 的折线（用覆盖层画贝塞尔曲线），
+    // 关键：让 chart 不画 zActualSeries_ 的折线（用覆盖层画 Catmull-Rom 插值曲线），
     // 但保留它在 legend 里的显示。setVisible(false) 会同时从 legend 隐藏，
     // 所以我们需要别的方式。
     //
     // 方案：让 zActualSeries_ 保持 visible，但 setColor 为透明，
     // 折线变成"透明的线"（实际上不渲染），legend 仍显示原颜色。
-    // 覆盖层在它上面画真实的红色贝塞尔曲线。
+    // 覆盖层在它上面画真实的红色 Catmull-Rom 插值曲线。
     zActualSeries_->setColor(Qt::transparent);
 
     zView_ = new QChartView(zChart_, this);
@@ -230,7 +228,7 @@ PressureChartWindow::PressureChartWindow(QWidget* parent)
     zView_->viewport()->installEventFilter(this);
     zView_->installEventFilter(this);
 
-    // 透明覆盖层：挂在 viewport 上，画 zActualSeries_ 的贝塞尔曲线
+    // 透明覆盖层：挂在 viewport 上，画 zActualSeries_ 的 Catmull-Rom 插值曲线
     zSplineOverlay_ = new SplineOverlay(zView_, zActualSeries_, Qt::red, 2.0);
     zSplineOverlay_->setGeometry(zView_->viewport()->rect());
     zSplineOverlay_->raise();  // 确保在最上层

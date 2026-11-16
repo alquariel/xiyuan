@@ -8,10 +8,10 @@
 // 下半：Z 坐标对比图
 //   两条曲线：
 //     - 目标 z：折线渲染
-//     - 实际反馈 z：**不插点**，直接用贝塞尔曲线连接已有点（通过透明覆盖层画 QPainterPath）
+//     - 实际反馈 z：通过透明覆盖层绘制 Catmull-Rom 插值曲线
 //
 // 用 QtCharts 的 QChartView + QLineSeries 实现；Z 坐标图额外用一个
-// 透明覆盖 Widget 画 QPainterPath 贝塞尔曲线，实现"已有点直接生成样条"。
+// 透明覆盖 Widget 生成并连接插补点，series 中仍只保存原始采样点。
 
 #include <QElapsedTimer>
 #include <QPoint>
@@ -75,13 +75,13 @@ private:
 
     // ---- Z 坐标图 ----
     QLineSeries* zTargetSeries_ = nullptr;  // 目标 z（折线渲染）
-    QLineSeries* zActualSeries_ = nullptr;  // 实际反馈 z（存已有点，不直接渲染；贝塞尔覆盖层画）
+    QLineSeries* zActualSeries_ = nullptr;  // 实际反馈 z（保存原始点，由插值覆盖层绘制）
     QChart*      zChart_        = nullptr;
     QChartView*  zView_         = nullptr;
     QValueAxis*  zAxisX_        = nullptr;
     QValueAxis*  zAxisY_        = nullptr;
 
-    // 实际反馈 z 的贝塞尔覆盖层（透明 widget，画已有点的贝塞尔曲线）
+    // 实际反馈 z 的插值覆盖层（透明 widget，生成并连接 Catmull-Rom 插补点）
     QWidget*     zSplineOverlay_ = nullptr;
 
     int pressureIndex_ = 0;
