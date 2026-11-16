@@ -53,7 +53,7 @@ protected:
         QPainter p(this);
         p.setRenderHint(QPainter::Antialiasing);
 
-        // ---- 关键 1：clip 到 chart plot area（把曲线限制在坐标轴以内，出框问题根因之一）----
+        // ---- 关键 1：clip 到 chart plot area（把曲线限制在坐标轴以内）----
         const QRectF plotAreaScene = chart->plotArea();
         const QRectF plotAreaWidget = QRectF(
             chartView_->mapFromScene(plotAreaScene.topLeft()),
