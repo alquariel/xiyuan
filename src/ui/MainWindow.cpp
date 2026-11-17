@@ -192,6 +192,8 @@ void MainWindow::connectSignals() {
             this, &MainWindow::showPlaceholderMessage);
     connect(&pressureService_, &PressureService::messageRequested,
             this, &MainWindow::showPlaceholderMessage);
+    connect(&pressureService_, &PressureService::pressureSampleReady,
+            egmFlow_.get(), &EgmFlowController::onPressureSample);
     connect(&timeseriesArchiveService_, &TimeseriesArchiveService::statusChanged,
             this, [this](const QString& status) {
                 const QString existingTip = ui_->robot_state_show->toolTip();

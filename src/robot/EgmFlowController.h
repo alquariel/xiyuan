@@ -7,7 +7,8 @@
 #include <QTimer>
 
 #include "app/AppConfig.h"
-#include "pressure/PressureSimulator.h"
+// 虚拟压力源已停用，保留头文件引用位置供后续仿真对照。
+// #include "pressure/PressureSimulator.h"
 #include "robot/EgmClient.h"
 #include "robot/PathLoader.h"
 
@@ -42,6 +43,7 @@ public slots:
     void pause();
     void resume();
     void stop();
+    void onPressureSample(double measuredN);
 
 signals:
     void statusTextChanged(const QString& text);
@@ -102,8 +104,11 @@ private:
     bool csvRecording_ = false;
     int csvRowsSinceFlush_ = 0;
 
-    // 模拟法向压力 Fz 数据源：10 ms 采样，均值 80 N、波动 ±20 N。
-    PressureSimulator pressureSim_{this};
+    // 原虚拟法向压力 Fz 数据源已停用：10 ms 采样，均值 80 N、波动 ±20 N。
+    // PressureSimulator pressureSim_{this};
+
+    // 最近一帧真实压力 rawValue，由 PressureService 在主线程转发。
+    double latestPressureN_ = 0.0;
 
     // EGM 运行时的实时曲线窗口（独立顶级窗口，EGM 启停时显隐）。
     PressureChartWindow* chartWindow_ = nullptr;

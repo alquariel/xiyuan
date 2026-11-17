@@ -247,6 +247,15 @@ AppConfig AppConfig::load(const AppPaths& paths) {
     config.serial.fiberLaserBaudrate = readInt(fiberLaser, "baudrate", config.serial.fiberLaserBaudrate);
 
     const QJsonObject pressure = root.value("pressure").toObject();
+
+    // pressure.source: "real_dll" (default) or "debug_tcp"
+    const QString sourceStr = readString(pressure, "source", QString());
+    config.pressure.source = (sourceStr.compare("debug_tcp", Qt::CaseInsensitive) == 0)
+                                 ? PressureSource::DebugTcp
+                                 : PressureSource::RealDll;
+    config.pressure.debugTcpPort = static_cast<quint16>(
+        readInt(pressure, "debug_tcp_port", static_cast<int>(config.pressure.debugTcpPort)));
+
     config.pressure.sampleIntervalMs = readPositiveInt(
         config, pressure, "sample_interval_ms", config.pressure.sampleIntervalMs, "pressure.sample_interval_ms");
     config.pressure.processingWindowSamples = readPositiveInt(

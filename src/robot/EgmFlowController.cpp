@@ -155,24 +155,22 @@ EgmFlowController::EgmFlowController(const AppConfig& config,
     connect(&egmClient_, &EgmClient::feedbackPoseReceived,
             this, &EgmFlowController::onFeedbackPose);
 
-    // 模拟压力源（10ms tick）→ EGM 压力闭环控制器的测量值注入。
-    // PressureSimulator 由 startCsvRecording 启动、stopCsvRecording 停止，
-    // 正好与 EGM 会话生命周期对齐。将来换成真实压力传感器时，把这条 connect
-    // 换成传感器的 dataReady 信号即可。
-    connect(&pressureSim_, &PressureSimulator::ticked,
-            &egmClient_, &EgmClient::setPressureMeasured);
+    // 原虚拟压力源链路已停用，保留注释代码供仿真对照。
+    // 真实压力由 PressureService::pressureSampleReady → onPressureSample() 注入。
+    // connect(&pressureSim_, &PressureSimulator::ticked,
+    //         &egmClient_, &EgmClient::setPressureMeasured);
 
     // ---- 实时曲线窗口数据链路 ----
     // 全部带空指针保护：没有 EGM 会话时 chartWindow_ 为空。
-    connect(&pressureSim_, &PressureSimulator::ticked,
-            this, [this](double pMeas) {
-                if (chartWindow_) {
-                    // 目标/实测/误差同源同频，误差曲线不再混入 0 值
-                    chartWindow_->appendPressureSample(
-                        chartPressureTargetN_, pMeas,
-                        chartPressureTargetN_ - pMeas);
-                }
-            });
+    // connect(&pressureSim_, &PressureSimulator::ticked,
+    //         this, [this](double pMeas) {
+    //             if (chartWindow_) {
+    //                 // 目标/实测/误差同源同频，误差曲线不再混入 0 值
+    //                 chartWindow_->appendPressureSample(
+    //                     chartPressureTargetN_, pMeas,
+    //                     chartPressureTargetN_ - pMeas);
+    //             }
+    //         });
     connect(&egmClient_, &EgmClient::feedbackPoseReceived,
             this, [this](const EgmTcpPose& pose) {
                 if (chartWindow_) {
@@ -599,7 +597,7 @@ void EgmFlowController::startSession() {
         return;
     }
 
-    // EGM 会话开始前开一个新 CSV，记录控制器实时反馈的 x/y/z + 模拟压力。
+    // EGM 会话开始前开一个新 CSV，记录控制器实时反馈的 x/y/z + 真实压力。
     startCsvRecording();
 
     // ---- 导纳式压力闭环 ----
@@ -789,18 +787,31 @@ void EgmFlowController::startCsvRecording() {
     csvRecording_ = true;
     csvRowsSinceFlush_ = 0;
 
-    // CSV 录制启动时同步启动模拟压力源，写行时直接取 currentValue()。
-    pressureSim_.start();
+    // 原虚拟压力源启动代码已停用；真实压力由 FC_start 独立启动采集。
+    // pressureSim_.start();
 }
 
 void EgmFlowController::stopCsvRecording() {
     if (!csvRecording_) return;
 
-    pressureSim_.stop();
+    // pressureSim_.stop();  // 原虚拟压力源停止代码，现已停用。
     csvRecording_ = false;
     csvStream_.flush();
     csvStream_.setDevice(nullptr);
     csvFile_.close();
+}
+
+void EgmFlowController::onPressureSample(double measuredN) {
+    latestPressureN_ = measuredN;
+
+    // 真实压力同时作为 EGM 压力闭环的测量输入。
+    egmClient_.setPressureMeasured(measuredN);
+
+    if (chartWindow_) {
+        chartWindow_->appendPressureSample(
+            chartPressureTargetN_, measuredN,
+            chartPressureTargetN_ - measuredN);
+    }
 }
 
 void EgmFlowController::onFeedbackPose(const EgmTcpPose& pose) {
@@ -814,7 +825,7 @@ void EgmFlowController::onFeedbackPose(const EgmTcpPose& pose) {
     csvStream_ << QString::number(pose.x, 'f', 3) << ','
                << QString::number(pose.y, 'f', 3) << ','
                << QString::number(pose.z, 'f', 3) << ','
-               << QString::number(pressureSim_.currentValue(), 'f', 2) << '\n';
+               << QString::number(latestPressureN_, 'f', 2) << '\n';
 
     // 每 250 帧（约 1 秒）落一次盘，兼顾实时性与磁盘写入开销。
     if (++csvRowsSinceFlush_ >= 250) {

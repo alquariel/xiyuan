@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "log_level": "INFO",
+    "log_format": "%(log_color)s%(levelname)-7s%(reset)s (%(name)s) %(message)s",
+    "date_format": "%Y-%m-%d %H:%M:%S",
+    "log_colors": {
+        "DEBUG": "cyan",
+        "INFO": "green",
+        "WARNING": "yellow",
+        "ERROR": "red",
+        "CRITICAL": "red,bg_white"
+    }
+}

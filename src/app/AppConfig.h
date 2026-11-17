@@ -139,7 +139,21 @@ struct SerialConfig {
     int fiberLaserBaudrate = 9600;
 };
 
+// 压力输入源。RealDll 使用厂商 pressure.dll；DebugTcp 使用
+// 独立的 QTcpServer 调试端口，方便没有硬件时验证压力曲线链路。
+enum class PressureSource {
+    RealDll,
+    DebugTcp,
+};
+
 struct PressureConfig {
+    // 输入源，默认使用真实传感器。改成 DebugTcp 即可切换。
+    PressureSource source = PressureSource::RealDll;
+
+    // DebugTcp 模式下 QTcpServer 监听端口。Android iOS 上的 TCP 调试助手
+    // 连接到 <PC 局域网 IP>:<debugTcpPort>。不要与厂商 DAQ 端口 8234 冲突。
+    quint16 debugTcpPort = 9100;
+
     // Matches pressure_reader.py time.sleep(0.1), but lives in config so users
     // can tune acquisition without recompiling the C++ application.
     int sampleIntervalMs = 100;

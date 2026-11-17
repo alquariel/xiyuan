@@ -116,6 +116,8 @@ set(APP_SOURCES
     src/pressure/PressureAcquisitionWorker.cpp
     src/pressure/PressureSensorClient.h
     src/pressure/PressureSensorClient.cpp
+    src/pressure/DebugPressureTcp.h
+    src/pressure/DebugPressureTcp.cpp
     src/pressure/PressureStatistics.h
     src/pressure/PressureStatistics.cpp
     src/camera/HighSpeedCameraTypes.h
