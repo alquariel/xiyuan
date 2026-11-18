@@ -53,6 +53,11 @@ public:
     PlcResult connect();
     void disconnect();
 
+    // Lightweight liveness check used by the health timer. Unlike the read/write
+    // accessors this never auto-connects, so callers can tell "the PLC went
+    // away" apart from "we were never connected".
+    PlcResult probe();
+
     PlcResult writeDbBit(int dbNumber, int byteOffset, int bitIndex, bool value);
     PlcResult readDbBit(int dbNumber, int byteOffset, int bitIndex, bool& value);
     PlcResult writeDbByte(int dbNumber, int byteOffset, quint8 value) override;

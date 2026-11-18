@@ -118,9 +118,6 @@ void MainWindow::initializeState() {
 void MainWindow::initializeUiDefaults() {
     ui_->Other_tabWidget_Robotplatform->setCurrentIndex(0);
 
-    ui_->ConnectionPLCButton->setVisible(false);
-    ui_->ConnectionPLCButton->setEnabled(false);
-
     ui_->robot_state_show->setWordWrap(true);
     ui_->robot_state_show->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     ui_->robot_state_show->setText(config_.isLoaded()
@@ -158,6 +155,8 @@ void MainWindow::initializeUiDefaults() {
         ui_->robot_state_show->setToolTip(
             existingTip.isEmpty() ? egmNote : existingTip + "\n" + egmNote);
     }
+
+    plcService_.initialize();
 }
 
 void MainWindow::connectSignals() {
@@ -245,7 +244,7 @@ void MainWindow::connectSignals() {
     connect(ui_->locusselectsetButton, &QPushButton::clicked,
             egmFlow_.get(), &EgmFlowController::loadPathFromDialog);
 
-    connect(ui_->DisconnectPLCButton, &QPushButton::clicked, &plcService_, &PlcService::disconnectPlc);
+    connect(ui_->DisconnectPLCButton, &QPushButton::clicked, &plcService_, &PlcService::toggleConnection);
     connect(ui_->cylinder1_button, &QPushButton::clicked, &plcService_, &PlcService::cylinder1);
     connect(ui_->cylinder2_button, &QPushButton::clicked, &plcService_, &PlcService::cylinder2);
     connect(ui_->cylinder3_button, &QPushButton::clicked, &plcService_, &PlcService::cylinder3);
