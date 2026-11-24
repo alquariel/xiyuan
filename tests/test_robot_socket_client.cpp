@@ -6,10 +6,6 @@
 #include <QHostAddress>
 #include <QTcpServer>
 #include <QTcpSocket>
-#include <QThread>
-
-#include <atomic>
-#include <thread>
 
 class TestRobotSocketClient final : public QObject {
     Q_OBJECT
@@ -19,8 +15,7 @@ private slots:
     void connectFailsWhenIpMissing();
     void connectFailsWhenPortInvalid();
     void connectFailsWhenPortTooLarge();
-    void connectFailsWhenPeerIgnoresPing();
-    void connectSucceedsWhenPeerRepliesPing();
+    void sendsExpectedBytesToLocalSocket();
 };
 
 void TestRobotSocketClient::loadModMessageMatchesPythonProtocol() {
@@ -64,10 +59,7 @@ void TestRobotSocketClient::connectFailsWhenPortTooLarge() {
     QVERIFY(result.message.contains("port", Qt::CaseInsensitive));
 }
 
-// Open a QTcpServer that accepts TCP connections but never writes anything
-// back — simulates an orphaned process (RobVC.exe) that happens to hold
-// the port. connectToRobot must fail the CASE 0 ping handshake.
-void TestRobotSocketClient::connectFailsWhenPeerIgnoresPing() {
+void TestRobotSocketClient::sendsExpectedBytesToLocalSocket() {
     QTcpServer server;
     QVERIFY(server.listen(QHostAddress::LocalHost, 0));
 
@@ -76,52 +68,32 @@ void TestRobotSocketClient::connectFailsWhenPeerIgnoresPing() {
     config.portMotion = static_cast<int>(server.serverPort());
 
     RobotSocketClient client(config);
-    const RobotSocketResult result = client.connectToRobot();
+    const RobotSocketResult connectResult = client.connectToRobot();
 
-    QVERIFY(!result.ok);
-    QVERIFY(result.message.contains("ping", Qt::CaseInsensitive));
-}
+    QVERIFY2(connectResult.ok, qPrintable(connectResult.message));
+    QVERIFY(server.waitForNewConnection(1000));
 
-// Peer thread that replies CASE 0 Ping with "0 1" — this is the happy path
-// that proves SERVER.mod is actually reachable.
-void TestRobotSocketClient::connectSucceedsWhenPeerRepliesPing() {
-    std::atomic_bool listeningStarted{false};
-    std::atomic<quint16> assignedPort{0};
+    QTcpSocket* acceptedSocket = server.nextPendingConnection();
+    QVERIFY(acceptedSocket != nullptr);
 
-    std::thread mock([&]() {
-        QTcpServer s;
-        if (!s.listen(QHostAddress::LocalHost, 0)) return;
-        assignedPort.store(s.serverPort());
-        listeningStarted.store(true);
-        if (!s.waitForNewConnection(3000)) return;
-        QTcpSocket* peer = s.nextPendingConnection();
-        if (!peer) return;
-        // Read ping, reply "0 1"
-        peer->waitForReadyRead(3000);
-        peer->readAll();
-        peer->write("0 1");
-        peer->waitForBytesWritten(1000);
-        // Keep alive a moment
-        QThread::msleep(500);
-        peer->close();
-        peer->deleteLater();
-    });
-    mock.detach();
+    QVERIFY(client.sendLoadMod("path_a.mod").ok);
+    QVERIFY(client.sendPause().ok);
+    QVERIFY(client.sendContinue().ok);
+    QVERIFY(client.sendStop().ok);
 
-    QElapsedTimer t;
-    t.start();
-    while (!listeningStarted.load() && t.elapsed() < 2000) QTest::qWait(20);
-    QVERIFY(listeningStarted.load());
+    const QByteArray expected = "LOAD_MOD:path_a.mod#PAUSE#CONTINUE#STOP#";
+    QByteArray received;
+    QElapsedTimer timer;
+    timer.start();
 
-    RobotConfig config;
-    config.ip = "127.0.0.1";
-    config.portMotion = static_cast<int>(assignedPort.load());
+    while (received.size() < expected.size() && timer.elapsed() < 1000) {
+        if (acceptedSocket->bytesAvailable() == 0) {
+            acceptedSocket->waitForReadyRead(50);
+        }
+        received += acceptedSocket->readAll();
+    }
 
-    RobotSocketClient client(config);
-    const RobotSocketResult result = client.connectToRobot();
-
-    QVERIFY2(result.ok, qPrintable(result.message));
-    QVERIFY(result.message.contains("ping OK", Qt::CaseInsensitive));
+    QCOMPARE(received, expected);
 }
 
 QTEST_MAIN(TestRobotSocketClient)

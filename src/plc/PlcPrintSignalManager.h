@@ -24,9 +24,7 @@ enum class PlcPrintCommand : quint8 {
 class PlcPrintSignalManager final : public IPlcPrintController {
 public:
     explicit PlcPrintSignalManager(IPlcByteAccess& plc);
-    // With enabled=false no DB18 access happens: every command returns success
-    // immediately so the print workflow still runs on a cell without a PLC.
-    PlcPrintSignalManager(IPlcByteAccess& plc, int timeoutMs, int pollIntervalMs, bool enabled = true);
+    PlcPrintSignalManager(IPlcByteAccess& plc, int timeoutMs, int pollIntervalMs);
 
     PlcResult startPrint(bool waitAck = true) override;
     PlcResult pausePrint(bool waitAck = true) override;
@@ -46,7 +44,6 @@ private:
     QString commandName(PlcPrintCommand command) const;
 
     IPlcByteAccess& plc_;
-    bool enabled_ = true;
     int dbNumber_ = 18;
     int commandOffset_ = 0;
     int ackOffset_ = 1;

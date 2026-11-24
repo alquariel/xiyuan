@@ -48,5 +48,4 @@ private:
     QString selectedLocalPath_;
     QString uploadedModFilename_;
     bool uploadSucceeded_ = false;
-    bool enabled_ = true;
 };

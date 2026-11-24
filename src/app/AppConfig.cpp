@@ -20,11 +20,6 @@ bool readBool(const QJsonObject& object, const QString& key, bool fallback) {
     return value.isBool() ? value.toBool() : fallback;
 }
 
-double readDouble(const QJsonObject& object, const QString& key, double fallback) {
-    const QJsonValue value = object.value(key);
-    return value.isDouble() ? value.toDouble() : fallback;
-}
-
 int readPositiveInt(AppConfig& config,
                     const QJsonObject& object,
                     const QString& key,
@@ -54,6 +49,23 @@ double readPositiveDouble(AppConfig& config,
     const double parsed = value.toDouble();
     if (parsed <= 0.0) {
         config.addWarning(QString("%1 must be greater than 0; using %2").arg(warningName).arg(fallback));
+        return fallback;
+    }
+    return parsed;
+}
+
+double readNonNegativeDouble(AppConfig& config,
+                             const QJsonObject& object,
+                             const QString& key,
+                             double fallback,
+                             const QString& warningName) {
+    const QJsonValue value = object.value(key);
+    if (!value.isDouble()) {
+        return fallback;
+    }
+    const double parsed = value.toDouble();
+    if (parsed < 0.0) {
+        config.addWarning(QString("%1 must be non-negative; using %2").arg(warningName).arg(fallback));
         return fallback;
     }
     return parsed;
@@ -168,30 +180,15 @@ AppConfig AppConfig::load(const AppPaths& paths) {
         robotMonitor, "flush_every_sample", config.robot.monitor.flushEverySample);
 
     const QJsonObject ftp = root.value("ftp").toObject();
-    config.ftp.enabled = readBool(ftp, "enabled", config.ftp.enabled);
     config.ftp.ip = readString(ftp, "ip", config.ftp.ip);
     config.ftp.port = readInt(ftp, "port", config.ftp.port);
     config.ftp.user = readString(ftp, "user", config.ftp.user);
     config.ftp.password = readString(ftp, "password", config.ftp.password);
 
     const QJsonObject plc = root.value("plc").toObject();
-    config.plc.enabled = readBool(plc, "enabled", config.plc.enabled);
     config.plc.ip = readString(plc, "ip", config.plc.ip);
     config.plc.rack = readInt(plc, "rack", config.plc.rack);
     config.plc.slot = readInt(plc, "slot", config.plc.slot);
-
-    const QJsonObject egm = root.value("egm").toObject();
-    config.egm.enabled = readBool(egm, "enabled", config.egm.enabled);
-    config.egm.ip = readString(egm, "ip", config.egm.ip);
-    config.egm.port = readInt(egm, "port", config.egm.port);
-    config.egm.offset = readInt(egm, "offset", config.egm.offset);
-    config.egm.periodMs = readPositiveInt(
-        config, egm, "period_ms", config.egm.periodMs, "egm.period_ms");
-    config.egm.maxDeviationTcpMm = readDouble(egm, "max_deviation_tcp_mm",
-                                               config.egm.maxDeviationTcpMm);
-    config.egm.maxSpeedDeviationTcpMmPerSec = readDouble(
-        egm, "max_speed_deviation_tcp_mm_per_sec",
-        config.egm.maxSpeedDeviationTcpMmPerSec);
 
     const QJsonObject thermal = root.value("thermal_camera").toObject();
     config.thermalCamera.ip = readString(thermal, "ip", config.thermalCamera.ip);
@@ -247,15 +244,6 @@ AppConfig AppConfig::load(const AppPaths& paths) {
     config.serial.fiberLaserBaudrate = readInt(fiberLaser, "baudrate", config.serial.fiberLaserBaudrate);
 
     const QJsonObject pressure = root.value("pressure").toObject();
-
-    // pressure.source: "real_dll" (default) or "debug_tcp"
-    const QString sourceStr = readString(pressure, "source", QString());
-    config.pressure.source = (sourceStr.compare("debug_tcp", Qt::CaseInsensitive) == 0)
-                                 ? PressureSource::DebugTcp
-                                 : PressureSource::RealDll;
-    config.pressure.debugTcpPort = static_cast<quint16>(
-        readInt(pressure, "debug_tcp_port", static_cast<int>(config.pressure.debugTcpPort)));
-
     config.pressure.sampleIntervalMs = readPositiveInt(
         config, pressure, "sample_interval_ms", config.pressure.sampleIntervalMs, "pressure.sample_interval_ms");
     config.pressure.processingWindowSamples = readPositiveInt(
@@ -414,6 +402,49 @@ AppConfig AppConfig::load(const AppPaths& paths) {
         "source_tag",
         config.robotMonitorArchive.sourceTag,
         "robot_monitor_archive.source_tag");
+
+    const QJsonObject egmPressure = root.value("egm_pressure").toObject();
+    config.egmPressure.enabled = readBool(egmPressure, "enabled", config.egmPressure.enabled);
+    config.egmPressure.robotIp = readNonEmptyString(
+        config, egmPressure, "robot_ip", config.egmPressure.robotIp, "egm_pressure.robot_ip");
+    config.egmPressure.udpPort = readPositiveInt(
+        config, egmPressure, "egm_udp_port", config.egmPressure.udpPort, "egm_pressure.egm_udp_port");
+    config.egmPressure.controlPeriodMs = readPositiveInt(
+        config, egmPressure, "control_period_ms", config.egmPressure.controlPeriodMs,
+        "egm_pressure.control_period_ms");
+    config.egmPressure.correctionAgeMs = readNonNegativeInt(
+        config, egmPressure, "correction_age_ms", config.egmPressure.correctionAgeMs,
+        "egm_pressure.correction_age_ms");
+    config.egmPressure.receiveTimeoutMs = readPositiveInt(
+        config, egmPressure, "receive_timeout_ms", config.egmPressure.receiveTimeoutMs,
+        "egm_pressure.receive_timeout_ms");
+    config.egmPressure.pressureTopic = readNonEmptyString(
+        config, egmPressure, "pressure_topic", config.egmPressure.pressureTopic,
+        "egm_pressure.pressure_topic");
+    config.egmPressure.robotMonitorTopic = readNonEmptyString(
+        config, egmPressure, "robot_monitor_topic", config.egmPressure.robotMonitorTopic,
+        "egm_pressure.robot_monitor_topic");
+    config.egmPressure.ddsDomainId = readNonNegativeInt(
+        config, egmPressure, "dds_domain_id", config.egmPressure.ddsDomainId,
+        "egm_pressure.dds_domain_id");
+    config.egmPressure.pressureSetpoint = readNonNegativeDouble(
+        config, egmPressure, "pressure_setpoint", config.egmPressure.pressureSetpoint,
+        "egm_pressure.pressure_setpoint");
+    config.egmPressure.kp = readNonNegativeDouble(
+        config, egmPressure, "kp", config.egmPressure.kp, "egm_pressure.kp");
+    config.egmPressure.ki = readNonNegativeDouble(
+        config, egmPressure, "ki", config.egmPressure.ki, "egm_pressure.ki");
+    config.egmPressure.zMaxMm = readPositiveDouble(
+        config, egmPressure, "z_max_mm", config.egmPressure.zMaxMm, "egm_pressure.z_max_mm");
+    config.egmPressure.dzMaxPerCycleMm = readPositiveDouble(
+        config, egmPressure, "dz_max_per_cycle_mm", config.egmPressure.dzMaxPerCycleMm,
+        "egm_pressure.dz_max_per_cycle_mm");
+    config.egmPressure.staleTimeoutMs = readPositiveDouble(
+        config, egmPressure, "stale_timeout_ms", config.egmPressure.staleTimeoutMs,
+        "egm_pressure.stale_timeout_ms");
+    config.egmPressure.rampRateMmPerS = readPositiveDouble(
+        config, egmPressure, "ramp_rate_mm_per_s", config.egmPressure.rampRateMmPerS,
+        "egm_pressure.ramp_rate_mm_per_s");
 
     config.loaded_ = true;
     return config;

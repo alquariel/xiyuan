@@ -7,7 +7,7 @@ RobotPrintService::RobotPrintService(const RobotConfig& robotConfig,
     : QObject(parent),
       ownedSocket_(std::make_unique<RobotSocketClient>(robotConfig)),
       ownedPlc_(std::make_unique<PlcClient>(plcConfig)),
-      ownedPrintSignals_(std::make_unique<PlcPrintSignalManager>(*ownedPlc_, 3000, 50, plcConfig.enabled)),
+      ownedPrintSignals_(std::make_unique<PlcPrintSignalManager>(*ownedPlc_)),
       uploadState_(uploadState),
       socket_(*ownedSocket_),
       plcPrint_(*ownedPrintSignals_) {

@@ -1849,7 +1849,7 @@ border-radius:6px;
         <property name="title">
          <string>PLC控制</string>
         </property>
-        <widget class="QLabel" name="plc_state_label">
+        <widget class="QPushButton" name="ConnectionPLCButton">
          <property name="geometry">
           <rect>
            <x>12</x>
@@ -1858,28 +1858,52 @@ border-radius:6px;
            <height>35</height>
           </rect>
          </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>110</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>110</width>
+           <height>35</height>
+          </size>
+         </property>
          <property name="font">
           <font>
            <family>微软雅黑</family>
-           <pointsize>10</pointsize>
+           <pointsize>14</pointsize>
            <weight>50</weight>
            <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="styleSheet">
-          <string notr="true">QLabel{
-background-color: rgb(255, 204, 199);
-color: rgb(32, 32, 32);
+          <string notr="true">QPushButton{
+background-color: rgb(217, 217, 217);
+color: rgb(0,0,0);  
 border-radius:4px;
-border:1px solid rgb(160, 160, 160);
+border:4px outset gray;
+}
+QPushButton::hover{
+background-color: rgb(200, 200, 200);
+color: rgb(0,0,0);  
+border-radius:4px;
+border:4px groove gray;
 }</string>
          </property>
          <property name="text">
-          <string>PLC: 未连接</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+          <string>连接PLC</string>
          </property>
         </widget>
         <widget class="QPushButton" name="DisconnectPLCButton">
@@ -1909,7 +1933,7 @@ border:4px groove gray;
 }</string>
          </property>
          <property name="text">
-          <string>连接PLC</string>
+          <string>断开PLC</string>
          </property>
         </widget>
        </widget>

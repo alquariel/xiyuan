@@ -1,7 +1,5 @@
 #pragma once
 
-#include <QMetaType>
-
 #include <cstdint>
 
 #include "pressure/generated/PressureSample.hpp"
@@ -21,8 +19,6 @@ struct PressureSampleData {
     bool windowReady = false;
     bool sensorRunning = false;
 };
-
-Q_DECLARE_METATYPE(PressureSampleData)
 
 // Build the generated DDS sample. The generated class uses IDL field names
 // such as timestamp_ms(), while the hand-written C++ code uses normal C++

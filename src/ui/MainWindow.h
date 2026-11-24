@@ -1,9 +1,6 @@
 #pragma once
 
 #include <QWidget>
-
-#include <memory>
-
 #include "app/AppConfig.h"
 #include "app/AppPaths.h"
 #include "services/PlaceholderServices.h"
@@ -19,7 +16,7 @@
 #include "services/robot/RobotPrintService.h"
 
 class QMouseEvent;
-class EgmFlowController;
+class EgmPressurePanel;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ContinuosfiberInterface; }
@@ -81,8 +78,5 @@ private:
     GrafanaStartupService grafanaStartupService_;
     HighSpeedCameraService highSpeedCameraService_;
     ThermalCameraService thermalCameraService_;
-
-    // EGM 会话编排：路径加载、启动校验、4 ms 插值 tick、CSV/曲线、看门狗。
-    // 所有 EGM 逻辑都在这个类里，MainWindow 只转发按钮和显示状态文本。
-    std::unique_ptr<EgmFlowController> egmFlow_;
+    EgmPressurePanel* egmPressurePanel_ = nullptr;
 };

@@ -11,15 +11,13 @@ FtpService::FtpService(FtpConfig config, QObject* parent)
     : QObject(parent),
       config_(std::move(config)),
       ownedUploader_(std::make_unique<FtpClient>()),
-      uploader_(ownedUploader_.get()),
-      enabled_(config_.enabled) {
+      uploader_(ownedUploader_.get()) {
 }
 
 FtpService::FtpService(FtpConfig config, IFtpUploader* uploader, QObject* parent)
     : QObject(parent),
       config_(std::move(config)),
-      uploader_(uploader),
-      enabled_(config_.enabled) {
+      uploader_(uploader) {
 }
 
 QString FtpService::selectedLocalPath() const {
@@ -36,12 +34,8 @@ bool FtpService::uploadSucceeded() const {
 
 QString FtpService::defaultModDirectory() {
     const QString appDir = QCoreApplication::applicationDirPath();
-    // Legacy layout first so existing builds and tests continue to find the
-    // directory they expect; fall back to build/path for new setups.
-    const QString legacyDir = QDir(appDir).filePath("mod_files");
-    if (QDir(legacyDir).exists()) return legacyDir;
-    const QString preferredDir = QDir(appDir).filePath("path");
-    return QDir(preferredDir).exists() ? preferredDir : appDir;
+    const QString modDir = QDir(appDir).filePath("mod_files");
+    return QDir(modDir).exists() ? modDir : appDir;
 }
 
 void FtpService::openLocus() {
@@ -68,26 +62,15 @@ bool FtpService::uploadSelectedFile(const QString& localFilePath) {
         return false;
     }
 
-    const QFileInfo fileInfo(localFilePath);
-    const QString remoteFilename = fileInfo.fileName();
-
-    if (!enabled_) {
-        // Simulation mode: the station has no FTP server (RobotStudio virtual
-        // controllers typically don't expose one). Treat the local file as
-        // "uploaded" so the downstream robot-print workflow can still send
-        // LOAD_MOD:<filename># over the socket channel.
-        setUploadState(fileInfo.absoluteFilePath(), remoteFilename);
-        emit messageRequested(QStringLiteral("FTP Upload"),
-                              QStringLiteral("FTP disabled (simulation mode): path file %1 is marked as selected.").arg(remoteFilename));
-        return true;
-    }
-
     if (uploader_ == nullptr) {
         clearUploadState();
         emit messageRequested(QStringLiteral("FTP Upload"),
                               QStringLiteral("FTP uploader is not available."));
         return false;
     }
+
+    const QFileInfo fileInfo(localFilePath);
+    const QString remoteFilename = fileInfo.fileName();
 
     FtpUploadRequest request;
     request.host = config_.ip;
@@ -129,7 +112,7 @@ bool FtpService::validateSelectedFile(const QString& localFilePath) {
         return false;
     }
 
-    if (enabled_ && (config_.ip.trimmed().isEmpty() || config_.port < 1 || config_.port > 65535)) {
+    if (config_.ip.trimmed().isEmpty() || config_.port < 1 || config_.port > 65535) {
         emit messageRequested(QStringLiteral("FTP Upload"),
                               QStringLiteral("FTP configuration is invalid."));
         return false;

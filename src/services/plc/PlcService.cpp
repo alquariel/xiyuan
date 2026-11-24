@@ -1,10 +1,7 @@
 #include "services/plc/PlcService.h"
 
 #include <QLineEdit>
-#include <QLabel>
-#include <QPushButton>
 #include <QTextBrowser>
-#include <QTimer>
 
 #include "ui_Interface4600_window.h"
 
@@ -12,139 +9,18 @@ namespace {
 
 constexpr int kDb5 = 5;
 constexpr int kConfirmRetries = 3;
-// Link health check period. Each tick costs one one-byte S7 read at most.
-constexpr int kHealthIntervalMs = 3000;
 
 }
 
 PlcService::PlcService(const PlcConfig& config, Ui::ContinuosfiberInterface* ui, QObject* parent)
     : QObject(parent),
       ui_(ui),
-      client_(config),
-      enabled_(config.enabled) {
-}
-
-void PlcService::initialize() {
-    if (healthTimer_ == nullptr) {
-        healthTimer_ = new QTimer(this);
-        healthTimer_->setInterval(kHealthIntervalMs);
-        connect(healthTimer_, &QTimer::timeout, this, &PlcService::onHealthTick);
-    }
-    if (enabled_) {
-        healthTimer_->start();
-    }
-    updateConnectionUi();
-}
-
-void PlcService::connectPlc() {
-    if (!enabled_) {
-        emit messageRequested("PLC", QString::fromUtf8(u8"PLC 已在 env_config.json 中禁用（模拟模式）。"));
-        return;
-    }
-
-    masterOn_ = true;
-    const bool ok = runCommand("PLC connect", client_.connect());
-    if (ok) {
-        linkWasUp_ = true;
-        reconnectPending_ = false;
-        showInfo(QString::fromUtf8(u8"PLC 连接成功。"));
-    }
-    updateConnectionUi();
+      client_(config) {
 }
 
 void PlcService::disconnectPlc() {
-    // Explicit disconnect doubles as the master switch: commands will not
-    // silently reconnect until the operator presses 连接PLC again.
-    masterOn_ = false;
-    linkWasUp_ = false;
-    reconnectPending_ = false;
     client_.disconnect();
-    updateConnectionUi();
-    showInfo(QString::fromUtf8(u8"PLC 已断开，自动连接已关闭。"));
-}
-
-void PlcService::toggleConnection() {
-    if (client_.isConnected()) {
-        disconnectPlc();
-    } else {
-        connectPlc();
-    }
-}
-
-void PlcService::updateConnectionUi() {
-    if (ui_ == nullptr) {
-        return;
-    }
-
-    QString text;
-    QString background;
-    if (!enabled_) {
-        text = QString::fromUtf8(u8"PLC: 已禁用");
-        background = "#e0e0e0";
-    } else if (reconnectPending_) {
-        text = QString::fromUtf8(u8"PLC: 重连中…");
-        background = "#ffe58f";
-    } else if (client_.isConnected()) {
-        text = QString::fromUtf8(u8"PLC: 已连接");
-        background = "#b7eb8f";
-    } else if (!masterOn_) {
-        text = QString::fromUtf8(u8"PLC: 已断开");
-        background = "#d9d9d9";
-    } else {
-        text = QString::fromUtf8(u8"PLC: 未连接");
-        background = "#ffccc7";
-    }
-
-    if (ui_->plc_state_label != nullptr) {
-        ui_->plc_state_label->setText(text);
-        ui_->plc_state_label->setStyleSheet(
-            QString("QLabel{background-color:%1; color:#202020; border-radius:4px;"
-                    " border:1px solid #a0a0a0;}").arg(background));
-        ui_->plc_state_label->setToolTip(client_.lastError());
-    }
-    if (ui_->DisconnectPLCButton != nullptr) {
-        ui_->DisconnectPLCButton->setText(
-            client_.isConnected() ? QString::fromUtf8(u8"断开PLC")
-                                  : QString::fromUtf8(u8"连接PLC"));
-    }
-}
-
-void PlcService::onHealthTick() {
-    if (!enabled_ || !masterOn_) {
-        return;
-    }
-
-    if (!client_.isConnected()) {
-        if (reconnectPending_) {
-            attemptReconnect();
-        }
-        return;
-    }
-
-    if (client_.probe().ok) {
-        if (!linkWasUp_ || reconnectPending_) {
-            linkWasUp_ = true;
-            reconnectPending_ = false;
-            updateConnectionUi();
-        }
-        return;
-    }
-
-    // The PLC stopped answering (power cycle, cable pulled). Flag the drop and
-    // start retrying; commands see a disconnected link until it comes back.
-    linkWasUp_ = false;
-    reconnectPending_ = true;
-    updateConnectionUi();
-    attemptReconnect();
-}
-
-void PlcService::attemptReconnect() {
-    if (client_.connect().ok) {
-        linkWasUp_ = true;
-        reconnectPending_ = false;
-        showInfo(QString::fromUtf8(u8"PLC 连接已恢复（自动重连）。"));
-    }
-    updateConnectionUi();
+    showInfo("PLC disconnected.");
 }
 
 void PlcService::cylinder1() {
@@ -504,30 +380,10 @@ void PlcService::setHysteresisRatio() {
 }
 
 bool PlcService::ensureConnected() {
-    if (!enabled_) {
-        emit messageRequested("PLC", "PLC is disabled in env_config.json (simulation mode). "
-                                      "Laser, motor and cylinder controls are unavailable.");
-        return false;
-    }
-
-    if (!masterOn_) {
-        emit messageRequested("PLC", QString::fromUtf8(
-            u8"PLC 连接已被手动断开，请先点击“连接PLC”。"));
-        return false;
-    }
-
     if (client_.isConnected()) {
         return true;
     }
-
-    // Lazy connect: the first command establishes the link.
-    const bool ok = runCommand("PLC connect", client_.connect());
-    if (ok) {
-        linkWasUp_ = true;
-        reconnectPending_ = false;
-        updateConnectionUi();
-    }
-    return ok;
+    return runCommand("PLC connect", client_.connect());
 }
 
 bool PlcService::runCommand(const QString& action, const PlcResult& result) {

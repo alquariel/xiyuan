@@ -1,23 +1,18 @@
 #include "services/pressure/PressureService.h"
 
-#include "pressure/DebugPressureTcp.h"
 #include "pressure/PressureAcquisitionWorker.h"
 #include "ui_Interface4600_window.h"
 
-#include <QDebug>
 #include <QDir>
 #include <QFileInfo>
 #include <QMetaObject>
 #include <QPushButton>
-
-#include <iostream>
 
 PressureService::PressureService(const AppConfig& config,
                                  const AppPaths& paths,
                                  Ui::ContinuosfiberInterface* ui,
                                  QObject* parent)
     : QObject(parent), config_(config.pressure), paths_(paths), ui_(ui) {
-    qRegisterMetaType<PressureSampleData>("PressureSampleData");
 }
 
 PressureService::~PressureService() {
@@ -25,14 +20,6 @@ PressureService::~PressureService() {
 }
 
 void PressureService::initializeMachine() {
-    if (config_.source == PressureSource::DebugTcp) {
-        emit messageRequested(
-            "Pressure (Debug TCP)",
-            QString("调试 TCP 模式 — 监听端口 %1\n手机/PC TCP 调试助手连接到 <PC IP>:%1\n发送格式：P,80.0  或  80.0")
-                .arg(config_.debugTcpPort));
-        return;
-    }
-
     const QFileInfo dll(pressureDllPath());
     if (!dll.exists()) {
         emit messageRequested("Pressure", QString("Pressure sensor DLL was not found: %1").arg(dll.absoluteFilePath()));
@@ -49,47 +36,11 @@ void PressureService::initializeMachine() {
 }
 
 void PressureService::startCollection() {
-    std::cerr << "[DIAG] PressureService::startCollection BEGIN" << std::endl;
-    qInfo() << "[PressureService] startCollection() source="
-            << static_cast<int>(config_.source)
-            << "running_=" << running_;
-    std::cerr << "[DIAG] log after qInfo" << std::endl;
-    if (running_) {
+    if (running_ || workerThread_) {
         emit messageRequested("Pressure", "Pressure acquisition is already running.");
         return;
     }
 
-    if (config_.source == PressureSource::DebugTcp) {
-        // ---- Debug TCP 源 ----
-        qInfo() << "[PressureService] creating DebugPressureTcp";
-        // parent 传 nullptr：我们用 unique_ptr 手动管理生命周期，
-        // 不要让 QObject parent 机制同时跟踪它，避免 double-delete。
-        debugTcp_ = std::make_unique<DebugPressureTcp>(config_.debugTcpPort, nullptr);
-        connect(debugTcp_.get(), &DebugPressureTcp::pressureSampleReady,
-                this, &PressureService::pressureSampleReady, Qt::QueuedConnection);
-        connect(debugTcp_.get(), &DebugPressureTcp::logMessage,
-                this, &PressureService::handleDebugTcpMessage);
-        connect(debugTcp_.get(), &DebugPressureTcp::listeningStateChanged,
-                this, [this](bool listening) {
-                    qInfo() << "[PressureService] listeningStateChanged =" << listening;
-                    if (listening) handleStarted();
-                    else handleStopped();
-                });
-
-        qInfo() << "[PressureService] calling debugTcp_->start()";
-        if (!debugTcp_->start()) {
-            qWarning() << "[PressureService] debugTcp_->start() FAILED";
-            debugTcp_.reset();
-            return;
-        }
-        qInfo() << "[PressureService] debugTcp started OK, handleStarted";
-        running_ = true;
-        handleStarted();
-        qInfo() << "[PressureService] startCollection() done (DebugTcp)";
-        return;
-    }
-
-    // ---- Real DLL 源 ----
     workerThread_ = std::make_unique<QThread>();
     worker_ = new PressureAcquisitionWorker(pressureDllPath(), config_);
     worker_->moveToThread(workerThread_.get());
@@ -98,11 +49,6 @@ void PressureService::startCollection() {
     connect(worker_, &PressureAcquisitionWorker::started, this, &PressureService::handleStarted);
     connect(worker_, &PressureAcquisitionWorker::stopped, this, &PressureService::handleStopped);
     connect(worker_, &PressureAcquisitionWorker::errorOccurred, this, &PressureService::handleError);
-    // 采集线程只负责取样；通过队列连接切回主线程后再向图表和 EGM 转发。
-    connect(worker_, &PressureAcquisitionWorker::samplePublished,
-            this, [this](const PressureSampleData& sample) {
-                emit pressureSampleReady(sample.rawValue);
-            }, Qt::QueuedConnection);
     connect(worker_, &PressureAcquisitionWorker::stopped, workerThread_.get(), &QThread::quit);
     connect(workerThread_.get(), &QThread::finished, worker_, &QObject::deleteLater);
     connect(workerThread_.get(), &QThread::finished, this, &PressureService::cleanupWorkerThread);
@@ -111,11 +57,6 @@ void PressureService::startCollection() {
 }
 
 void PressureService::stopCollection() {
-    if (config_.source == PressureSource::DebugTcp) {
-        cleanupDebugTcp();
-        return;
-    }
-
     if (!workerThread_) {
         running_ = false;
         return;
@@ -165,10 +106,6 @@ void PressureService::handleError(const QString& message) {
     handleStopped();
 }
 
-void PressureService::handleDebugTcpMessage(const QString& message) {
-    emit messageRequested("Pressure (Debug TCP)", message);
-}
-
 QString PressureService::pressureDllPath() const {
     return paths_.rootDir().absoluteFilePath("lib/sensors/pressure_sensor/pressure.dll");
 }
@@ -179,13 +116,4 @@ void PressureService::cleanupWorkerThread() {
     if (workerThread_ && !workerThread_->isRunning()) {
         workerThread_.reset();
     }
-}
-
-void PressureService::cleanupDebugTcp() {
-    if (debugTcp_) {
-        debugTcp_->stop();
-        debugTcp_.reset();
-    }
-    running_ = false;
-    handleStopped();
 }

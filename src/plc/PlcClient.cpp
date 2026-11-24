@@ -54,15 +54,6 @@ PlcResult PlcClient::connect() {
         return PlcResult::success();
     }
 
-    // Bound every blocking Snap7 call: a powered-off PLC must not freeze the UI
-    // thread for the Windows TCP default timeout.
-    int pingTimeoutMs = 500;
-    int sendTimeoutMs = 2000;
-    int recvTimeoutMs = 2000;
-    Cli_SetParam(client_, p_i32_PingTimeout, &pingTimeoutMs);
-    Cli_SetParam(client_, p_i32_SendTimeout, &sendTimeoutMs);
-    Cli_SetParam(client_, p_i32_RecvTimeout, &recvTimeoutMs);
-
     // Python used snap7.client.Client().connect(ip, rack, slot). This mirrors
     // that call through Snap7's C ABI and the same rack/slot config.
     const QByteArray ip = config_.ip.toUtf8();
@@ -82,24 +73,6 @@ void PlcClient::disconnect() {
         Cli_Disconnect(client_);
         connected_ = false;
     }
-}
-
-PlcResult PlcClient::probe() {
-    if (client_ == 0 || !isConnected()) {
-        return PlcResult::failure("PLC is not connected.");
-    }
-
-    // One byte from DB5 is the cheapest round-trip that proves the CPU still
-    // answers; any failure drops the cached state so callers reconnect.
-    std::array<std::uint8_t, 1> data{};
-    const int code = Cli_ReadArea(client_, s7AreaDb, 5, 0, 1, s7WordLenByte, data.data());
-    if (code != 0) {
-        connected_ = false;
-        return snap7Failure("health probe", code);
-    }
-
-    lastError_.clear();
-    return PlcResult::success();
 }
 
 PlcResult PlcClient::writeDbBit(int dbNumber, int byteOffset, int bitIndex, bool value) {

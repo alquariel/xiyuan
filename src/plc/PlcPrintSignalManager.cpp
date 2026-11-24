@@ -4,15 +4,13 @@
 #include <QThread>
 
 PlcPrintSignalManager::PlcPrintSignalManager(IPlcByteAccess& plc)
-    : PlcPrintSignalManager(plc, 3000, 50, true) {
+    : PlcPrintSignalManager(plc, 3000, 50) {
 }
 
 PlcPrintSignalManager::PlcPrintSignalManager(IPlcByteAccess& plc,
                                              int timeoutMs,
-                                             int pollIntervalMs,
-                                             bool enabled)
+                                             int pollIntervalMs)
     : plc_(plc),
-      enabled_(enabled),
       timeoutMs_(timeoutMs < 1 ? 3000 : timeoutMs),
       pollIntervalMs_(pollIntervalMs < 1 ? 50 : pollIntervalMs) {
 }
@@ -36,12 +34,6 @@ PlcResult PlcPrintSignalManager::stopPrint(bool waitAck) {
 PlcResult PlcPrintSignalManager::sendCommand(PlcPrintCommand command, bool waitAck) {
     if (command == PlcPrintCommand::None) {
         return PlcResult::failure("PLC print command is invalid.");
-    }
-
-    if (!enabled_) {
-        // Simulation mode: there is no PLC/DB18 in the cell, so report success
-        // instead of blocking the UI thread on a 3 s ACK timeout.
-        return PlcResult::success();
     }
 
     const auto value = static_cast<quint8>(command);

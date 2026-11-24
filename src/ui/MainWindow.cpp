@@ -2,27 +2,16 @@
 
 #include <QApplication>
 #include <QCheckBox>
-#include <QCoreApplication>
-#include <QDateTime>
-#include <QDir>
-#include <QFile>
-#include <QFileDialog>
-#include <QFileInfo>
 #include <QGuiApplication>
 #include <QIcon>
 #include <QMessageBox>
 #include <QMouseEvent>
+#include <QPushButton>
 #include <QScreen>
-#include <QStringList>
-#include <QTextStream>
-#include <QThread>
-#include <algorithm>
-#include <cmath>
 #include <memory>
-
-#include "robot/EgmFlowController.h"
 #include "thermal_camera/ThermalCameraClient.h"
 #include "thermal_camera/ThermalFrameStore.h"
+#include "ui/EgmPressurePanel.h"
 #include "ui_Interface4600_window.h"
 
 MainWindow::MainWindow(QWidget* parent)
@@ -51,31 +40,27 @@ MainWindow::MainWindow(QWidget* parent)
           config_.thermalCamera.displayIntervalMs,
           this) {
     ui_->setupUi(this);
-    egmFlow_ = std::make_unique<EgmFlowController>(
-        config_, robotPrintService_.socket(), this, this);
-    connect(egmFlow_.get(), &EgmFlowController::statusTextChanged,
-            this, [this](const QString& text) {
-                ui_->robot_state_show->setText(text);
-            });
-    connect(egmFlow_.get(), &EgmFlowController::statusToolTipChanged,
-            this, [this](const QString& text) {
-                ui_->robot_state_show->setToolTip(text);
-            });
     initializeWindowChrome();
     initializeState();
     initializeUiDefaults();
     connectSignals();
+
+    if (config_.egmPressure.enabled) {
+        egmPressurePanel_ = new EgmPressurePanel(config_.egmPressure, this);
+        ui_->Other_tabWidget_Robotplatform->addTab(
+            egmPressurePanel_, QString::fromUtf8(u8"EGM 压力修正"));
+    }
+
     centerOnScreen();
 }
 
 MainWindow::~MainWindow() {
-    // 先停掉 EGM 会话（tick / CSV / 曲线 / 看门狗），再释放 ui_，
-    // 避免回调在 ui 已销毁后仍写入控件。
-    egmFlow_.reset();
     delete ui_;
 }
 
 void MainWindow::startBackgroundServices() {
+    // Keep process orchestration out of the constructor so the main window can
+    // be created, shown, and painted before slow external tools begin startup.
     if (config_.timeseriesArchive.enabled) {
         timeseriesArchiveService_.start();
     }
@@ -118,6 +103,9 @@ void MainWindow::initializeState() {
 void MainWindow::initializeUiDefaults() {
     ui_->Other_tabWidget_Robotplatform->setCurrentIndex(0);
 
+    ui_->ConnectionPLCButton->setVisible(false);
+    ui_->ConnectionPLCButton->setEnabled(false);
+
     ui_->robot_state_show->setWordWrap(true);
     ui_->robot_state_show->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     ui_->robot_state_show->setText(config_.isLoaded()
@@ -127,36 +115,6 @@ void MainWindow::initializeUiDefaults() {
     if (!config_.warnings().isEmpty()) {
         ui_->robot_state_show->setToolTip(config_.warnings().join('\n'));
     }
-
-    if (!config_.plc.enabled) {
-        QWidget* const plcWidgets[] = {
-            ui_->DisconnectPLCButton,
-            ui_->cylinder1_button, ui_->cylinder2_button, ui_->cylinder3_button,
-            ui_->motor_enable, ui_->motor_reset, ui_->motor_actuation,
-            ui_->parameter_input, ui_->laser_connect,
-            ui_->set_target_temperature, ui_->set_laser_power,
-            ui_->temperature_control, ui_->set_laser_power_control,
-            ui_->redlight_open, ui_->redlight_close,
-            ui_->laser_open_button, ui_->laser_close_button,
-            ui_->Hysteresis_ratio_input, ui_->interruption, ui_->continuous };
-        for (QWidget* widget : plcWidgets) {
-            widget->setEnabled(false);
-        }
-
-        const QString plcNote = "PLC disabled (simulation mode): laser, motor and cylinder controls are read-only.";
-        const QString existingTip = ui_->robot_state_show->toolTip();
-        ui_->robot_state_show->setToolTip(
-            existingTip.isEmpty() ? plcNote : existingTip + "\n" + plcNote);
-    }
-
-    if (!config_.egm.enabled) {
-        const QString egmNote = "EGM disabled (needs 689-1 External Guided Motion on the controller).";
-        const QString existingTip = ui_->robot_state_show->toolTip();
-        ui_->robot_state_show->setToolTip(
-            existingTip.isEmpty() ? egmNote : existingTip + "\n" + egmNote);
-    }
-
-    plcService_.initialize();
 }
 
 void MainWindow::connectSignals() {
@@ -191,8 +149,6 @@ void MainWindow::connectSignals() {
             this, &MainWindow::showPlaceholderMessage);
     connect(&pressureService_, &PressureService::messageRequested,
             this, &MainWindow::showPlaceholderMessage);
-    connect(&pressureService_, &PressureService::pressureSampleReady,
-            egmFlow_.get(), &EgmFlowController::onPressureSample);
     connect(&timeseriesArchiveService_, &TimeseriesArchiveService::statusChanged,
             this, [this](const QString& status) {
                 const QString existingTip = ui_->robot_state_show->toolTip();
@@ -220,31 +176,14 @@ void MainWindow::connectSignals() {
     connect(ui_->RobotaxismoveButton, &QPushButton::clicked, &robotMovementService_, &RobotMovementService::moveRobotAxes);
     connect(ui_->PositionermoveButton, &QPushButton::clicked, &robotMovementService_, &RobotMovementService::moveExternalAxis);
     connect(ui_->PositionercomebackButton, &QPushButton::clicked, &robotMovementService_, &RobotMovementService::resetExternalAxis);
+    connect(ui_->Robot_movebutton_Gcode, &QPushButton::clicked, &robotPrintService_, &RobotPrintService::startPrint);
+    connect(ui_->PauseRobotButton, &QPushButton::clicked, &robotPrintService_, &RobotPrintService::pausePrint);
+    connect(ui_->ContinueRobotButton, &QPushButton::clicked, &robotPrintService_, &RobotPrintService::continuePrint);
+    connect(ui_->StopRobotButton, &QPushButton::clicked, &robotPrintService_, &RobotPrintService::stopPrint);
 
-    // "开始打印" → EGM 会话编排（原 MainWindow::onStartPrintClicked）
-    connect(ui_->Robot_movebutton_Gcode, &QPushButton::clicked,
-            egmFlow_.get(), &EgmFlowController::startSession);
+    connect(ui_->locusselectsetButton, &QPushButton::clicked, &ftpService_, &FtpService::openLocus);
 
-    // Pause / Continue / Stop — PLC 侧保持原有连接；EGM 侧的暂停/恢复/停止
-    // 由 EgmFlowController 自己处理（未启动时是空操作）。
-    connect(ui_->PauseRobotButton, &QPushButton::clicked,
-            &robotPrintService_, &RobotPrintService::pausePrint);
-    connect(ui_->PauseRobotButton, &QPushButton::clicked,
-            egmFlow_.get(), &EgmFlowController::pause);
-    connect(ui_->ContinueRobotButton, &QPushButton::clicked,
-            &robotPrintService_, &RobotPrintService::continuePrint);
-    connect(ui_->ContinueRobotButton, &QPushButton::clicked,
-            egmFlow_.get(), &EgmFlowController::resume);
-    connect(ui_->StopRobotButton, &QPushButton::clicked,
-            &robotPrintService_, &RobotPrintService::stopPrint);
-    connect(ui_->StopRobotButton, &QPushButton::clicked,
-            egmFlow_.get(), &EgmFlowController::stop);
-
-    // "获取路径" → 打开 txt 路径文件对话框
-    connect(ui_->locusselectsetButton, &QPushButton::clicked,
-            egmFlow_.get(), &EgmFlowController::loadPathFromDialog);
-
-    connect(ui_->DisconnectPLCButton, &QPushButton::clicked, &plcService_, &PlcService::toggleConnection);
+    connect(ui_->DisconnectPLCButton, &QPushButton::clicked, &plcService_, &PlcService::disconnectPlc);
     connect(ui_->cylinder1_button, &QPushButton::clicked, &plcService_, &PlcService::cylinder1);
     connect(ui_->cylinder2_button, &QPushButton::clicked, &plcService_, &PlcService::cylinder2);
     connect(ui_->cylinder3_button, &QPushButton::clicked, &plcService_, &PlcService::cylinder3);
@@ -283,8 +222,6 @@ void MainWindow::connectSignals() {
     connect(ui_->FC_data, &QPushButton::clicked, &pressureService_, &PressureService::showData);
     connect(ui_->FC_start, &QPushButton::clicked, &pressureService_, &PressureService::startCollection);
     connect(ui_->FC_stop, &QPushButton::clicked, &pressureService_, &PressureService::stopCollection);
-
-
 }
 
 void MainWindow::centerOnScreen() {
@@ -295,6 +232,10 @@ void MainWindow::centerOnScreen() {
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event) {
+    // The Python main window handled thermal ROI clicks globally. Forwarding the
+    // event here preserves that behavior without changing the .ui design. The
+    // service expects coordinates local to the thermal preview label, not the
+    // whole main window.
     const QPoint labelPos = ui_->TIC_RD->mapFrom(this, event != nullptr ? event->pos() : QPoint());
     if (event != nullptr &&
         ui_->TIC_RD->rect().contains(labelPos) &&
@@ -324,4 +265,3 @@ void MainWindow::updateMotorStateFromContinuous() {
         ui_->state_show->setText(QString::fromUtf8(u8"连续状态"));
     }
 }
-

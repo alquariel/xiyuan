@@ -55,12 +55,6 @@ struct RobotConfig {
 };
 
 struct FtpConfig {
-    // When false (RobotStudio virtual-controller stations typically have no
-    // FTP server), selecting a MOD path file still validates the local file
-    // but simulates upload success so the print workflow can proceed over
-    // the socket channel only.
-    bool enabled = true;
-
     QString ip = "192.168.0.104";
     int port = 21;
     QString user = "Default User";
@@ -68,34 +62,9 @@ struct FtpConfig {
 };
 
 struct PlcConfig {
-    // When false the cell has no S7-1200 (for example a RobotStudio virtual
-    // controller station). The DB18 print handshake is then simulated and the
-    // DB5 direct controls are disabled instead of waiting for Snap7 timeouts.
-    bool enabled = true;
-
     QString ip = "192.168.0.201";
     int rack = 0;
     int slot = 1;
-};
-
-struct EgmConfig {
-    // 总开关。false 时 EGM 完全不启动（未装 689-1 的虚拟控制器用这个降级）。
-    bool enabled = false;
-
-    // 本机监听端口。必须与控制器 EIO/SIO 配置里 UCdevice 的 RemotePortNumber 一致
-    // （默认 6510）。控制器会先向 本机:6510 发 EgmRobot，本机再回发 EgmSensor。
-    QString ip = "127.0.0.1";
-    int port = 6510;
-    int offset = 0;
-
-    // Streaming cadence: ABB's EGM application manual recommends 250 Hz for
-    // industrial use (4 ms period). Reduce to 100 Hz / 10 ms for software-
-    // only playback on slower controllers.
-    int periodMs = 4;
-
-    // Deviation safety parameters — must match EGMServer.mod EGMSetup values.
-    double maxDeviationTcpMm = 0.1;
-    double maxSpeedDeviationTcpMmPerSec = 2000.0;
 };
 
 struct ThermalCameraConfig {
@@ -139,21 +108,7 @@ struct SerialConfig {
     int fiberLaserBaudrate = 9600;
 };
 
-// 压力输入源。RealDll 使用厂商 pressure.dll；DebugTcp 使用
-// 独立的 QTcpServer 调试端口，方便没有硬件时验证压力曲线链路。
-enum class PressureSource {
-    RealDll,
-    DebugTcp,
-};
-
 struct PressureConfig {
-    // 输入源，默认使用真实传感器。改成 DebugTcp 即可切换。
-    PressureSource source = PressureSource::RealDll;
-
-    // DebugTcp 模式下 QTcpServer 监听端口。Android iOS 上的 TCP 调试助手
-    // 连接到 <PC 局域网 IP>:<debugTcpPort>。不要与厂商 DAQ 端口 8234 冲突。
-    quint16 debugTcpPort = 9100;
-
     // Matches pressure_reader.py time.sleep(0.1), but lives in config so users
     // can tune acquisition without recompiling the C++ application.
     int sampleIntervalMs = 100;
@@ -249,12 +204,45 @@ struct RobotMonitorArchiveConfig {
     QString sourceTag = "abb_irb4600";
 };
 
+struct EgmPressureConfig {
+    // Master switch for the in-process EGM path-correction tab and worker thread.
+    bool enabled = true;
+
+    // Controller IP is informational for the EGM server (the controller is the
+    // UDP client); the PC only binds the local UDP port below.
+    QString robotIp = "192.168.0.104";
+    int udpPort = 6510;
+
+    // EGM sample period used by RAPID (legal values: 24 / 48 / 72 ms).
+    int controlPeriodMs = 48;
+
+    // Sensor measurement age reported in EgmPathCorr.age (milliseconds).
+    int correctionAgeMs = 48;
+
+    // When no EgmRobot arrives within this window the server stops replying and
+    // reports a link timeout instead of sending a stale correction.
+    int receiveTimeoutMs = 500;
+
+    // Fast DDS sources for the closed loop.
+    QString pressureTopic = "afp.pressure.sample";
+    QString robotMonitorTopic = "afp.robot.monitor.sample";
+    int ddsDomainId = 0;
+
+    // PI control law. Pressure uses raw sensor units until calibrated.
+    double pressureSetpoint = 0.0;
+    double kp = 0.0;
+    double ki = 0.0;
+    double zMaxMm = 3.0;
+    double dzMaxPerCycleMm = 0.1;
+    double staleTimeoutMs = 300.0;
+    double rampRateMmPerS = 5.0;
+};
+
 class AppConfig {
 public:
     RobotConfig robot;
     FtpConfig ftp;
     PlcConfig plc;
-    EgmConfig egm;
     ThermalCameraConfig thermalCamera;
     HighSpeedCameraConfig highSpeedCamera;
     SerialConfig serial;
@@ -263,6 +251,7 @@ public:
     GrafanaConfig grafana;
     PressureArchiveConfig pressureArchive;
     RobotMonitorArchiveConfig robotMonitorArchive;
+    EgmPressureConfig egmPressure;
 
     static AppConfig load(const AppPaths& paths);
 

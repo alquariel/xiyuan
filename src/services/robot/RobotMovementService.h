@@ -9,7 +9,6 @@
 #include "app/AppConfig.h"
 #include "plc/PlcClient.h"
 #include "robot/PlcRobotMotionClient.h"
-#include "robot/SocketRobotMotionClient.h"
 
 class QLineEdit;
 class QThread;
@@ -57,8 +56,7 @@ private:
     RobotConfig robotConfig_;
     std::unique_ptr<PlcClient> ownedPlc_;
     std::unique_ptr<PlcRobotMotionClient> ownedMotionClient_;
-    std::unique_ptr<SocketRobotMotionClient> ownedSocketMotionClient_;
-    IRobotMotionController* motionClient_ = nullptr;
+    IRobotMotionController& motionClient_;
     QThread* motionThread_ = nullptr;
     bool motionRunning_ = false;
 };

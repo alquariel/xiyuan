@@ -18,18 +18,10 @@ RobotMovementService::RobotMovementService(const RobotConfig& robotConfig,
                                            QObject* parent)
     : QObject(parent),
       ui_(ui),
-      robotConfig_(robotConfig) {
-    // transport.type selects the motion path: "socket" sends RAPID motion
-    // commands straight to the controller socket (robot.ip:port_motion),
-    // anything else keeps the legacy Snap7/PLC handshake untouched.
-    if (robotConfig.transportType.compare(QLatin1String("socket"), Qt::CaseInsensitive) == 0) {
-        ownedSocketMotionClient_ = std::make_unique<SocketRobotMotionClient>(robotConfig);
-        motionClient_ = ownedSocketMotionClient_.get();
-    } else {
-        ownedPlc_ = std::make_unique<PlcClient>(plcConfig);
-        ownedMotionClient_ = std::make_unique<PlcRobotMotionClient>(*ownedPlc_);
-        motionClient_ = ownedMotionClient_.get();
-    }
+      robotConfig_(robotConfig),
+      ownedPlc_(std::make_unique<PlcClient>(plcConfig)),
+      ownedMotionClient_(std::make_unique<PlcRobotMotionClient>(*ownedPlc_)),
+      motionClient_(*ownedMotionClient_) {
 }
 
 RobotMovementService::RobotMovementService(const RobotConfig& robotConfig,
@@ -39,7 +31,7 @@ RobotMovementService::RobotMovementService(const RobotConfig& robotConfig,
     : QObject(parent),
       ui_(ui),
       robotConfig_(robotConfig),
-      motionClient_(&motionClient) {
+      motionClient_(motionClient) {
 }
 
 RobotMovementService::~RobotMovementService() {
@@ -85,7 +77,7 @@ void RobotMovementService::moveRobot() {
     }
 
     runMotionCommand("move robot", speed, [this, pose]() {
-        return motionClient_->moveCartesian(pose);
+        return motionClient_.moveCartesian(pose);
     });
 }
 
@@ -115,7 +107,7 @@ void RobotMovementService::resetRobot() {
     }
 
     runMotionCommand("reset robot", speed, [this, pose]() {
-        return motionClient_->moveCartesian(pose);
+        return motionClient_.moveCartesian(pose);
     });
 }
 
@@ -138,7 +130,7 @@ void RobotMovementService::moveRobotAxes() {
     }
 
     runMotionCommand("move robot axes", speed, [this, axes]() {
-        return motionClient_->moveJoints(axes);
+        return motionClient_.moveJoints(axes);
     });
 }
 
@@ -160,7 +152,7 @@ void RobotMovementService::moveExternalAxis() {
     }
 
     runMotionCommand("move external axis", speed, [this, axis1, axis2, axis3]() {
-        return motionClient_->moveExternalAxis({axis3, axis1, axis2, 0.0, 0.0, 0.0});
+        return motionClient_.moveExternalAxis({axis3, axis1, axis2, 0.0, 0.0, 0.0});
     });
 }
 
@@ -173,7 +165,7 @@ void RobotMovementService::resetExternalAxis() {
     }
 
     runMotionCommand("reset external axis", speed, [this]() {
-        return motionClient_->moveExternalAxis({-1900.0, 0.0, 0.0, 0.0, 0.0, 0.0});
+        return motionClient_.moveExternalAxis({-1900.0, 0.0, 0.0, 0.0, 0.0, 0.0});
     });
 }
 
@@ -233,7 +225,7 @@ void RobotMovementService::runMotionCommand(const QString& action,
     motionRunning_ = true;
     QThread* thread = QThread::create([this, action, speed, motionTask = std::move(motionTask)]() mutable {
         try {
-            motionClient_->setSpeed(speed);
+            motionClient_.setSpeed(speed);
             const RobotMotionResult result = motionTask();
             QMetaObject::invokeMethod(this, [this, action, result]() {
                 reportMotionResult(action, result);

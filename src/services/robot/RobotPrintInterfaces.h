@@ -46,29 +46,6 @@ public:
     virtual RobotSocketResult sendPause() = 0;
     virtual RobotSocketResult sendContinue() = 0;
     virtual RobotSocketResult sendStop() = 0;
-
-    // Send a raw "<code> <params>#" or "STRING_COMMAND#" frame — used by EGM
-    // and any other extension that the narrow print-only interface above does
-    // not cover (e.g. CASE 110 / 111 / 112 to flip EGM flags in SERVER.mod).
-    virtual RobotSocketResult sendRawMessage(const QString& frame) = 0;
-
-    // Same as sendRawMessage but also returns the single-line reply. Used by
-    // the EGM path to read back the current TCP pose (CASE 113) so the PC can
-    // convert absolute path points into EGM offsets. The default reports
-    // "unsupported" so existing socket fakes keep compiling.
-    virtual RobotSocketResult sendRawMessageWithReply(const QString& frame, QString& reply) {
-        Q_UNUSED(frame);
-        Q_UNUSED(reply);
-        return RobotSocketResult::failure("Reply capture is not supported by this socket.");
-    }
-
-    // 带超时的版本：EGM 启动前的握手查询必须快（不能像默认 3 s 那样把界面
-    // 卡住十几秒）。默认实现忽略超时，退回上面的固定超时版本。
-    virtual RobotSocketResult sendRawMessageWithReply(const QString& frame, QString& reply,
-                                                      int timeoutMs) {
-        Q_UNUSED(timeoutMs);
-        return sendRawMessageWithReply(frame, reply);
-    }
 };
 
 // Interface for the DB18 print commands needed by the robot print workflow.

@@ -57,11 +57,6 @@ public:
         return failSideMessage ? RobotSocketResult::failure("stop side message failed") : RobotSocketResult::success();
     }
 
-    RobotSocketResult sendRawMessage(const QString& frame) override {
-        record(QStringLiteral("socket:raw:%1").arg(frame));
-        return failSideMessage ? RobotSocketResult::failure(QStringLiteral("raw message failed")) : RobotSocketResult::success();
-    }
-
 private:
     void record(const QString& operation) {
         operations << operation;

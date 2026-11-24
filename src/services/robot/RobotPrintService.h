@@ -32,12 +32,6 @@ public:
     bool pauseFlag() const;
     bool stopFlag() const;
 
-    // EGM layer needs to send raw CASE frames through the same TCP socket that
-    // the print workflow uses (so connection state is shared and we don't hold
-    // two sockets open to port 5000). This accessor exposes the socket interface
-    // so callers can write "110 #" / "111 #" to flip EGM flags in SERVER.mod.
-    IRobotCommandSocket* socket() const { return &socket_; }
-
 signals:
     void messageRequested(const QString& title, const QString& message);
     void robotStatusRequested(const QString& text, bool connected);

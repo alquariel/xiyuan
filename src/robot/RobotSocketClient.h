@@ -22,19 +22,11 @@ public:
     RobotSocketResult sendPause() override;
     RobotSocketResult sendContinue() override;
     RobotSocketResult sendStop() override;
-    RobotSocketResult sendRawMessage(const QString& frame) override;
-    RobotSocketResult sendRawMessageWithReply(const QString& frame, QString& reply) override;
-    RobotSocketResult sendRawMessageWithReply(const QString& frame, QString& reply,
-                                              int timeoutMs) override;
-
-    // CASE 0 Ping — sends "0 #" and waits for "0 1" to verify the peer is
-    // really the SERVER.mod RAPID process, not just any program bound to the
-    // port (we saw an orphan RobVC.exe accept a TCP connect but never reply).
-    RobotSocketResult sendPing();
 
     static QString loadModMessage(const QString& modFilename);
 
 private:
+    RobotSocketResult sendRawMessage(const QString& message);
     QString endpointText() const;
 
     RobotConfig config_;

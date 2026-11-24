@@ -11,7 +11,11 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR}/src/ui)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Network Widgets Charts Test)
+if(MINGW)
+    add_compile_definitions(MINGW_COMPILER)
+endif()
+
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Network Widgets Test)
 find_package(snap7 CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(fastdds CONFIG REQUIRED)
@@ -95,14 +99,6 @@ set(APP_SOURCES
     src/robot/RobotQuaternion.cpp
     src/robot/PlcRobotMotionClient.h
     src/robot/PlcRobotMotionClient.cpp
-    src/robot/SocketRobotMotionClient.h
-    src/robot/SocketRobotMotionClient.cpp
-    src/robot/EgmClient.h
-    src/robot/EgmClient.cpp
-    src/robot/EgmFlowController.h
-    src/robot/EgmFlowController.cpp
-    src/robot/PathLoader.h
-    src/robot/PathLoader.cpp
     src/plc/S7Data.h
     src/plc/S7Data.cpp
     src/plc/PlcClient.h
@@ -116,8 +112,6 @@ set(APP_SOURCES
     src/pressure/PressureAcquisitionWorker.cpp
     src/pressure/PressureSensorClient.h
     src/pressure/PressureSensorClient.cpp
-    src/pressure/DebugPressureTcp.h
-    src/pressure/DebugPressureTcp.cpp
     src/pressure/PressureStatistics.h
     src/pressure/PressureStatistics.cpp
     src/camera/HighSpeedCameraTypes.h
@@ -139,8 +133,21 @@ set(APP_SOURCES
     src/robot_monitor/generated/RobotMonitorSampleTypeObjectSupport.cxx
     src/ui/MainWindow.h
     src/ui/MainWindow.cpp
-    src/ui/PressureChartWindow.h
-    src/ui/PressureChartWindow.cpp
+    src/egm/EgmSnapshots.h
+    src/egm/EgmWireCodec.h
+    src/egm/EgmWireCodec.cpp
+    src/egm/EgmUdpServer.h
+    src/egm/EgmUdpServer.cpp
+    src/egm/PressureSampleSubscriber.h
+    src/egm/PressureSampleSubscriber.cpp
+    src/egm/RobotMonitorSubscriber.h
+    src/egm/RobotMonitorSubscriber.cpp
+    src/egm/PressurePiController.h
+    src/egm/PressurePiController.cpp
+    src/egm/EgmPressureController.h
+    src/egm/EgmPressureController.cpp
+    src/ui/EgmPressurePanel.h
+    src/ui/EgmPressurePanel.cpp
     src/services/PlaceholderServices.h
     src/services/PlaceholderServices.cpp
     src/services/ftp/FtpService.h
@@ -149,8 +156,6 @@ set(APP_SOURCES
     src/services/plc/PlcService.cpp
     src/services/pressure/PressureService.h
     src/services/pressure/PressureService.cpp
-    src/pressure/PressureSimulator.h
-    src/pressure/PressureSimulator.cpp
     src/services/camera/HighSpeedCameraService.h
     src/services/camera/HighSpeedCameraService.cpp
     src/services/thermal_camera/ThermalCameraService.h
@@ -187,7 +192,6 @@ if(APP_TARGET_READY)
         Qt6::Gui
         Qt6::Network
         Qt6::Widgets
-        Qt6::Charts
         snap7::snap7
         fastdds
     )
@@ -209,21 +213,56 @@ if(APP_TARGET_READY)
         COMMAND ${CMAKE_COMMAND} -E echo
                 "Thermal camera runtime copied from: ${THERMAL_CAMERA_RUNTIME_SOURCE_DIR}"
         COMMAND ${CMAKE_COMMAND} -E make_directory
-                $<TARGET_FILE_DIR:AFP_ABB_CPP>/path
+                $<TARGET_FILE_DIR:AFP_ABB_CPP>/mod_files
     )
 
-    # windeployqt 自动把所有 Qt 运行时 DLL + plugins + 间接依赖（含 Charts 链
-    # 上的 Qt6OpenGL/Qt6OpenGLWidgets 等）全部扫到，不再需要手动逐模块 copy。
-    find_program(WINDEPLOYQT_EXE windeployqt HINTS
-                 $ENV{QTDIR}/bin
-                 "D:/Qt/6.8.3/mingw_64/bin"
-                 REQUIRED)
-    add_custom_command(TARGET AFP_ABB_CPP POST_BUILD
-        COMMAND ${WINDEPLOYQT_EXE}
-                --no-translations --no-opengl-sw
-                $<TARGET_FILE:AFP_ABB_CPP>
-        COMMENT "Deploying Qt runtime DLLs via windeployqt..."
-    )
+    if(WIN32)
+        get_target_property(QT_QMAKE_EXECUTABLE Qt6::qmake IMPORTED_LOCATION)
+        get_filename_component(QT_BIN_DIR "${QT_QMAKE_EXECUTABLE}" DIRECTORY)
+        if(EXISTS "${QT_BIN_DIR}/windeployqt.exe")
+            add_custom_command(TARGET AFP_ABB_CPP POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E env
+                        "PATH=${QT_BIN_DIR};$ENV{PATH}"
+                        "${QT_BIN_DIR}/windeployqt.exe"
+                        --no-translations
+                        --no-system-d3d-compiler
+                        --no-opengl-sw
+                        "$<TARGET_FILE:AFP_ABB_CPP>"
+                COMMENT "Deploying Qt runtime next to AFP_ABB_CPP.exe"
+            )
+        endif()
+
+        add_custom_command(TARGET AFP_ABB_CPP POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    $<TARGET_RUNTIME_DLLS:AFP_ABB_CPP>
+                    $<TARGET_FILE_DIR:AFP_ABB_CPP>
+            COMMAND_EXPAND_LISTS
+            COMMENT "Deploying third-party runtime DLLs next to AFP_ABB_CPP.exe"
+        )
+
+        foreach(_prefix IN LISTS CMAKE_PREFIX_PATH)
+            if(EXISTS "${_prefix}/bin/libfastdds.dll")
+                set(VCPKG_RUNTIME_BIN "${_prefix}/bin")
+            endif()
+        endforeach()
+        if(VCPKG_RUNTIME_BIN)
+            set(EGM_EXTRA_RUNTIME_DLLS)
+            foreach(_dll_name libcrypto-3-x64.dll libssl-3-x64.dll libtinyxml2.dll
+                              libfoonathan_memory-0.7.4.dll)
+                if(EXISTS "${VCPKG_RUNTIME_BIN}/${_dll_name}")
+                    list(APPEND EGM_EXTRA_RUNTIME_DLLS "${VCPKG_RUNTIME_BIN}/${_dll_name}")
+                endif()
+            endforeach()
+            if(EGM_EXTRA_RUNTIME_DLLS)
+                add_custom_command(TARGET AFP_ABB_CPP POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                            ${EGM_EXTRA_RUNTIME_DLLS}
+                            $<TARGET_FILE_DIR:AFP_ABB_CPP>
+                    COMMENT "Deploying OpenSSL/tinyxml2/foonathan_memory DLLs"
+                )
+            endif()
+        endif()
+    endif()
 else()
     string(REPLACE ";" "\n  " MISSING_APP_SOURCES_TEXT "${MISSING_APP_SOURCES}")
     set(MISSING_APP_SOURCES_TEXT "  ${MISSING_APP_SOURCES_TEXT}")
@@ -295,14 +334,14 @@ add_custom_command(TARGET dds_influx_subscriber POST_BUILD
             $<TARGET_FILE_DIR:dds_influx_subscriber>
 )
 
-#if(TARGET AFP_ABB_CPP)
-#    add_dependencies(AFP_ABB_CPP dds_influx_subscriber)
-#    add_custom_command(TARGET AFP_ABB_CPP POST_BUILD
-#        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-#                $<TARGET_FILE:dds_influx_subscriber>
-#                $<TARGET_FILE_DIR:AFP_ABB_CPP>
-#    )
-#endif
+if(TARGET AFP_ABB_CPP)
+    add_dependencies(AFP_ABB_CPP dds_influx_subscriber)
+    add_custom_command(TARGET AFP_ABB_CPP POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                $<TARGET_FILE:dds_influx_subscriber>
+                $<TARGET_FILE_DIR:AFP_ABB_CPP>
+    )
+endif()
 
 enable_testing()
 
@@ -504,6 +543,60 @@ if(TEST_PRESSURE_STATISTICS_READY)
 elseif(MISSING_TEST_PRESSURE_STATISTICS_SOURCES)
     string(REPLACE ";" "\n  " MISSING_TEST_PRESSURE_STATISTICS_TEXT "${MISSING_TEST_PRESSURE_STATISTICS_SOURCES}")
     message(STATUS "test_pressure_statistics target deferred. Missing files:\n  ${MISSING_TEST_PRESSURE_STATISTICS_TEXT}")
+endif()
+
+set(TEST_EGM_PRESSURE_PI_SOURCES
+    tests/test_egm_pressure_pi_controller.cpp
+    src/egm/PressurePiController.cpp
+)
+set(TEST_EGM_PRESSURE_PI_READY TRUE)
+set(MISSING_TEST_EGM_PRESSURE_PI_SOURCES)
+foreach(TEST_SOURCE ${TEST_EGM_PRESSURE_PI_SOURCES})
+    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${TEST_SOURCE}")
+        set(TEST_EGM_PRESSURE_PI_READY FALSE)
+        list(APPEND MISSING_TEST_EGM_PRESSURE_PI_SOURCES ${TEST_SOURCE})
+    endif()
+endforeach()
+
+if(TEST_EGM_PRESSURE_PI_READY)
+    add_executable(test_egm_pressure_pi_controller ${TEST_EGM_PRESSURE_PI_SOURCES})
+    target_include_directories(test_egm_pressure_pi_controller PRIVATE src)
+    target_link_libraries(test_egm_pressure_pi_controller PRIVATE Qt6::Core Qt6::Test)
+    copy_qt_test_runtime(test_egm_pressure_pi_controller)
+    add_test(NAME test_egm_pressure_pi_controller COMMAND test_egm_pressure_pi_controller)
+elseif(MISSING_TEST_EGM_PRESSURE_PI_SOURCES)
+    string(REPLACE ";" "\n  " MISSING_TEST_EGM_PRESSURE_PI_TEXT "${MISSING_TEST_EGM_PRESSURE_PI_SOURCES}")
+    message(STATUS "test_egm_pressure_pi_controller target deferred. Missing files:\n  ${MISSING_TEST_EGM_PRESSURE_PI_TEXT}")
+endif()
+
+set(TEST_EGM_UDP_SERVER_SOURCES
+    tests/test_egm_udp_server.cpp
+    src/egm/EgmUdpServer.cpp
+    src/egm/EgmWireCodec.cpp
+)
+set(TEST_EGM_UDP_SERVER_READY TRUE)
+set(MISSING_TEST_EGM_UDP_SERVER_SOURCES)
+foreach(TEST_SOURCE ${TEST_EGM_UDP_SERVER_SOURCES})
+    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${TEST_SOURCE}")
+        set(TEST_EGM_UDP_SERVER_READY FALSE)
+        list(APPEND MISSING_TEST_EGM_UDP_SERVER_SOURCES ${TEST_SOURCE})
+    endif()
+endforeach()
+
+if(TEST_EGM_UDP_SERVER_READY)
+    add_executable(test_egm_udp_server ${TEST_EGM_UDP_SERVER_SOURCES})
+    target_include_directories(test_egm_udp_server PRIVATE src)
+    target_link_libraries(test_egm_udp_server PRIVATE Qt6::Core Qt6::Network Qt6::Test)
+    copy_qt_test_runtime(test_egm_udp_server)
+    add_custom_command(TARGET test_egm_udp_server POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                $<TARGET_FILE:Qt6::Network>
+                $<TARGET_FILE_DIR:test_egm_udp_server>
+    )
+    add_test(NAME test_egm_udp_server COMMAND test_egm_udp_server)
+elseif(MISSING_TEST_EGM_UDP_SERVER_SOURCES)
+    string(REPLACE ";" "\n  " MISSING_TEST_EGM_UDP_SERVER_TEXT "${MISSING_TEST_EGM_UDP_SERVER_SOURCES}")
+    message(STATUS "test_egm_udp_server target deferred. Missing files:\n  ${MISSING_TEST_EGM_UDP_SERVER_TEXT}")
 endif()
 
 set(TEST_PRESSURE_DDS_TYPES_SOURCES
@@ -714,26 +807,6 @@ elseif(MISSING_TEST_ROBOT_SOCKET_CLIENT_SOURCES)
     message(STATUS "test_robot_socket_client target deferred. Missing files:\n  ${MISSING_TEST_ROBOT_SOCKET_CLIENT_TEXT}")
 endif()
 
-set(TEST_PATH_LOADER_SOURCES
-    tests/test_path_loader.cpp
-    src/robot/PathLoader.cpp
-)
-add_executable(test_path_loader ${TEST_PATH_LOADER_SOURCES})
-target_include_directories(test_path_loader PRIVATE src)
-target_link_libraries(test_path_loader PRIVATE Qt6::Core Qt6::Test)
-copy_qt_test_runtime(test_path_loader)
-add_test(NAME test_path_loader COMMAND test_path_loader)
-
-set(TEST_EGM_CLIENT_SOURCES
-    tests/test_egm_client.cpp
-    src/robot/EgmClient.cpp
-)
-add_executable(test_egm_client ${TEST_EGM_CLIENT_SOURCES})
-target_include_directories(test_egm_client PRIVATE src)
-target_link_libraries(test_egm_client PRIVATE Qt6::Core Qt6::Network Qt6::Test)
-copy_qt_test_runtime(test_egm_client)
-add_test(NAME test_egm_client COMMAND test_egm_client)
-
 set(TEST_ROBOT_QUATERNION_SOURCES
     tests/test_robot_quaternion.cpp
     src/robot/RobotQuaternion.cpp
@@ -858,7 +931,6 @@ add_executable(test_robot_movement_service
     src/services/robot/RobotMovementService.cpp
     src/services/robot/RobotMovementService.h
     src/robot/PlcRobotMotionClient.cpp
-    src/robot/SocketRobotMotionClient.cpp
     src/robot/RobotQuaternion.cpp
     src/plc/PlcClient.cpp
     src/plc/S7Data.cpp
@@ -868,7 +940,7 @@ target_include_directories(test_robot_movement_service PRIVATE
     src
     ${CMAKE_CURRENT_BINARY_DIR}/test_robot_movement_service_autogen/include
 )
-target_link_libraries(test_robot_movement_service PRIVATE Qt6::Core Qt6::Gui Qt6::Network Qt6::Widgets Qt6::Test snap7::snap7)
+target_link_libraries(test_robot_movement_service PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Test snap7::snap7)
 copy_qt_widget_test_runtime(test_robot_movement_service)
 add_custom_command(TARGET test_robot_movement_service POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
