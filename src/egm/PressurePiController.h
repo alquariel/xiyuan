@@ -2,11 +2,12 @@
 
 namespace egm {
 
-// PI 控制律参数。压力单位为传感器原始单位，输出单位为 mm。
+// PID 控制律参数（kd 默认 0 时退化为 PI）。压力单位为传感器原始单位，输出单位为 mm。
 struct PressurePiConfig {
     double setpoint = 0.0;            // 目标压力
     double kp = 0.0;                  // mm / 压力单位
     double ki = 0.0;                  // mm / (压力单位 * s)
+    double kd = 0.0;                  // mm / (压力单位 / s)
     double zMaxMm = 3.0;              // 输出限幅（单轴）
     double dzMaxPerCycleMm = 0.1;     // 每周期最大变化量
     double staleTimeoutMs = 300.0;    // 压力样本失效阈值
@@ -23,7 +24,6 @@ struct PressurePiInput {
 
 // 纯逻辑 PI 控制器：无 Qt / 无网络依赖，便于单元测试。
 //
-// 符号契约（见设计文档 §5）：
 //   工具 +Z = 离开工件表面（抬刀）
 //   pressureMean > setpoint（压力过大）-> z_corr > 0 -> 抬刀
 //   pressureMean < setpoint（压力不足）-> z_corr < 0 -> 下压
@@ -52,6 +52,8 @@ private:
     PressurePiConfig config_;
     double outputMm_ = 0.0;
     double integralTerm_ = 0.0;
+    double prevPressure_ = 0.0;
+    bool hasPrevPressure_ = false;
     bool saturated_ = false;
 };
 

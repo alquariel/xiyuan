@@ -34,6 +34,8 @@ private slots:
     void rampsToZeroWhenSampleStale();
     void setConfigKeepsIntegral();
     void nonPositiveDtKeepsPreviousOutput();
+    void derivativeReactsToPressureRise();
+    void resetClearsDerivativeState();
 };
 
 void TestPressurePiController::disabledKeepsZeroOutput() {
@@ -181,6 +183,39 @@ void TestPressurePiController::nonPositiveDtKeepsPreviousOutput() {
     QVERIFY(closeTo(controller.update(makeInput(10.0), 0.048), 1.0));
     QVERIFY(closeTo(controller.update(makeInput(10.0), 0.0), 1.0));
     QVERIFY(closeTo(controller.update(makeInput(10.0), -0.1), 1.0));
+}
+
+void TestPressurePiController::derivativeReactsToPressureRise() {
+    egm::PressurePiConfig config;
+    config.setpoint = 0.0;
+    config.kp = 0.0;
+    config.ki = 0.0;
+    config.kd = 1.0;
+    config.zMaxMm = 3.0;
+    config.dzMaxPerCycleMm = 10.0;
+    egm::PressurePiController controller(config);
+
+    // 首帧没有历史压力，微分项为 0。
+    QVERIFY(closeTo(controller.update(makeInput(1.0), 0.1), 0.0));
+    // 第二帧压力上升 1.0，kd * 1.0 / 0.1 = 10，按 zMaxMm 限幅到 3.0。
+    QVERIFY(closeTo(controller.update(makeInput(2.0), 0.1), 3.0));
+}
+
+void TestPressurePiController::resetClearsDerivativeState() {
+    egm::PressurePiConfig config;
+    config.setpoint = 0.0;
+    config.kp = 0.0;
+    config.ki = 0.0;
+    config.kd = 1.0;
+    config.zMaxMm = 3.0;
+    config.dzMaxPerCycleMm = 10.0;
+    egm::PressurePiController controller(config);
+
+    controller.update(makeInput(1.0), 0.1);
+    QVERIFY(closeTo(controller.update(makeInput(2.0), 0.1), 3.0));
+
+    controller.reset();
+    QVERIFY(closeTo(controller.update(makeInput(5.0), 0.1), 0.0));
 }
 
 QTEST_MAIN(TestPressurePiController)

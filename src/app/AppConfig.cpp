@@ -434,6 +434,8 @@ AppConfig AppConfig::load(const AppPaths& paths) {
         config, egmPressure, "kp", config.egmPressure.kp, "egm_pressure.kp");
     config.egmPressure.ki = readNonNegativeDouble(
         config, egmPressure, "ki", config.egmPressure.ki, "egm_pressure.ki");
+    config.egmPressure.kd = readNonNegativeDouble(
+        config, egmPressure, "kd", config.egmPressure.kd, "egm_pressure.kd");
     config.egmPressure.zMaxMm = readPositiveDouble(
         config, egmPressure, "z_max_mm", config.egmPressure.zMaxMm, "egm_pressure.z_max_mm");
     config.egmPressure.dzMaxPerCycleMm = readPositiveDouble(

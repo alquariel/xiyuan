@@ -87,7 +87,7 @@ EGM 模块在主进程内新建**独立 DDS Participant（node）**接入同一 
 
 ```text
 AFP_ABB_CPP.exe（主程序：UI + PLC + 打印 + EGM 压力修正）
-   ├── Qt 主线程        : 主界面（含 EGM 页签）、参数编辑、曲线刷新、日志
+   ├── Qt 主线程        : 主界面（含 EGM 页签）、参数编辑、状态刷新、日志
    ├── EGM 线程(QThread): 阻塞 recvfrom(EgmRobot) → 立即 sendto(EgmSensorPathCorr) ← 48ms 硬节拍
    │                     （PI 计算在同一线程内按 48ms dt 执行）
    └── DDS 订阅线程     : Fast DDS listener 回调，仅写入"最新样本"快照
@@ -116,9 +116,9 @@ DDS 慢于 EGM：一个压力样本会被约 2 个 EGM 周期复用，属**采�
 | 区域 | 内容 |
 |---|---|
 | 状态栏 | DDS 压力订阅状态、DDS 监控订阅状态、EGM UDP 连接状态、压力样本新鲜度（ms）、当前 `z_corr` |
-| 参数区 | `pressure_setpoint`、`kp`、`ki`、`z_max_mm`、`dz_max_per_cycle_mm`、使能开关「修正启用」 |
-| 操作区 | 开始监听 / 停止监听、修正使能、**一键回零**（`z_corr` 平滑回 0） |
-| 实时区 | 两条滚动曲线（60 s 窗口）：压力均值 `mean_value`、`z_corr`（mm）；机器人 TCP Z 仅用于安全限位判断，不绘图 |
+| 参数区 | `pressure_setpoint`、`kp`、`ki`、`z_max_mm`、`dz_max_per_cycle_mm` |
+| 操作区 | 开始监听 / 停止监听、启用修正 / 停止修正按钮、**一键回零**（`z_corr` 平滑回 0） |
+| 实时区 | 压力均值、修正输出、收/发帧数等文本状态 |
 | 告警区 | 数据超时、方向契约未确认、UDP 断连、输出饱和 |
 
 安全要求：**关闭窗口或点击"停止"等价于 `z_corr` 按 `ramp_down_ms` 平滑回 0**，绝不直接断掉 UDP（断掉会让控制器进入 EGM 超时停止，虽安全但会中断打印）。
@@ -259,7 +259,7 @@ EgmSensorPathCorr
 | `PressurePiController` | 纯 PI 控制律：输入压力均值 + setpoint + dt，输出 `z_corr`。**无 Qt / 无网络依赖，可单测** | 无 |
 | `EgmUdpServer` | 绑定 6510，阻塞 `recvfrom(EgmRobot)` → 调用控制律 → 组 `EgmSensorPathCorr` → `sendto` | Qt Network、`EgmWireCodec` |
 | `EgmPressureController` | 编排：`QThread` 生命周期、启停、健康状态、优雅退出 | 上述模块 |
-| `EgmPressurePanel` | 主界面新增页签（Qt Widgets），参数读写、曲线、告警 | Qt |
+| `EgmPressurePanel` | 主界面新增页签（Qt Widgets），参数读写、状态、告警 | Qt |
 | `EgmWireCodec` | ABB `egm.proto` 的最小 protobuf wire 编解码（仅 EgmRobot / EgmSensorPathCorr） | 无 |
 | `third_party/egm/egm.proto` | ABB 官方 proto，作为字段契约参考，不参与编译 | 无 |
 
@@ -377,7 +377,7 @@ EgmSensorPathCorr
 - `EgmUdpServer`：6510 绑定、先收后发、seqno 每帧单增、未收首帧不发、链路超时停发、输出硬限幅。
 - `PressureSampleSubscriber` / `RobotMonitorSubscriber`：DDS 回调内仅写最新快照。
 - `PressurePiController` + `EgmPressureController`：PI 在专用线程执行，参数热更新，失效平滑回零，链路恢复清积分。
-- `EgmPressurePanel`：主界面新增「EGM 压力修正」页签（状态、参数、启停、回零、双趋势曲线）。
+- `EgmPressurePanel`：主界面新增「EGM 压力修正」页签（状态、参数、启停、回零、启用/停止修正按钮）。
 - 单元测试：`tests/test_egm_pressure_pi_controller.cpp`（11 例）、`tests/test_egm_udp_server.cpp`（7 例，含 Python 黄金字节比对）。
 
 不使用 protobuf 运行时的原因：

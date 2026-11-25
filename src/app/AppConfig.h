@@ -228,10 +228,11 @@ struct EgmPressureConfig {
     QString robotMonitorTopic = "afp.robot.monitor.sample";
     int ddsDomainId = 0;
 
-    // PI control law. Pressure uses raw sensor units until calibrated.
+    // PID control law. Pressure uses raw sensor units until calibrated.
     double pressureSetpoint = 0.0;
     double kp = 0.0;
     double ki = 0.0;
+    double kd = 0.0;
     double zMaxMm = 3.0;
     double dzMaxPerCycleMm = 0.1;
     double staleTimeoutMs = 300.0;

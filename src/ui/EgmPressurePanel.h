@@ -1,19 +1,15 @@
 #pragma once
 
-#include <QElapsedTimer>
 #include <QWidget>
 
 #include "app/AppConfig.h"
 #include "egm/EgmPressureController.h"
 
-class QCheckBox;
 class QDoubleSpinBox;
 class QLabel;
 class QPushButton;
 
-class TrendPlot;
-
-// 主界面「EGM 压力修正」页签：参数整定、启停监听、状态与趋势显示。
+// 主界面「EGM 压力修正」页签：参数整定、启停监听与状态显示。
 class EgmPressurePanel final : public QWidget {
     Q_OBJECT
 
@@ -33,10 +29,12 @@ private:
     QDoubleSpinBox* setpointSpin_ = nullptr;
     QDoubleSpinBox* kpSpin_ = nullptr;
     QDoubleSpinBox* kiSpin_ = nullptr;
+    QDoubleSpinBox* kdSpin_ = nullptr;
     QDoubleSpinBox* zMaxSpin_ = nullptr;
     QDoubleSpinBox* dzMaxSpin_ = nullptr;
 
-    QCheckBox* correctionCheck_ = nullptr;
+    QPushButton* enableCorrectionButton_ = nullptr;
+    QPushButton* stopCorrectionButton_ = nullptr;
     QPushButton* startButton_ = nullptr;
     QPushButton* stopButton_ = nullptr;
     QPushButton* zeroButton_ = nullptr;
@@ -48,9 +46,4 @@ private:
     QLabel* correctionValueLabel_ = nullptr;
     QLabel* frameCountLabel_ = nullptr;
     QLabel* errorLabel_ = nullptr;
-
-    TrendPlot* pressurePlot_ = nullptr;
-    TrendPlot* correctionPlot_ = nullptr;
-
-    QElapsedTimer clock_;
 };

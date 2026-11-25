@@ -21,6 +21,7 @@ EgmPressureController::EgmPressureController(EgmPressureConfig config, QObject* 
     piConfig_.setpoint = config_.pressureSetpoint;
     piConfig_.kp = config_.kp;
     piConfig_.ki = config_.ki;
+    piConfig_.kd = config_.kd;
     piConfig_.zMaxMm = config_.zMaxMm;
     piConfig_.dzMaxPerCycleMm = config_.dzMaxPerCycleMm;
     piConfig_.staleTimeoutMs = config_.staleTimeoutMs;
@@ -111,11 +112,13 @@ void EgmPressureController::stopListening() {
 }
 
 void EgmPressureController::setControlParameters(double setpoint, double kp, double ki,
-                                                 double zMaxMm, double dzMaxPerCycleMm) {
+                                                 double kd, double zMaxMm,
+                                                 double dzMaxPerCycleMm) {
     QMutexLocker locker(&paramMutex_);
     piConfig_.setpoint = setpoint;
     piConfig_.kp = kp;
     piConfig_.ki = ki;
+    piConfig_.kd = kd;
     piConfig_.zMaxMm = std::max(0.01, zMaxMm);
     piConfig_.dzMaxPerCycleMm = std::max(0.001, dzMaxPerCycleMm);
 }

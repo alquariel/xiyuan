@@ -1,149 +1,13 @@
 #include "ui/EgmPressurePanel.h"
 
-#include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QGridLayout>
 #include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
-#include <QPainter>
 #include <QPushButton>
-#include <QVector>
 #include <QVBoxLayout>
 
-#include <algorithm>
-
 #include "egm/EgmPressureController.h"
-
-class TrendPlot final : public QWidget {
-public:
-    TrendPlot(QString title, QColor color, QWidget* parent = nullptr)
-        : QWidget(parent), title_(std::move(title)), color_(color) {
-        setMinimumHeight(170);
-    }
-
-    void addSample(double timeSeconds, double value) {
-        points_.append(QPointF(timeSeconds, value));
-        while (!points_.isEmpty() && timeSeconds - points_.first().x() > kWindowSeconds) {
-            points_.removeFirst();
-        }
-        update();
-    }
-
-    void setReference(double value, bool visible) {
-        reference_ = value;
-        hasReference_ = visible;
-        update();
-    }
-
-    void clear() {
-        points_.clear();
-        update();
-    }
-
-protected:
-    void paintEvent(QPaintEvent* event) override {
-        Q_UNUSED(event);
-        QPainter painter(this);
-        painter.setRenderHint(QPainter::Antialiasing, true);
-        painter.fillRect(rect(), QColor(30, 30, 30));
-
-        painter.setPen(Qt::white);
-        painter.drawText(QRectF(6, 2, width() - 12, 18), Qt::AlignLeft | Qt::AlignVCenter, title_);
-
-        const QRectF area = QRectF(rect()).adjusted(42, 24, -10, -20);
-
-        double yMin = 0.0;
-        double yMax = 0.0;
-        bool hasData = false;
-        for (const QPointF& point : points_) {
-            if (!hasData) {
-                yMin = yMax = point.y();
-                hasData = true;
-            } else {
-                yMin = std::min(yMin, point.y());
-                yMax = std::max(yMax, point.y());
-            }
-        }
-        if (hasReference_) {
-            if (!hasData) {
-                yMin = yMax = reference_;
-                hasData = true;
-            } else {
-                yMin = std::min(yMin, reference_);
-                yMax = std::max(yMax, reference_);
-            }
-        }
-        if (!hasData) {
-            yMin = -1.0;
-            yMax = 1.0;
-        }
-        if (yMax - yMin < 1e-6) {
-            yMin -= 0.5;
-            yMax += 0.5;
-        }
-        const double padding = (yMax - yMin) * 0.1;
-        yMin -= padding;
-        yMax += padding;
-
-        const double tMax = points_.isEmpty() ? 0.0 : points_.last().x();
-        const double tMin = std::max(0.0, tMax - kWindowSeconds);
-        const double tSpan = std::max(0.5, tMax - tMin);
-
-        painter.setPen(QColor(58, 58, 58));
-        for (int i = 0; i <= 4; ++i) {
-            const double y = area.top() + area.height() * i / 4.0;
-            painter.drawLine(QPointF(area.left(), y), QPointF(area.right(), y));
-        }
-        for (int i = 0; i <= 4; ++i) {
-            const double x = area.left() + area.width() * i / 4.0;
-            painter.drawLine(QPointF(x, area.top()), QPointF(x, area.bottom()));
-        }
-
-        const auto mapY = [&](double value) {
-            return area.bottom() - (value - yMin) / (yMax - yMin) * area.height();
-        };
-
-        painter.setFont(QFont(font().family(), 8));
-        painter.setPen(QColor(160, 160, 160));
-        painter.drawText(QRectF(0, area.top() - 8, 38, 16), Qt::AlignRight,
-                         QString::number(yMax, 'f', 2));
-        painter.drawText(QRectF(0, area.bottom() - 8, 38, 16), Qt::AlignRight,
-                         QString::number(yMin, 'f', 2));
-        painter.drawText(QRectF(area.left(), area.bottom() + 2, 60, 16), Qt::AlignLeft,
-                         QString("-60s"));
-        painter.drawText(QRectF(area.right() - 60, area.bottom() + 2, 60, 16), Qt::AlignRight,
-                         QString("now"));
-
-        if (hasReference_) {
-            QPen referencePen(QColor(150, 150, 150));
-            referencePen.setStyle(Qt::DashLine);
-            painter.setPen(referencePen);
-            const double y = mapY(reference_);
-            painter.drawLine(QPointF(area.left(), y), QPointF(area.right(), y));
-        }
-
-        if (points_.size() >= 2) {
-            QPolygonF polyline;
-            polyline.reserve(points_.size());
-            for (const QPointF& point : points_) {
-                polyline.append(QPointF(area.left() + (point.x() - tMin) / tSpan * area.width(),
-                                        mapY(point.y())));
-            }
-            painter.setPen(QPen(color_, 2.0));
-            painter.drawPolyline(polyline);
-        }
-    }
-
-private:
-    static constexpr double kWindowSeconds = 60.0;
-
-    QString title_;
-    QColor color_;
-    QVector<QPointF> points_;
-    double reference_ = 0.0;
-    bool hasReference_ = false;
-};
 
 QLabel* makeStateLabel() {
     auto* label = new QLabel(QStringLiteral("--"));
@@ -163,7 +27,6 @@ EgmPressurePanel::EgmPressurePanel(const EgmPressureConfig& config, QWidget* par
 
     buildUi();
     applyParameters();
-    clock_.start();
 
     connect(controller_, &egm::EgmPressureController::statusChanged, this,
             [this](const egm::EgmPressureController::Status& status) {
@@ -218,12 +81,15 @@ void EgmPressurePanel::buildUi() {
             -1.0e6, 1.0e6, 0.5, 3);
     addSpin(QStringLiteral("Kp"), 0, 1, &kpSpin_, config_.kp, 0.0, 1000.0, 0.001, 4);
     addSpin(QStringLiteral("Ki"), 0, 2, &kiSpin_, config_.ki, 0.0, 10000.0, 0.001, 4);
+    addSpin(QStringLiteral("Kd"), 0, 3, &kdSpin_, config_.kd, 0.0, 10000.0, 0.001, 4);
     addSpin(QStringLiteral("Z 限幅 (mm)"), 1, 0, &zMaxSpin_, config_.zMaxMm, 0.01, 20.0, 0.1, 2);
     addSpin(QStringLiteral("单周期限幅 (mm)"), 1, 1, &dzMaxSpin_, config_.dzMaxPerCycleMm, 0.001,
             5.0, 0.01, 3);
 
-    correctionCheck_ = new QCheckBox(QStringLiteral("启用修正"), paramGroup);
-    paramLayout->addWidget(correctionCheck_, 1, 4, 1, 2);
+    enableCorrectionButton_ = new QPushButton(QStringLiteral("启用修正"), paramGroup);
+    stopCorrectionButton_ = new QPushButton(QStringLiteral("停止修正"), paramGroup);
+    paramLayout->addWidget(enableCorrectionButton_, 1, 4, 1, 2);
+    paramLayout->addWidget(stopCorrectionButton_, 1, 6, 1, 2);
 
     startButton_ = new QPushButton(QStringLiteral("开始监听"), paramGroup);
     stopButton_ = new QPushButton(QStringLiteral("停止监听"), paramGroup);
@@ -232,13 +98,6 @@ void EgmPressurePanel::buildUi() {
     paramLayout->addWidget(stopButton_, 2, 2, 1, 2);
     paramLayout->addWidget(zeroButton_, 2, 4, 1, 2);
     root->addWidget(paramGroup);
-
-    auto* plotLayout = new QHBoxLayout();
-    pressurePlot_ = new TrendPlot(QStringLiteral("压力均值"), QColor(80, 180, 255), this);
-    correctionPlot_ = new TrendPlot(QStringLiteral("Z 修正 (mm)"), QColor(255, 170, 60), this);
-    plotLayout->addWidget(pressurePlot_, 1);
-    plotLayout->addWidget(correctionPlot_, 1);
-    root->addLayout(plotLayout, 1);
 
     errorLabel_ = new QLabel(this);
     errorLabel_->setWordWrap(true);
@@ -258,15 +117,19 @@ void EgmPressurePanel::buildUi() {
     });
     connect(stopButton_, &QPushButton::clicked, this, [this]() {
         controller_->stopListening();
-        correctionCheck_->setChecked(false);
         updateButtonState();
     });
     connect(zeroButton_, &QPushButton::clicked, this, [this]() {
         controller_->requestZero();
-        correctionCheck_->setChecked(false);
+        updateButtonState();
     });
-    connect(correctionCheck_, &QCheckBox::toggled, this, [this](bool checked) {
-        controller_->setCorrectionEnabled(checked);
+    connect(enableCorrectionButton_, &QPushButton::clicked, this, [this]() {
+        controller_->setCorrectionEnabled(true);
+        updateButtonState();
+    });
+    connect(stopCorrectionButton_, &QPushButton::clicked, this, [this]() {
+        controller_->setCorrectionEnabled(false);
+        updateButtonState();
     });
 
     connect(setpointSpin_, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
@@ -274,6 +137,8 @@ void EgmPressurePanel::buildUi() {
     connect(kpSpin_, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
             &EgmPressurePanel::applyParameters);
     connect(kiSpin_, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
+            &EgmPressurePanel::applyParameters);
+    connect(kdSpin_, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
             &EgmPressurePanel::applyParameters);
     connect(zMaxSpin_, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
             &EgmPressurePanel::applyParameters);
@@ -286,16 +151,18 @@ void EgmPressurePanel::applyParameters() {
         return;
     }
     controller_->setControlParameters(setpointSpin_->value(), kpSpin_->value(), kiSpin_->value(),
-                                      zMaxSpin_->value(), dzMaxSpin_->value());
-    correctionPlot_->setReference(0.0, true);
-    pressurePlot_->setReference(setpointSpin_->value(), true);
+                                      kdSpin_->value(), zMaxSpin_->value(),
+                                      dzMaxSpin_->value());
 }
 
 void EgmPressurePanel::updateButtonState() {
     const bool listening = controller_->isListening();
+    const bool correcting = controller_->isCorrectionEnabled();
     startButton_->setEnabled(!listening);
     stopButton_->setEnabled(listening);
     zeroButton_->setEnabled(listening);
+    enableCorrectionButton_->setEnabled(listening && !correcting);
+    stopCorrectionButton_->setEnabled(listening && correcting);
 }
 
 void EgmPressurePanel::updateLabels(const egm::EgmPressureController::Status& status) {
@@ -326,12 +193,6 @@ void EgmPressurePanel::updateLabels(const egm::EgmPressureController::Status& st
         QStringLiteral("修正输出 %1 mm").arg(status.zCorrectionMm, 0, 'f', 3));
     frameCountLabel_->setText(
         QStringLiteral("收 %1 / 发 %2").arg(status.framesReceived).arg(status.framesSent));
-
-    if (status.listening && status.ddsPressureOk) {
-        const double seconds = clock_.elapsed() / 1000.0;
-        pressurePlot_->addSample(seconds, status.pressureMean);
-        correctionPlot_->addSample(seconds, status.zCorrectionMm);
-    }
 
     if (!status.lastError.isEmpty()) {
         errorLabel_->setText(status.lastError);

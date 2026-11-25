@@ -55,7 +55,7 @@ public:
     void stopListening();
 
     // 参数热更新：不重置积分与当前输出。
-    void setControlParameters(double setpoint, double kp, double ki, double zMaxMm,
+    void setControlParameters(double setpoint, double kp, double ki, double kd, double zMaxMm,
                               double dzMaxPerCycleMm);
     void setCorrectionEnabled(bool enabled);
 
