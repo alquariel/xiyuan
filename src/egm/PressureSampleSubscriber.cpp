@@ -31,10 +31,12 @@ namespace {
 constexpr const char* kPressureTypeName = "AfpPressureSample";
 }
 
+//定义监听器类
 class PressureSampleSubscriber::Listener final : public eprosima::fastdds::dds::DataReaderListener {
 public:
     explicit Listener(PressureSampleSubscriber* owner) : owner_(owner) {}
 
+    // 数据可用回调
     void on_data_available(eprosima::fastdds::dds::DataReader* reader) override {
         AfpPressureSample sample;
         eprosima::fastdds::dds::SampleInfo info;
@@ -44,6 +46,7 @@ public:
             if (!info.valid_data || owner_ == nullptr) {
                 continue;
             }
+            // 处理样本数据，更新快照
             PressureSnapshot snapshot;
             snapshot.valid = true;
             snapshot.windowReady = sample.window_ready();

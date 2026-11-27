@@ -72,7 +72,7 @@ bool EgmPressureController::startListening() {
     pi_.reset();
     lastFrameAt_ = {};
 
-    // UDP 收发与 PI 计算必须在本进程的专用线程内完成，绝不能在 Qt 主线程
+    // UDP 收发与 PI 计算必须在专用线程内完成，不在 Qt 主线程
     // （主线程可能被 PLC 打印确认流程阻塞数秒）。
     serverThread_ = QThread::create([this]() {
         QString error;

@@ -26,6 +26,8 @@ Slice K adds an optional ABB robot monitoring socket workflow. When enabled by `
 
 Slice L publishes parsed robot monitor samples through eProsima Fast DDS and extends `dds_influx_subscriber.exe` so pressure and robot monitor data can be archived concurrently into the same InfluxDB database.
 
+Slice M adds an in-process EGM pressure path-correction module. It subscribes to the pressure and robot monitor DDS topics, runs a PI/PID law along the layup normal, and sends `EgmSensorPathCorr` back to the ABB controller over UDP 6510 on every 48 ms EGM cycle. The existing Siemens PLC and print channels are isolated from this loop.
+
 ## What Slice A Contains
 
 - C++17 Qt Widgets executable.
@@ -135,7 +137,7 @@ build\Release\AFP_ABB_CPP.exe
 ```
 
 The app should open the original AFP ABB UI. Hardware behavior is converted slice by slice, so unconverted buttons still show placeholder messages.
-PLC controls from Slice B, pressure controls from Slice C, FTP MOD upload from Slice D, DB18 print command signaling from Slice E, robot print workflow controls from Slice F, PLC-forward robot movement controls from Slice G, high-speed camera controls from Slice H, thermal camera controls from Slice I, optional pressure DDS archiving from Slice J, optional robot monitoring from Slice K, and robot monitor DDS/Influx archiving from Slice L now have real C++ implementations. They still require the matching hardware, runtime DLLs, database runtime, RAPID modules, and network configuration to perform real operations.
+PLC controls from Slice B, pressure controls from Slice C, FTP MOD upload from Slice D, DB18 print command signaling from Slice E, robot print workflow controls from Slice F, PLC-forward robot movement controls from Slice G, high-speed camera controls from Slice H, thermal camera controls from Slice I, optional pressure DDS archiving from Slice J, optional robot monitoring from Slice K, robot monitor DDS/Influx archiving from Slice L, and the EGM pressure path-correction tab from Slice M now have real C++ implementations. They still require the matching hardware, runtime DLLs, database runtime, RAPID modules, and network configuration to perform real operations.
 
 ## Run Tests
 
@@ -849,6 +851,99 @@ With a Hikrobot/MVS-compatible camera and runtime available:
 4. Click `get_parameter` and confirm `FrameRate`, `ExposureTime`, and `Gain` are populated.
 5. Click `HC_start` and confirm live preview appears in `HC_RD`.
 6. Click `HC_stop` and confirm preview and parameter fields are cleared.
+
+## EGM Pressure Path Correction (Slice M)
+
+Slice M adds an in-process EGM path-correction tab to `AFP_ABB_CPP.exe`. It closes the pressure loop along the layup normal and returns a bounded Z offset to the ABB controller, which adds it to the nominal RAPID path. The loop never shares a thread, socket, or PLC connection with the print/motion channel.
+
+Data path:
+
+```text
+pressure DDS  afp.pressure.sample ─────────┐
+                                           ├─> EGM module (dedicated QThread)
+robot monitor DDS afp.robot.monitor.sample ┘     PI/PID: P_mean -> z_corr
+                                                 every 48 ms
+                                                       |
+                                                       v
+                            UDP 6510 EgmSensorPathCorr (pathCorr.pos.z)
+                                                       |
+                                                       v
+                                   ABB controller EGM Path Correction (RAPID)
+```
+
+Runtime behavior:
+
+- The PC is the EGM UDP server and binds port `6510`; the controller is the UDP client and uses local port `6511`. Do not swap these two ports.
+- Every received `EgmRobot` frame is answered immediately with one `EgmSensorPathCorr` frame (`pathCorr.pos.x/y = 0`, `pathCorr.pos.z = z_corr` mm, `age` in ms).
+- No correction is sent before the first `EgmRobot` arrives. If no frame arrives within `receive_timeout_ms`, sending stops and the tab reports a link timeout.
+- `seqno` increments once per frame. DDS listeners only write a latest-value snapshot; the 100 ms UI timer reads it.
+- Control sign contract: `+Z` lifts the tool off the workpiece. `P_mean > setpoint` gives `z_corr > 0`; `P_mean < setpoint` gives `z_corr < 0`.
+- Output is clamped to `z_max_mm`, rate-limited to `dz_max_per_cycle_mm`, and uses conditional integration to avoid windup.
+- If the pressure sample is stale, invalid, or `sensor_running` is false, `z_corr` ramps back to zero at `ramp_rate_mm_per_s` and the tab shows an error.
+
+Configuration is in `config\env_config.json`:
+
+```json
+"egm_pressure": {
+  "enabled": true,
+  "robot_ip": "192.168.0.104",
+  "egm_udp_port": 6510,
+  "control_period_ms": 48,
+  "correction_age_ms": 48,
+  "receive_timeout_ms": 500,
+  "pressure_topic": "afp.pressure.sample",
+  "robot_monitor_topic": "afp.robot.monitor.sample",
+  "dds_domain_id": 0,
+  "pressure_setpoint": 0.0,
+  "kp": 0.0,
+  "ki": 0.0,
+  "kd": 0.0,
+  "z_max_mm": 3.0,
+  "dz_max_per_cycle_mm": 0.1,
+  "stale_timeout_ms": 300,
+  "ramp_rate_mm_per_s": 5.0
+}
+```
+
+`kp = ki = kd = 0` means zero correction. Pressure is in raw sensor units until calibrated. With `enabled: false` the EGM tab and worker thread are not created.
+
+EGM tab controls:
+
+```text
+开始监听 / Start Listening     bind UDP 6510 and start DDS subscriptions
+停止监听 / Stop Listening      ramp z_corr to zero, then stop the loop
+启用修正 / Enable Correction   allow the PI/PID output to reach the controller
+停止修正 / Stop Correction     keep the link alive but output a zero correction
+一键回零 / Zero                reset integral and ramp z_corr to zero
+```
+
+Parameters (`setpoint`, `Kp`, `Ki`, `Kd`, Z limit, per-cycle limit) apply immediately without resetting the integral term. Closing the app or stopping listening ramps to zero before the socket closes, so the controller does not hit an EGM timeout stop in the middle of a print.
+
+Controller prerequisites (IRC5, RobotWare 6.15):
+
+1. Create a `UdpUc` device `UCdevice`: Remote Address = PC IP, Remote Port = `6510`, Local Port = `6511`. Restart the controller after adding it.
+2. Create an `External Motion Interface Data` named `pathCorr` (Motion topic), matching the RAPID string exactly. Restart the controller.
+3. Load the modified `rapid\RAPID\TASK1\PROGMOD\Motion.mod`. Its CASE 33 uses `EGMSetupUC ...\PathCorr\APTR` + `EGMActMove` + `EGMMoveL` + `EGMReset`, guarded by `PERS bool useEgmPathCorr:=FALSE`.
+4. Start listening on the EGM tab before setting `useEgmPathCorr` to TRUE. Setting it TRUE first causes `ERR_UDPUC_COMM`.
+5. Rollback: set `useEgmPathCorr` back to FALSE, or restore the previous `Motion.mod`.
+
+Allow inbound UDP 6510 on the PC. A simple manual check:
+
+1. Set `kp = ki = kd = 0` and click Start Listening; confirm the tab shows pressure DDS, robot DDS, and EGM link status.
+2. Run the print path and confirm `EgmRobot` frames arrive continuously with no timeout.
+3. Enable correction, then raise `kp` slowly from zero and observe the pressure converging with a smooth `z_corr`.
+4. Open-loop check: apply `z_corr = +1 mm` and confirm the tool moves 1 mm away from the surface; if the direction is inverted, fix the sign contract, not the gains.
+5. Disconnect pressure DDS, pressure UDP, or set `sensor_running = false`; confirm `z_corr` ramps to zero and an error is shown.
+
+Tests:
+
+```powershell
+ctest --test-dir build -C Release -R "test_egm_" --output-on-failure
+```
+
+`test_egm_pressure_pi_controller` covers the pure PID law. `test_egm_udp_server` covers the wire codec and local-loopback request/response, including byte-level comparison against the Python `egm_pb2` gold output.
+
+Design details are in `docs\design\2026-11-24-afp-abb-cpp-slice-m-egm-pressure-path-correction-design.md`.
 
 ## Future Conversion Slices
 
